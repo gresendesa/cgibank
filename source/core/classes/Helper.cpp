@@ -26,6 +26,15 @@ public:
 		return output;
 	};
 
+	static string implode(vector< string > list, char delimiter){
+		string output = list[0];
+		for (int i = 1; i < list.size(); ++i)
+		{
+			output += delimiter + list[i];
+		}
+		return output;
+	}
+
 	/*
 		It seaches for 'search' into 'subject' and replace it for 'replace'
 	*/
@@ -42,7 +51,7 @@ public:
 	};
 
 	/*
-		It decode and string encoded as an url
+		It decodes a string encoded as an url
 		This snippet is a copy from http://www.cplusplus.com/forum/general/94849/
 	*/
 	static std::string urlDecode(std::string eString) {
@@ -62,14 +71,17 @@ public:
 		return (ret);
 	};
 
-	static string getFileContent(string path, bool &errorFlag){	
-		string fullPath = "../files/" + path;
+
+	/*
+		It returns a content file as a string
+	*/
+	static string getFileContent(string path, bool &errorFlag){
 		ifstream file;
 		string line, fullContent = "";
-		file.open (fullPath.c_str(), ios::out);
+		file.open (path.c_str(), ios::out);
 		if(file.is_open()){
 			while(getline(file, line)){
-				fullContent += line;
+				fullContent += Helper::replace("\n", " ", line) + "\n";
 			}
 			errorFlag = false;
 			file.close();
@@ -79,9 +91,24 @@ public:
 		return fullContent;
 	};
 
+	/*
+		It checks if a files exists
+	*/
 	static bool fileExists(string filename)
 	{
 		ifstream file(filename.c_str());
 		return file;
 	};
+
+	/*
+		It fill a vector from a array
+	*/
+	static vector< string > fillVectorFromArray(string *list, int size){
+		vector< string > output;
+		for (int i = 0; i < size; ++i)
+		{
+			output.push_back(list[i]);
+		}
+		return output;
+	} 
 };

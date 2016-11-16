@@ -3,7 +3,7 @@ class Server
 public:
 	Server();
 	~Server();
-	static const int MAX_CONTENT_LENGTH = 10000;
+	//static const int MAX_CONTENT_LENGTH = 10000;
 	/*
 		Return a enviroment variable. Check out http://www.cgi101.com/book/ch3/text.html for see variables
 	*/
@@ -19,7 +19,7 @@ public:
 
 	static vector< string > getURIElements(){
 		string URI = Server::getEnvironmentValue("REQUEST_URI");
-		vector< string > splittedURL = Helper::explode(URI, '/');
+		vector< string > splittedURL = Helper::explode(Helper::explode(URI, '?')[0], '/');
 		return splittedURL;
 	};
 
@@ -34,5 +34,22 @@ public:
 			variablesTable.insert(pair< string, string > (Helper::urlDecode(Helper::replace("+", " ", record[0])), Helper::urlDecode(Helper::replace("+", " ", record[1]))));
 		}
 		return variablesTable;
+	};
+
+	/*
+		Check if the server URI matches to the informed URI
+	*/
+	static bool route(string uri){
+		bool result = true;
+		vector< string > fullURIE = Server::getURIElements();
+		vector< string > URIE = Helper::explode(uri, '/');
+		for (int i = 0; i < URIE.size(); i++)
+		{
+			if ((i > fullURIE.size() - 1) || (URIE[i] != fullURIE[i])){
+				result = false;
+				break;
+			}
+		}
+		return result;
 	};
 };
