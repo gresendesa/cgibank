@@ -1,5 +1,5 @@
-#include "framework/include/Core.hpp"
-#include "framework/include/routes.hpp"
+#include "../../include/framework/Core.hpp"
+#include "../../include/framework/routes.hpp"
 
 int main()
 {

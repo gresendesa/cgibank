@@ -1,5 +1,5 @@
-#include "../include/views/Login.hpp"
+#include "../../../include/app/views/Main.hpp"
 
-Output View::Login::run(){
-	return "Login screen. I got it bitch!!!";
+void View::Main::program(){
+	this->appendText("Fala bro");
 }

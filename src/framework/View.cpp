@@ -1,13 +1,36 @@
-#include "include/View.hpp"
+#include "../../include/framework/View.hpp"
+#include "../../include/framework/Helper.hpp"
 
-bool Framework::View::appendHTML(string path){
-
+void Framework::View::appendHTML(string path){
+	bool error;
+	string result = Helper::getFileContent("../src/app/views/html/" + path + ".html", error);
+	if(error){
+		this->content = "Warning: <b>src/app/views/html/" + path + ".html</b> not found";
+	} else {
+		this->content = result;
+	}
 }
 
-bool Framework::View::appendText(string content){
+void Framework::View::appendText(string content){
+	if (this->content.size()){
+		this->content += content;
+	} else {
+		this->content = content;
+	}
+}
+
+void Framework::View::replaceFlags(map< string, string> replaceList){
+	for (map<string,string>::iterator i=replaceList.begin(); i!=replaceList.end(); i++){
+		//cout << i->first << " => " << i->second << '\n';
+		this->content = Helper::replace("{{"+ i->first +"}}", i->second, this->content);
+	}
+}
+
+void Framework::View::program(){
 
 }
 
 Output Framework::View::run(){
-
+	this->program();
+	return this->content;
 }

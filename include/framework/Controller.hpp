@@ -1,5 +1,5 @@
-#ifndef VIEW_HPP
-#define VIEW_HPP
+#ifndef CONTROLLER_HPP
+#define CONTROLLER_HPP
 
 	#include <iostream>
 	#include <string>
@@ -12,15 +12,11 @@
 	typedef string Output;
 
 	namespace Framework{
-		class View
+		class Controller
 		{
-		private:
-			string viewContent;
 		public:
-			//View(arguments);
-			//~View();	
-			static bool appendHTML(string);
-			static bool appendText(string);
+			//Controller(arguments);
+			//~Controller();
 			static Output run();
 		};
 	}

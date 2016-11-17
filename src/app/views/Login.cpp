@@ -1,5 +1,8 @@
-#include "../include/views/Main.hpp"
+#include "../../../include/app/views/Login.hpp"
 
-Output View::Main::run(){
-	return "gffs";
+void View::Login::program(){
+	//this->appendText("{{{agora}}}Login bitch {{agora}}{{agora}}{{teste}} merda{agora}");
+	this->appendHTML("test");
+	map<string, string> replaceList = {{"agora", "feio"}, {"fdsa", "poiop"}};
+	this->replaceFlags(replaceList);
 }

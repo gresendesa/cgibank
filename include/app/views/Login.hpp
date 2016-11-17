@@ -1,7 +1,7 @@
 #ifndef VIEW_LOGIN_HPP
 #define VIEW_LOGIN_HPP
 
-	#include "../../../framework/include/View.hpp"
+	#include "../../framework/View.hpp"
 
 	#include <string>
 
@@ -13,7 +13,7 @@
 		class Login: public Framework::View
 		{
 		public:
-			static Output run();
+			void program(); 
 		};
 	};
 		

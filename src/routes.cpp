@@ -1,11 +1,13 @@
-#include "framework/include/routes.hpp"
+#include "../include/framework/routes.hpp"
 
 Output routes(){
 	if (Route::match("/")) {
 		if(Route::match("/teste")){
-			return View::Main::run();
+			View::Main main;
+			return main.run();
 		} else {
-			return View::Login::run();
+			View::Login login;
+			return login.run();
 		}
 	}
 }
