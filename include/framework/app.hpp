@@ -6,5 +6,6 @@
 	#include "../app/views/Login.hpp"
 
 	//Controllers
+	#include "../app/controllers/Login.hpp"
 
 #endif

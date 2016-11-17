@@ -3,8 +3,7 @@
 Output routes(){
 	if (Route::match("/")) {
 		if(Route::match("/teste")){
-			View::Main main;
-			return main.run();
+			return Controller::Login::run();
 		} else {
 			View::Login login;
 			return login.run();
