@@ -1,13 +1,10 @@
 #include "../../include/framework/Core.hpp"
-#include "../../include/framework/routes.hpp"
 
 int main()
 {
 	/*
-		Here routes() function is passed as callback to Core::bootstrap()
+		Here all system get initialized
 	*/
-	Output (*routes_function)();
-	routes_function = &routes;
-	Core::bootstrap(routes_function);
+	Core::bootstrap();
 	return 0;
 }

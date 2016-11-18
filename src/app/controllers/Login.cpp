@@ -4,5 +4,8 @@ Output Controller::Login::run(){
 	View::Main view;
 	string a = "meu nome";
 	Model::Manager user;
-	return user.getId();
+	user.setName("Guigao");
+	user.setName("Bonito");
+	map< string, string > fields = user.getFields();
+	return fields["name"];
 }

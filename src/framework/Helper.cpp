@@ -23,6 +23,22 @@ vector< string > Helper::explode(string input, char delimiter) {
 	return output;
 };
 
+
+/*
+	It checks if the string has only alphanumeric characters
+*/
+bool Helper::isAlphanum(string input){
+	bool result = true;
+	for (int i = 0; i < input.size(); ++i)
+	{
+		if(!isalnum(input.at(i))){
+			result = false;
+			break;
+		}
+	}
+	return result;
+}
+
 /*
 	Join vector elements with a string
 */

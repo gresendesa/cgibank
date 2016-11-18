@@ -1,12 +1,13 @@
 #include "../../include/framework/Core.hpp"
+#include "../../include/framework/Route.hpp"
 /*
 	Bootstrap system
 */
-bool Core::bootstrap(Output (*routes)()){
+bool Core::bootstrap(){
 	/*
 		The output system must converge here :)
 	*/
-	Output globalOutput = routes();
+	Output globalOutput = Route::route();
 	cout << Core::getResponseMetadata() << "Content-type: text/html\n\n" << globalOutput << "\r\n";
 }
 

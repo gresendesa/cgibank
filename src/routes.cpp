@@ -1,6 +1,6 @@
 #include "../include/framework/routes.hpp"
 
-Output routes(){
+Output Route::route(){
 	if (Route::match("/")) {
 		if(Route::match("/teste")){
 			return Controller::Login::run();

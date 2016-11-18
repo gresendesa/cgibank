@@ -6,6 +6,7 @@
 	#include <vector>
 	#include <map>
 	#include <fstream>
+	#include <locale>
 
 	using namespace std;
 
@@ -21,6 +22,7 @@
 		static string getFileContent(string, bool&);
 		static bool fileExists(string);
 		static vector< string > fillVectorFromArray(string*, int);
+		static bool isAlphanum(string);
 	};
 
 #endif

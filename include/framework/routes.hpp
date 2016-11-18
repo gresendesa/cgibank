@@ -1,6 +1,7 @@
 #ifndef ROUTES_HPP
 #define ROUTES_HPP
 
+	/*
 	#include <iostream>
 	#include <string>
 	#include <vector>
@@ -8,15 +9,14 @@
 	#include <fstream>
 
 	using namespace std;
+	*/
 
 	#include "Route.hpp"
 
-	#include "../app/app_register.hpp" //Loads models, controllers and views
+	#include "../app/register.hpp" //Loads models, controllers and views
 
 	typedef string Output;
 
 	using namespace std;
-
-	Output routes();
 
 #endif

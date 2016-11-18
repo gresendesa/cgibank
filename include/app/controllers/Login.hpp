@@ -2,7 +2,7 @@
 #define CONTROLLER_LOGIN_HPP
 
 	#include "../../framework/Controller.hpp"
-	#include "../app_register.hpp"
+	#include "../register.hpp"
 
 	#include <iostream>
 	#include <string>

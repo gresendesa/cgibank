@@ -1,7 +1,7 @@
 #include "../../include/framework/Model.hpp"
 
 Framework::Model::Model(string storageName){
-	this->setId(storageName);
+	
 }
 
 bool Framework::Model::save(){

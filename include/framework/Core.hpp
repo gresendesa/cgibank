@@ -1,15 +1,17 @@
 #ifndef CORE_HPP
 #define CORE_HPP
 
+	/*
 	#include <iostream>
 	#include <string>
 	#include <vector>
 	#include <map>
 	#include <fstream>
 
-	#include "Helper.hpp"
-
 	using namespace std;
+	*/
+
+	#include "Helper.hpp"	
 
 	typedef string Output;
 
@@ -22,7 +24,7 @@
 		//Core();
 		//~Core();
 
-		static bool bootstrap(Output (*)());
+		static bool bootstrap();
 		static string getEnvironmentValue(string, string);
 		static vector< string > getURIElements();
 		static map< string, string > getPOST();

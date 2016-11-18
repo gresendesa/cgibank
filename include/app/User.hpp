@@ -27,6 +27,12 @@
 				};
 				this->appendFields(fieldsMap);
 			};
+			void setName(string);
+			void setEmail(string);
+			void setPassword(string);
+			string getName();
+			string getEmail();
+			string getPassword();
 			//~Login();
 		};
 	}
