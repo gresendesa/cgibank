@@ -21,7 +21,6 @@ void Framework::View::appendText(string content){
 
 void Framework::View::replaceFlags(map< string, string> replaceList){
 	for (map<string,string>::iterator i=replaceList.begin(); i!=replaceList.end(); i++){
-		//cout << i->first << " => " << i->second << '\n';
 		this->content = Helper::replace("{{"+ i->first +"}}", i->second, this->content);
 	}
 }

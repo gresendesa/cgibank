@@ -15,13 +15,19 @@
 
 	class Core
 	{
+	private:
+		
 	public:
+		static vector< string > responseMetadata;
 		//Core();
 		//~Core();
+
 		static bool bootstrap(Output (*)());
-		static string getEnvironmentValue(string label);
+		static string getEnvironmentValue(string, string);
 		static vector< string > getURIElements();
 		static map< string, string > getPOST();
+		static void setAResponseMetadata(string);
+		static string getResponseMetadata();
 	};
 
 #endif

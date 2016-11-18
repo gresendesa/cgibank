@@ -2,5 +2,7 @@
 
 Output Controller::Login::run(){
 	View::Main view;
-	return view.run();
+	string a = "meu nome";
+	Model::User user;
+	return user.getId();
 }

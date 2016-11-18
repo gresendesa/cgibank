@@ -27,11 +27,17 @@ vector< string > Helper::explode(string input, char delimiter) {
 	Join vector elements with a string
 */
 string Helper::implode(vector< string > list, char delimiter){
-	string output = list[0];
-	for (int i = 1; i < list.size(); ++i)
-	{
-		output += delimiter + list[i];
+	string output;
+	if(list.size()){
+		output = list[0];
+		for (int i = 1; i < list.size(); ++i)
+		{
+			output += delimiter + list[i];
+		}
+	} else {
+		output = "";
 	}
+	
 	return output;
 }
 

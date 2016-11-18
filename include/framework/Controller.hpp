@@ -18,6 +18,8 @@
 			//Controller(arguments);
 			//~Controller();
 			static Output run();
+			static Output redirect(string);
+			static Output externalRedirect(string);
 		};
 	}
 	

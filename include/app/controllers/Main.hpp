@@ -1,5 +1,5 @@
-#ifndef CONTROLLER_LOGIN_HPP
-#define CONTROLLER_LOGIN_HPP
+#ifndef CONTROLLER_MAIN_HPP
+#define CONTROLLER_MAIN_HPP
 
 	#include "../../framework/Controller.hpp"
 	#include "../app_register.hpp"
@@ -15,7 +15,7 @@
 	typedef string Output;
 
 	namespace Controller{
-		class Login: Framework::Controller
+		class Main: Framework::Controller
 		{
 		public:
 			//Login(arguments);

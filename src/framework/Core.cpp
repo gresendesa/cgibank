@@ -6,19 +6,21 @@ bool Core::bootstrap(Output (*routes)()){
 	/*
 		The output system must converge here :)
 	*/
-	cout << "Content-type: text/html\n\n";
-	cout << routes();
+	Output globalOutput = routes();
+	cout << Core::getResponseMetadata() << "Content-type: text/html\n\n" << globalOutput << "\r\n";
 }
 
 /*
 	Return a enviroment variable. Check out http://www.cgi101.com/book/ch3/text.html for see variables
 */
-string Core::getEnvironmentValue(string label){
+string Core::getEnvironmentValue(string label, string def){
 	char *value = getenv(label.c_str());
 	string output = "";
-	if(value != 0){
+	if(value != NULL){
 		string envValue(value);
 		output = envValue;
+	} else {
+		output = def;
 	}
 	return output;
 };
@@ -27,7 +29,7 @@ string Core::getEnvironmentValue(string label){
 	Return the URI elements 
 */
 vector< string > Core::getURIElements(){
-	string URI = Core::getEnvironmentValue("REQUEST_URI");
+	string URI = Core::getEnvironmentValue("REQUEST_URI", "/");
 	vector< string > splittedURL = Helper::explode(Helper::explode(URI, '?')[0], '/');
 	return splittedURL;
 };
@@ -47,3 +49,19 @@ map< string, string > Core::getPOST(){
 	}
 	return variablesTable;
 };
+
+/*
+	Set a metadata like headers to be sent with the server response
+*/
+void Core::setAResponseMetadata(string metadata){
+	Core::responseMetadata.push_back(metadata + " ");
+}
+
+/*
+	Get all set metadata and returns them as a string
+*/
+string Core::getResponseMetadata(){
+	return Helper::implode(Core::responseMetadata, ' ');
+}
+
+vector< string > Core::responseMetadata;

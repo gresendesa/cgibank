@@ -11,7 +11,7 @@
 
 	#include "Route.hpp"
 
-	#include "app.hpp" //Loads models, controllers and views
+	#include "../app/app_register.hpp" //Loads models, controllers and views
 
 	typedef string Output;
 
