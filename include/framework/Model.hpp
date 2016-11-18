@@ -18,8 +18,9 @@
 			string storageName;
 			string id;
 			map< string, string *> fieldsMap;
-		public:
+		protected:
 			Model(string storageName);
+		public:
 			bool save();
 			bool find(map< string, string >);
 			void put(map< string, string >);
@@ -27,6 +28,8 @@
 			void setStorageName(string);
 			void setId(string);
 			void setFieldsMap(map< string, string *>);
+			void appendFields(map< string, string *>);
+			map< string, string > getFields();
 		};
 	}
 		

@@ -14,15 +14,18 @@
 	namespace Model{
 		class User: public Framework::Model
 		{
-		public:
+		private:
 			string name;
-			string idade;
+			string email;
+			string password;
+		public:
 			User(string storageName = "User") : Framework::Model(storageName){
 				map< string, string *> fieldsMap = {
 					{"name", &this->name},
-					{"idade", &this->idade}
+					{"email", &this->email},
+					{"password", &this->password}
 				};
-				this->setFieldsMap(fieldsMap);
+				this->appendFields(fieldsMap);
 			};
 			//~Login();
 		};

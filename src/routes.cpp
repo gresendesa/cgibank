@@ -11,6 +11,9 @@ Output routes(){
 		if(Route::match("/daniel")){
 			return Controller::Main::run();
 		} else
+		if(Route::match("/caio")){
+			return "caioccaiocdiao";
+		} else
 		if(Route::match("/redirect")){
 			return Framework::Controller::redirect("/teste");
 		} else 

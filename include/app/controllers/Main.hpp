@@ -15,7 +15,7 @@
 	typedef string Output;
 
 	namespace Controller{
-		class Main: Framework::Controller
+		class Main: public Framework::Controller
 		{
 		public:
 			//Login(arguments);

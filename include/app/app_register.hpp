@@ -3,6 +3,7 @@
 
 	//Models
 	#include "User.hpp"
+	#include "Manager.hpp"
 
 	//Views
 	#include "../app/views/Main.hpp"

@@ -3,6 +3,6 @@
 Output Controller::Login::run(){
 	View::Main view;
 	string a = "meu nome";
-	Model::User user;
+	Model::Manager user;
 	return user.getId();
 }
