@@ -13,5 +13,6 @@
 	//Controllers
 	#include "../app/controllers/Login.hpp"
 	#include "../app/controllers/Main.hpp"
+	#include "../app/controllers/Signup.hpp"
 
 #endif

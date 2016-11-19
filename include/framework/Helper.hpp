@@ -23,6 +23,7 @@
 		static bool fileExists(string);
 		static vector< string > fillVectorFromArray(string*, int);
 		static bool isAlphanum(string);
+		static string serializeStrMap(map< string, string >, string valueSeparator = " :: ", string recordSeparator = " >> ");
 	};
 
 #endif

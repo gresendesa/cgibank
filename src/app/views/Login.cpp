@@ -2,7 +2,7 @@
 
 void View::Login::program(){
 	//this->appendText("{{{agora}}}Login bitch {{agora}}{{agora}}{{teste}} merda{agora}");
-	this->appendHTML("test");
-	map<string, string> replaceList = {{"agora", "feio"}, {"fdsa", "poiop"}};
-	this->replaceFlags(replaceList);
+	this->appendHTML("loginregister");
+	//map<string, string> replaceList = {{"agora", "feio"}, {"fdsa", "poiop"}};
+	//this->replaceFlags(replaceList);
 }

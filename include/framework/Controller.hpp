@@ -7,6 +7,8 @@
 	#include <map>
 	//#include <fstream>
 
+	#include "Core.hpp"
+
 	using namespace std;
 
 	typedef string Output;

@@ -1,11 +1,11 @@
-#ifndef CONTROLLER_LOGIN_HPP
-#define CONTROLLER_LOGIN_HPP
+#ifndef CONTROLLER_SIGNUP_HPP
+#define CONTROLLER_SIGNUP_HPP
 
 	#include "../../framework/Controller.hpp"
 	#include "../register.hpp"
 
 	namespace Controller{
-		class Login: public Framework::Controller
+		class Signup: public Framework::Controller
 		{
 		public:
 			//Login(arguments);

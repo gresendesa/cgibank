@@ -113,6 +113,7 @@ string Helper::getFileContent(string path, bool &errorFlag){
 	return fullContent;
 };
 
+
 /*
 	It checks if a files exists
 */
@@ -132,4 +133,17 @@ vector< string > Helper::fillVectorFromArray(string *list, int size){
 		output.push_back(list[i]);
 	}
 	return output;
-} 
+}
+
+string Helper::serializeStrMap(map< string, string > mapList, string valueSeparator, string recordSeparator){
+	string output = "";
+	int counter = 0;
+	for (map<string,string>::iterator i=mapList.begin(); i!=mapList.end(); i++){
+		if(counter)
+			output += recordSeparator + i->first + valueSeparator + i->second;
+		else
+			output += i->first + valueSeparator + i->second;
+		counter++;
+	}
+	return output;
+}

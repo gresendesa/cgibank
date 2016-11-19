@@ -4,16 +4,6 @@
 	#include "../../framework/Controller.hpp"
 	#include "../register.hpp"
 
-	#include <iostream>
-	#include <string>
-	#include <vector>
-	#include <map>
-	#include <fstream>
-
-	using namespace std;
-
-	typedef string Output;
-
 	namespace Controller{
 		class Main: public Framework::Controller
 		{

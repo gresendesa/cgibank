@@ -2,17 +2,17 @@
 
 Output Route::route(){
 	if (Route::match("/")) {
-		if(Route::match("/teste")){
+		if(Route::match("/welcome")){
 			return Controller::Login::run();
 		} else 
 		if(Route::match("/main")){
 			return Controller::Main::run();
 		} else
-		if(Route::match("/daniel")){
-			return Controller::Main::run();
+		if(Route::match("/signup")){
+			return Controller::Signup::run();
 		} else
-		if(Route::match("/caio")){
-			return "caioccaiocdiao";
+		if(Route::match("/signin")){
+			return Controller::Main::run();
 		} else
 		if(Route::match("/redirect")){
 			return Framework::Controller::redirect("/teste");
@@ -24,8 +24,9 @@ Output Route::route(){
 
 
 		else {
-			View::NotFoundPage not_found_page;
-			return not_found_page.run();
+			//View::NotFoundPage not_found_page;
+			//return not_found_page.run();
+			return Framework::Controller::redirect("/welcome ");
 		}
 	} else {
 		return " ";
