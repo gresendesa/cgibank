@@ -13,12 +13,14 @@ A storage has the following functionalities:
 ## Storages.config file
 
 Storage reads information from data/Storages.config file. Every storage must be declared manually into this file. The sintax follow this model:
-{storage_name}#{field_foo[*][!]}#{field_bar[*][!]}...#{field_baz[*][!]}
+```
+storage_name#field_foo*!#field_bar*!...#field_baz*!
+```
 
 Meanings:
-  - {storage_name}: must receive exactly what the name suggests
+  - storage_name: must receive exactly what the name suggests
   - #: is the field separator
-  - {field_foo}, {field_bar}, {field_baz}: must receive the field names that storage will have.
+  - field_foo, field_bar, field_baz: must receive the field names that storage will have.
   - * and !: They're optional
     - * define field as a unique field
     - ! define field as a required field
