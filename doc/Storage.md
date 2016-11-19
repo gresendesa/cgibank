@@ -3,11 +3,12 @@
 Storage is the class that represents the system storage data which is saved as files placed into data/ directory.
 
 A storage has the following functionalities:
-	- ::Create (Storage name is required as parameter)
-	- Insert record;
-	- Update record;
-	- Delete record;
-	- Search for records;
+  - ::Get (Storage name is required as parameter)
+    - Storage searches for the specified name into Storages.config and load all informations from this file. Then a Storage object is returned. If the specified storage is not defined in the config file then the returned object receive Storage::ERROR as status attribute.
+  - Insert record
+  - Update record
+  - Delete record
+  - Search for records
 
 ## Storages.config file
 
@@ -15,14 +16,15 @@ Storage reads information from data/Storages.config file. Every storage must be 
 {storage_name}#{field_foo[*][!]}#{field_bar[*][!]}...#{field_baz[*][!]}
 
 Meanings:
-	- {storage_name}: must receive exactly what the name suggests;
-	- #: is the field separator
-	- {field_foo}, {field_bar}, {field_baz}: must receive the field names that storage will have.
-	- * and !: They're optional options
-		- * define field as a unique field
-		- ! define field as a required field
+  - {storage_name}: must receive exactly what the name suggests
+  - #: is the field separator
+  - {field_foo}, {field_bar}, {field_baz}: must receive the field names that storage will have.
+  - * and !: They're optional
+    - * define field as a unique field
+    - ! define field as a required field
 
 Examples:
+
 ```
 User#username*!#email*!#password!#description#website
 Acesses#ip!#pid
@@ -50,7 +52,7 @@ To create a storage it's necessary to specify:
 
 ## Storage saving
 
-Storage saves only one record for object instance. Once a Storage is created and 
+Storage saves only one record for object instance. 
 
 
 ## Storage loading
