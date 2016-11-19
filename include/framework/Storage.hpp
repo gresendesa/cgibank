@@ -27,7 +27,7 @@
 
 		Storage(string);
 		void loadRecords();
-		void fillObject(string);
+		void fill(string);
 		string serializeRecord(map< string, string >);
 		static bool insertLine(string, string);
 		static bool createBlankFile(string);

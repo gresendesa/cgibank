@@ -1,5 +1,5 @@
 #include "../../../include/app/views/Main.hpp"
 
 void View::Main::program(){
-	this->appendHTML("testx");
+	this->appendHTML("index");
 }

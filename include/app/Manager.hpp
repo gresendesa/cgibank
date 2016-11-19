@@ -14,14 +14,9 @@
 	namespace Model{
 		class Manager: public Model::User
 		{
-		private:
-			string hashid;
 		public:
-			Manager(string storageName = "Manager") : User(storageName){
-				map< string, string *> fieldsMap = {
-					{"hashid", &this->hashid}
-				};
-				this->appendFields(fieldsMap);
+			Manager() : User(){
+				this->level = "Manager";
 			};
 		};
 	}		

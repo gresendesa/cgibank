@@ -22,7 +22,6 @@ Output Route::route(){
 			return "foo <a href=\"/redirect\">click me</a>";
 		}
 
-
 		else {
 			//View::NotFoundPage not_found_page;
 			//return not_found_page.run();

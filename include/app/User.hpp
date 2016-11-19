@@ -18,12 +18,15 @@
 			string name;
 			string email;
 			string password;
+		protected:
+			string level;
 		public:
 			User(string storageName = "User") : Framework::Model(storageName){
 				map< string, string *> fieldsMap = {
 					{"name", &this->name},
 					{"email", &this->email},
-					{"password", &this->password}
+					{"password", &this->password},
+					{"level", &this->level}
 				};
 				this->appendFields(fieldsMap);
 			};

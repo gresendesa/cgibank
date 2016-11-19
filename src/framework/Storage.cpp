@@ -25,7 +25,6 @@ Storage Storage::getOrCreate(string name, vector< string > fields){
 		if(Storage::createBlankFile(fullPath)){
 			if(fields.size() > 0)
 				Storage::insertLine(Helper::implode(fields, Storage::SEPARATOR), fullPath);
-				Storage::insertLine("0", fullPath);
 		} else {
 			status = Storage::ERROR;
 		}
@@ -59,11 +58,11 @@ void Storage::loadRecords(){
 		this->status = Storage::ERROR;
 	} else { 
 		this->status = Storage::SUCCESS;
-		this->fillObject(fileContent);
+		this->fill(fileContent);
 	}
 };
 
-void Storage::fillObject(string fileContent){
+void Storage::fill(string fileContent){
 	vector< string > lines = Helper::explode(fileContent, '\n');
 	if(lines.size()){
 		this->fields = Helper::explode(lines[0], Storage::SEPARATOR);

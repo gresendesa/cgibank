@@ -32,6 +32,7 @@
 			void setFieldsMap(map< string, string *>);
 			void appendFields(map< string, string *>);
 			map< string, string > getFields();
+			vector< string > getFieldLabels();
 		};
 	}
 		

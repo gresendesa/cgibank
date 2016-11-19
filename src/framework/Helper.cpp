@@ -113,7 +113,6 @@ string Helper::getFileContent(string path, bool &errorFlag){
 	return fullContent;
 };
 
-
 /*
 	It checks if a files exists
 */
@@ -146,4 +145,14 @@ string Helper::serializeStrMap(map< string, string > mapList, string valueSepara
 		counter++;
 	}
 	return output;
+}
+
+void Helper::log(string input){
+	string filename = "../data/log.txt"; 
+	ofstream file;
+	file.open(filename.c_str(), ios::app);
+	if(file.is_open()){
+		file << input << '\n';
+		file.close();
+	}
 }

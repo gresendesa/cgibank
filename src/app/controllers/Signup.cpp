@@ -3,5 +3,11 @@
 Output Controller::Signup::run(){
 	//Framework::Controller::redirect("/main");
 	map< string, string > variables = Core::getPOST();
-	return Helper::serializeStrMap(variables);
+	Model::Manager manager;
+	manager.setName(variables["username"]);
+	manager.setEmail(variables["email"]);
+	manager.setPassword(variables["password"]);
+	manager.save();
+	//return Helper::serializeStrMap(variables);
+	return "Debug: Ok. POST request caught. {name: " + variables["username"] + " # email: " + variables["email"] + " # password: " + variables["password"] + "} User saved in data/User. <a href=\"/welcome\">Back</a>";
 }

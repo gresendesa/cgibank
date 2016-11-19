@@ -1,11 +1,12 @@
 #include "../../include/framework/Model.hpp"
 
 Framework::Model::Model(string storageName){
-	
+	this->storageName = storageName;
 }
 
 bool Framework::Model::save(){
-	
+	//Helper::log(this->storageName);
+	Storage::getOrCreate(this->storageName, this->getFieldLabels()).insert(this->getFields());
 }
 
 bool Framework::Model::find(map< string, string > snippets){
@@ -44,6 +45,15 @@ map< string, string > Framework::Model::getFields(){
 	for (map< string, string *>::iterator i=this->fieldsMap.begin(); i!=this->fieldsMap.end(); i++){
 		pair< string, string> field(i->first, *i->second);
 		output.insert(field);
+	}
+	return output;
+}
+
+
+vector< string > Framework::Model::getFieldLabels(){
+	vector< string > output;
+	for (map< string, string *>::iterator i=this->fieldsMap.begin(); i!=this->fieldsMap.end(); i++){
+		output.push_back(i->first);
 	}
 	return output;
 }
