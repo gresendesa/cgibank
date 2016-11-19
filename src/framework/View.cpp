@@ -25,11 +25,11 @@ void Framework::View::replaceFlags(map< string, string> replaceList){
 	}
 }
 
-void Framework::View::program(){
+void Framework::View::program(map< string, string> parameters){
 
 }
 
-Output Framework::View::run(){
+Output Framework::View::run(map< string, string> parameters){
 	this->program();
 	return this->content;
 }

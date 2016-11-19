@@ -5,8 +5,15 @@ Framework::Model::Model(string storageName){
 }
 
 bool Framework::Model::save(){
-	//Helper::log(this->storageName);
-	Storage::getOrCreate(this->storageName, this->getFieldLabels()).insert(this->getFields());
+	bool result = true;
+	Storage model = Storage::getOrCreate(this->storageName, this->getFieldLabels());
+	if(model.getStatus() == Storage::SUCCESS){
+		model.insert(this->getFields());
+	} else {
+		bool result = false;
+		Helper::log("Error: Framework::Model::save()");
+	}
+	return result;
 }
 
 bool Framework::Model::find(map< string, string > snippets){

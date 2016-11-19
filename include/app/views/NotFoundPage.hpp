@@ -13,7 +13,7 @@
 		class NotFoundPage: public Framework::View
 		{
 		public:
-			void program();
+			void program(map< string, string> = map< string, string>());
 		};
 	};
 		

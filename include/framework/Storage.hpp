@@ -33,6 +33,8 @@
 		static bool createBlankFile(string);
 		vector< string > getRequiredFields();
 		vector< string > getUniqueFields();
+		bool isRequiredFieldsOk(map< string, string >);
+		bool isUniqueFieldsOk(map< string, string >);
 
 	public:
 		//~Storage();
@@ -42,10 +44,18 @@
 		static const int ERROR = 3;
 
 		static Storage getOrCreate(string name, vector< string > fields = vector< string >());
-		bool insert(map< string, string >);
+		int insert(map< string, string >);
 		int getStatus();
 		vector< string > getFields();
 		vector< map< string, string > > getRecords();
+		
+		class Record{
+		private:
+			string recordName;
+		public:
+			Record(string);
+			int create();
+		};
 	};
 
 #endif

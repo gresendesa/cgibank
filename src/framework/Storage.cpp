@@ -106,11 +106,53 @@ bool Storage::createBlankFile(string filename){
 	return success;
 }
 
-bool Storage::insert(map< string, string > record){
-	this->loadRecords();
-	bool result = Storage::insertLine(this->serializeRecord(record), this->filename);
-	this->loadRecords();
+bool Storage::isRequiredFieldsOk(map< string, string > record){
+	//Check for empty required fields
+	bool result = true;
+	vector< string > requiredFields = this->getRequiredFields();
+	for (int i = 0; i < requiredFields.size(); i++)
+	{
+		if(record[requiredFields[i]].size() == 0){
+			result = false;
+			break;
+		}
+	}
 	return result;
+}
+
+bool Storage::isUniqueFieldsOk(map< string, string > record){
+	//Check unique fields
+	bool result = true;
+	vector< string > uniqueFields = this->getUniqueFields();
+	for (int i = 0; i < records.size(); i++)
+	{
+		for (int j = 0; j < uniqueFields.size(); j++)
+		{
+			if(records[i][uniqueFields[j]] == record[uniqueFields[j]]){
+				result = false;
+				break;
+			}
+		}
+		
+	}
+	return result;
+}
+
+int Storage::insert(map< string, string > record){
+	int output = Storage::SUCCESS;
+	if(!this->isRequiredFieldsOk(record)){
+		output = Storage::INCONSISTENCY;
+	} else
+	if(!this->isUniqueFieldsOk(record)){
+		output = Storage::DUPLICATE;
+	} else {
+		if(Storage::insertLine(this->serializeRecord(record), this->filename)){
+			this->loadRecords();
+		} else {
+			output = Storage::ERROR;
+		}
+	}
+	return output;	
 };
 
 int Storage::getStatus(){
@@ -144,4 +186,14 @@ vector< string > Storage::getUniqueFields(){
 	}
 	return uniqueFields;
 };
+
+Storage::Record::Record(string recordName){
+	this->recordName = recordName;
+}
+
+int Storage::Record::create(){
+	return 0;
+}
+
+
 

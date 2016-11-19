@@ -19,11 +19,11 @@
 			void appendHTML(string);
 			void appendText(string);
 			void replaceFlags(map< string, string>);
-			virtual void program();
+			virtual void program(map< string, string> = map< string, string>());
 		public:
 			//View(arguments);
 			//~View();	
-			Output run();
+			Output run(map< string, string> = map< string, string>());
 		};
 	}
 	
