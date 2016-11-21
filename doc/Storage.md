@@ -72,3 +72,4 @@ Everyline will be loaded as a Record object;
   - Storage::DUPLICATE (There are duplicated unique fields)
   - Storage::INCONSISTENCY (There are empty or missing required fields) 
   - Storage::ERROR (General error)
+

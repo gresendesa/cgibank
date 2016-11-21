@@ -1,199 +1,157 @@
 #include "../../include/framework/Storage.hpp"
 
-Storage::Storage(string filename){
-	this->filename = "../data/" + filename;
-	bool isThereError;
-	this->loadRecords();
+const string Storage::DATA_DIRECTORY = "data/";
+bool Storage::is_ready = true;
+map< string, Storage::File& > Storage::filesTable = Storage::getFilesTable();
+
+/*----------------------------------------------------------
+					Nested File class
+----------------------------------------------------------*/
+Storage::File::File(string filename, vector< string > fields){
+	bool error;
+	Storage::File::open(&this->file, filename, error);
+	this->is_open = !error;
+	this->name = filename;
+	this->fields = fields;
+};
+
+string Storage::File::getName(){
+	return this->name;
+}
+
+vector< string > Storage::File::getFields(){
+	return this->fields;
+}
+
+fstream * Storage::File::getFile(){
+	return &this->file;
+}
+
+bool Storage::File::isOpen(){
+	return this->is_open;
+}
+
+fstream* Storage::File::open(fstream * fs, string filename, bool &error){
+	error = false;
+	fs->open (Storage::DATA_DIRECTORY + filename, fstream::in | fstream::out);
+	if(!fs->is_open())
+		error = true;
+	return fs;
+};
+
+void Storage::File::close(){
+	if(this->is_open)
+		this->file.close();
+}
+
+/*----------------------------------------------------------
+					Storage class
+----------------------------------------------------------*/
+Storage::Storage(string name){
+	this->name = name;
+	if(Storage::filesTable.count(name))
+		this->is_loaded = true;
+	else
+		this->is_loaded = false;
+};
+
+Storage::~Storage(){
 	
 };
 
-/*
-	Create a new file if it does not exist. 
-	Next returns an instaciate object
-
-	Fields receive a vector< string >. 
-	For unique insert * next to the field;
-	For required fields insert ! next to the field;
-*/
-Storage Storage::getOrCreate(string name, vector< string > fields){
-	string fullPath = "../data/" + name;
-	int status = Storage::SUCCESS;
-
-	Storage df(name);
-
-	if(!Helper::fileExists(fullPath)){
-		if(Storage::createBlankFile(fullPath)){
-			if(fields.size() > 0)
-				Storage::insertLine(Helper::implode(fields, Storage::SEPARATOR), fullPath);
-		} else {
-			status = Storage::ERROR;
-		}
-	} else {
-		df.loadRecords();
-	};
-
-	df.fields = fields;
-	df.status = status;
-	return df;
-};
-
-bool Storage::insertLine(string line, string filename){
-	bool success = false;
-	if(Helper::fileExists(filename)){
-		ofstream file;
-		file.open(filename.c_str(), ios::app);
-		if(file.is_open()){
-			file << line << '\n';
-			file.close();
-			success = true;
-		}
-	}
-	return success;
-};
-
-void Storage::loadRecords(){
-	bool isThereError;
-	string fileContent = Helper::getFileContent(this->filename, isThereError);
-	if(isThereError){
-		this->status = Storage::ERROR;
-	} else { 
-		this->status = Storage::SUCCESS;
-		this->fill(fileContent);
-	}
-};
-
-void Storage::fill(string fileContent){
-	vector< string > lines = Helper::explode(fileContent, '\n');
-	if(lines.size()){
-		this->fields = Helper::explode(lines[0], Storage::SEPARATOR);
-		for (int i = 1; i < lines.size(); i++)
-		{
-			vector< string > record = Helper::explode(lines[i], Storage::SEPARATOR);
-			for (int j = 0; j < this->fields.size(); j++)
-			{
-				pair< string, string > record(this->fields[j], lines[i]);
-				map< string, string > recordList;
-				recordList.insert(record);
-				this->records.push_back(recordList);
-			}
-		}
-	};
-};
-
-string Storage::serializeRecord(map< string, string > record){
-	string output = "";
-	for (int i = 0; i < this->fields.size(); ++i)
-	{
-		if(i){
-			output += Storage::SEPARATOR + record[fields[i]];
-		} else {
-			output = record[fields[i]];
-		}	
-	}
-	return output;
-};
-
-bool Storage::createBlankFile(string filename){
-	bool success = false;
-	if(!Helper::fileExists(filename)){
-		ofstream file;
-		file.open(filename.c_str());
-		if(file.is_open()){
-			file.close();
-			success = true;
-		}
-	}
-	return success;
+bool Storage::isLoaded(){
+	return this->is_loaded;
 }
 
-bool Storage::isRequiredFieldsOk(map< string, string > record){
-	//Check for empty required fields
-	bool result = true;
-	vector< string > requiredFields = this->getRequiredFields();
-	for (int i = 0; i < requiredFields.size(); i++)
+void Storage::closeAllFiles(){
+	for (map< string, Storage::File& >::iterator i=Storage::filesTable.begin(); i!=Storage::filesTable.end(); i++){
+		i->second.close();
+	}
+}
+
+void Storage::loadRecords(){
+	fstream * file = Storage::filesTable.at(this->name).getFile();
+}
+
+/*
+	This function is called before main().
+	It opens all storage files blocking them and putting their references into Storage::files;
+*/
+vector< string > Storage::loadConfigFile(){
+	string line;
+	vector< string > lines;
+	ifstream configFile (Storage::DATA_DIRECTORY + "Storages.config");
+	if (configFile.is_open())
 	{
-		if(record[requiredFields[i]].size() == 0){
-			result = false;
+		while (getline(configFile, line))
+		{
+			lines.push_back(line);
+		}
+		configFile.close();
+	} else {
+		Helper::log("Storage init error: Config file not found", Storage::DATA_DIRECTORY);
+	}
+	return lines;
+};
+
+
+map< string, vector< string > > Storage::parseConfigFile(vector< string > lines, bool &error){
+	map< string, vector< string > > configContent;
+	error = false;
+	for (int i = 0; i < lines.size(); i++)
+	{
+		vector< string > lineElements = Helper::explode(lines[i], Storage::SEPARATOR);
+		if(lineElements.size() > 1){
+			string filename = lineElements.front();
+			lineElements.erase(lineElements.begin());
+			pair< string, vector< string > > record(filename, lineElements);
+			configContent.insert(record);
+		} else {
+			Helper::log("Storage init error: Sintax error on config file", Storage::DATA_DIRECTORY);
+			error = true;
 			break;
 		}
 	}
-	return result;
+	return configContent;
 }
 
-bool Storage::isUniqueFieldsOk(map< string, string > record){
-	//Check unique fields
-	bool result = true;
-	vector< string > uniqueFields = this->getUniqueFields();
-	for (int i = 0; i < records.size(); i++)
-	{
-		for (int j = 0; j < uniqueFields.size(); j++)
-		{
-			if(records[i][uniqueFields[j]] == record[uniqueFields[j]]){
-				result = false;
-				break;
+map< string, Storage::File& > Storage::getFilesTable(){
+	Storage::is_ready = true;
+	bool error;
+	map< string, Storage::File& > output;
+	map< string, vector< string > > configContent = Storage::parseConfigFile(Storage::loadConfigFile(), error);
+	if(!error){
+		for (map< string, vector< string > >::iterator i=configContent.begin(); i!=configContent.end(); i++){
+			Storage::File file(i->first, i->second);
+			if(file.isOpen()){
+				pair< string, Storage::File& > record(i->first, file);
+				Storage::filesTable.insert(record);
+			} else {
+				Helper::log("Storage init error: File " + file.getName() + " couldn't be opened", Storage::DATA_DIRECTORY);
+				error = false;
 			}
 		}
-		
 	}
-	return result;
+	
+	if(error){
+		Storage::is_ready = false;
+		Helper::log("Storage init error: Process aborted", Storage::DATA_DIRECTORY);
+	}
+	
+	return output;
 }
 
-int Storage::insert(map< string, string > record){
-	int output = Storage::SUCCESS;
-	if(!this->isRequiredFieldsOk(record)){
-		output = Storage::INCONSISTENCY;
-	} else
-	if(!this->isUniqueFieldsOk(record)){
-		output = Storage::DUPLICATE;
-	} else {
-		if(Storage::insertLine(this->serializeRecord(record), this->filename)){
-			this->loadRecords();
-		} else {
-			output = Storage::ERROR;
-		}
-	}
-	return output;	
-};
-
-int Storage::getStatus(){
-	return this->status;
-};
-
-vector< string > Storage::getFields(){
-	return this->fields;
-};
-
-vector< map< string, string > > Storage::getRecords(){
-	return this->records;
-};
-
-vector< string > Storage::getRequiredFields(){
-	vector< string > requiredFields;
-	for (int i = 0; i < this->fields.size(); ++i)
-	{
-		if(fields[i].find(Storage::REQUIRED_FIELD) != string::npos)
-			requiredFields.push_back(fields[i]);
-	}
-	return requiredFields;
-};
-
-vector< string > Storage::getUniqueFields(){
-	vector< string > uniqueFields;
-	for (int i = 0; i < this->fields.size(); ++i)
-	{
-		if(fields[i].find(Storage::UNIQUE_FIELD) != string::npos)
-			uniqueFields.push_back(fields[i]);
-	}
-	return uniqueFields;
-};
-
-Storage::Record::Record(string recordName){
-	this->recordName = recordName;
+bool Storage::isReady(){
+	return Storage::is_ready;
 }
 
-int Storage::Record::create(){
-	return 0;
-}
+/*----------------------------------------------------------
+					Nested Record class
+----------------------------------------------------------*/
+
+Storage::Record::Record(Storage * storage){
+	
+};
 
 
 

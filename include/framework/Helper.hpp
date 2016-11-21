@@ -24,7 +24,7 @@
 		static vector< string > fillVectorFromArray(string*, int);
 		static bool isAlphanum(string);
 		static string serializeStrMap(map< string, string >, string valueSeparator = " :: ", string recordSeparator = " >> ");
-		static void log(string);
+		static void log(string, string = "../data/");
 	};
 
 #endif

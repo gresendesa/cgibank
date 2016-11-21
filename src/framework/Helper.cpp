@@ -147,8 +147,8 @@ string Helper::serializeStrMap(map< string, string > mapList, string valueSepara
 	return output;
 }
 
-void Helper::log(string input){
-	string filename = "../data/log.txt"; 
+void Helper::log(string input, string directory){
+	string filename = directory + "log.txt"; 
 	ofstream file;
 	file.open(filename.c_str(), ios::app);
 	if(file.is_open()){
