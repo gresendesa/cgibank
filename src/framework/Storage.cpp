@@ -9,7 +9,7 @@ map< string, Storage::File& > Storage::filesTable = Storage::getFilesTable();
 ----------------------------------------------------------*/
 Storage::File::File(string filename, vector< string > fields){
 	bool error;
-	Storage::File::open(&this->file, filename, error);
+	Storage::File::open(this->file, filename, error);
 	this->is_open = !error;
 	this->name = filename;
 	this->fields = fields;
@@ -24,7 +24,7 @@ vector< string > Storage::File::getFields(){
 }
 
 fstream * Storage::File::getFile(){
-	return &this->file;
+	return this->file;
 }
 
 bool Storage::File::isOpen(){
@@ -41,7 +41,15 @@ fstream* Storage::File::open(fstream * fs, string filename, bool &error){
 
 void Storage::File::close(){
 	if(this->is_open)
-		this->file.close();
+		this->file->close();
+}
+
+void Storage::File::reset(){
+	string filename = Storage::DATA_DIRECTORY + this->name;
+	delete(filename.c_str());
+	if(this->is_open)
+		this->file->close();
+	fstream file;
 }
 
 /*----------------------------------------------------------
@@ -66,6 +74,7 @@ bool Storage::isLoaded(){
 void Storage::closeAllFiles(){
 	for (map< string, Storage::File& >::iterator i=Storage::filesTable.begin(); i!=Storage::filesTable.end(); i++){
 		i->second.close();
+			
 	}
 }
 
@@ -122,12 +131,12 @@ map< string, Storage::File& > Storage::getFilesTable(){
 	map< string, vector< string > > configContent = Storage::parseConfigFile(Storage::loadConfigFile(), error);
 	if(!error){
 		for (map< string, vector< string > >::iterator i=configContent.begin(); i!=configContent.end(); i++){
-			Storage::File file(i->first, i->second);
-			if(file.isOpen()){
-				pair< string, Storage::File& > record(i->first, file);
+			Storage::File* file = new Storage::File(i->first, i->second);
+			if(file->isOpen()){
+				pair< string, Storage::File& > record(i->first, *file);
 				Storage::filesTable.insert(record);
 			} else {
-				Helper::log("Storage init error: File " + file.getName() + " couldn't be opened", Storage::DATA_DIRECTORY);
+				Helper::log("Storage init error: File " + file->getName() + " couldn't be opened", Storage::DATA_DIRECTORY);
 				error = false;
 			}
 		}

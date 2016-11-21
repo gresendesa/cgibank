@@ -7,6 +7,7 @@
 	#include <map>
 	#include <fstream>
 	#include <locale>
+	#include <cstdio>
 
 	using namespace std;
 

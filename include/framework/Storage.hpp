@@ -21,7 +21,7 @@
 		*/
 		class File{
 		private:
-			fstream file;
+			fstream *file;
 			string name;
 			bool is_open;
 			vector< string > fields;
@@ -33,6 +33,7 @@
 			vector< string > getFields();
 			fstream * getFile();
 			void close();
+			void reset();
 		};
 
 		/*
@@ -72,7 +73,8 @@
 		static map< string, Storage::File& > getFilesTable();
 		static void closeAllFiles();
 		bool isLoaded();
-		void loadRecords();	
+		void loadRecords();
+
 	};
 
 #endif
