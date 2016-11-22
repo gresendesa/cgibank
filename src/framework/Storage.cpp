@@ -3,6 +3,8 @@
 const string Storage::DATA_DIRECTORY = "data/";
 bool Storage::is_ready = true;
 map< string, Storage::File* > Storage::filesTable = Storage::getFilesTable();
+const string Storage::REQUIRED_FIELD = "!";
+const string Storage::UNIQUE_FIELD = "*";
 
 /*----------------------------------------------------------
 					Nested File class
@@ -61,7 +63,7 @@ map< string, string > Storage::File::parseLine(vector< string > fields){
 		string value = "";
 		if(i <= fields.size() - 1)
 		value = fields[i];
-		pair< string, string > record(this->fields[i], value);
+		pair< string, string > record(Storage::removeFieldFlags(this->fields[i]), value);
 		content.insert(record);
 	}
 	return content;
@@ -83,13 +85,26 @@ bool Storage::File::loadRecords(){
 	return result;
 }
 
+bool Storage::File::saveRecords(){
+	ofstream file(Storage::DATA_DIRECTORY + this->name);
+	for (int i = 0; i < this->records.size(); i++)
+	{
+		map< string, string > recordContent = this->records[i]->getContent();
+		for (int j = 0; j < this->fields.size(); j++)
+		{
+			file << recordContent[Storage::removeFieldFlags(this->fields[j])];
+			if(j < this->fields.size() - 1)
+				file << Storage::SEPARATOR;
+		}
+		if(i < this->records.size() - 1)
+		file << endl;
+	}
+	file.close();
+}
+
 vector< Storage::File::Record* > Storage::File::getRecords(){
 	return this->records;
 };
-
-
-
-
 
 
 /*----------------------------------------------------------
@@ -108,6 +123,10 @@ Storage::Storage(string name){
 Storage::~Storage(){
 	
 };
+
+string Storage::removeFieldFlags(string input){
+	return Helper::replace(Storage::REQUIRED_FIELD, "", Helper::replace(Storage::UNIQUE_FIELD, "", input));
+}
 
 /*
 	Remove specified file and create a new with the same name
@@ -135,24 +154,24 @@ string Storage::getName(){
 	return this->name;
 }
 
+/*
+	Saves all modified files, closes open files and frees dinamically allocated memory
+*/
 void Storage::consolidate(){
 	for (map< string, Storage::File* >::iterator i=Storage::filesTable.begin(); i!=Storage::filesTable.end(); i++){
-		i->second->close();
-		vector< Storage::File::Record* > records = i->second->getRecords();
-
-		for (int j = 0; j < records.size(); j++)
-		{
-			cout << records[j]->getField("username*!") << endl;
-			map< string, string > content = records[j]->getContent();
-
-			for (map< string, string >::iterator k=content.begin(); k!=content.end(); k++){
-				//cout << j->first << ":" << j->second << endl;
-			}
-
-			
-			delete records[j];
+		if(i->second->isActive()){
+			vector< Storage::File::Record* > records = i->second->getRecords();
+			string filename = Storage::DATA_DIRECTORY + i->second->getName();
+			remove(filename.c_str());
+			i->second->close();
+			i->second->saveRecords();
+			for (int j = 0; j < records.size(); j++)	
+				delete records[j];
+			delete i->second;
+		} else {
+			i->second->close();
+			delete i->second;
 		}
-		delete i->second;
 	}
 }
 

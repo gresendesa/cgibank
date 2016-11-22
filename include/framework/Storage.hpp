@@ -40,6 +40,7 @@
 			bool isOpen();
 			bool isActive();
 			bool loadRecords();
+			bool saveRecords();
 			vector< Storage::File::Record* > getRecords();
 			map< string, string > parseLine(vector< string >);
 			void addRecord(Storage::File::Record*);
@@ -66,8 +67,8 @@
 		Storage(string);
 		~Storage();
 		static const char SEPARATOR = '#';
-		static const char REQUIRED_FIELD = '!';
-		static const char UNIQUE_FIELD = '*';
+		static const string REQUIRED_FIELD;
+		static const string UNIQUE_FIELD;
 		static const string DATA_DIRECTORY;
 		static const int SUCCESS = 0;
 		static const int DUPLICATE = 1;
@@ -77,6 +78,7 @@
 		static bool isReady();
 
 		static vector< string > loadConfigFile();
+		static string removeFieldFlags(string);
 		static map< string, vector< string > > parseConfigFile(vector< string >, bool&);
 		static map< string, Storage::File* > getFilesTable();
 		static void consolidate();
