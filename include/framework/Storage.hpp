@@ -20,7 +20,7 @@
 			File class
 		*/
 		class File{
-		private:
+		public:
 			/*
 				Record class
 			*/
@@ -29,28 +29,34 @@
 				Storage::File *file;
 				map< string, string > content;
 			public:
-				Record(Storage::File *);
+				Record(Storage::File *, map< string, string >);
+				map< string, string > getContent();
+				string getField(string);
 			};
 
-			string name;
-			bool is_open;
-			bool is_active;
-			vector< string > fields;
-			vector< Storage::File::Record > records;
-			static ifstream * open(ifstream *, string, bool&);
-		public:
 			ifstream file;
 			File(string, vector< string >);
 			string getName();
 			bool isOpen();
 			bool isActive();
 			bool loadRecords();
+			vector< Storage::File::Record* > getRecords();
+			map< string, string > parseLine(vector< string >);
+			void addRecord(Storage::File::Record*);
 			vector< string > getFields();
 			ifstream * getFile();
-			void close();
+			void close();	
+		private:
+			string name;
+			bool is_open;
+			bool is_active;
+			vector< string > fields;
+			vector< Storage::File::Record* > records;
+			static ifstream * open(ifstream *, string, bool&);
+
 		};
 
-		static map< string, Storage::File& > filesTable;
+		static map< string, Storage::File* > filesTable;
 		static bool is_ready;
 
 		bool is_loaded;
@@ -72,7 +78,7 @@
 
 		static vector< string > loadConfigFile();
 		static map< string, vector< string > > parseConfigFile(vector< string >, bool&);
-		static map< string, Storage::File& > getFilesTable();
+		static map< string, Storage::File* > getFilesTable();
 		static void consolidate();
 		static bool resetFile(string);
 		bool isLoaded();

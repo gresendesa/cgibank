@@ -2,7 +2,7 @@
 
 const string Storage::DATA_DIRECTORY = "data/";
 bool Storage::is_ready = true;
-map< string, Storage::File& > Storage::filesTable = Storage::getFilesTable();
+map< string, Storage::File* > Storage::filesTable = Storage::getFilesTable();
 
 /*----------------------------------------------------------
 					Nested File class
@@ -32,6 +32,10 @@ bool Storage::File::isOpen(){
 	return this->is_open;
 }
 
+void Storage::File::addRecord(Storage::File::Record* record){
+	this->records.push_back(record);
+}
+
 bool Storage::File::isActive(){
 	return this->is_active;
 }
@@ -50,20 +54,39 @@ void Storage::File::close(){
 		this->file.close();
 }
 
+map< string, string > Storage::File::parseLine(vector< string > fields){
+	map< string, string > content;
+	for (int i = 0; i < this->fields.size(); ++i)
+	{
+		string value = "";
+		if(i <= fields.size() - 1)
+		value = fields[i];
+		pair< string, string > record(this->fields[i], value);
+		content.insert(record);
+	}
+	return content;
+}
+
 bool Storage::File::loadRecords(){
 	bool result = true;
 	if(this->is_open){
 		this->is_active = true;
 		string line;
 		while(getline(this->file, line)){
-			cout << line << endl;
+			vector< string > fields = Helper::explode(line, Storage::SEPARATOR);
+			Storage::File::Record* recordObj = new Storage::File::Record(this, this->parseLine(fields));
+			this->addRecord(recordObj);
 		}
 	} else {
-		//Helper::log("Storage::File load error: File " + this->name + " couldn't be loaded", Storage::DATA_DIRECTORY);
 		result = false;
 	}
 	return result;
 }
+
+vector< Storage::File::Record* > Storage::File::getRecords(){
+	return this->records;
+};
+
 
 
 
@@ -76,7 +99,7 @@ Storage::Storage(string name){
 	this->name = name;
 	if(Storage::filesTable.count(name)){
 		this->is_loaded = true;
-		//Storage::filesTable.at(name).loadRecords();
+		Storage::filesTable.at(name)->loadRecords();
 	} else {
 		this->is_loaded = false;
 	}
@@ -92,11 +115,11 @@ Storage::~Storage(){
 bool Storage::resetFile(string name){
 	bool result = true;
 	if(Storage::filesTable.count(name)){
-		vector< string > fields = Storage::filesTable.at(name).getFields();
-		Storage::filesTable.at(name).close();
+		vector< string > fields = Storage::filesTable.at(name)->getFields();
+		Storage::filesTable.at(name)->close();
 		Storage::filesTable.erase(name);
 		Storage::File newFile(name, fields);
-		pair< string, Storage::File& > record(name, newFile);
+		pair< string, Storage::File* > record(name, &newFile);
 		Storage::filesTable.insert(record);
 	} else {
 		result = false;
@@ -113,8 +136,23 @@ string Storage::getName(){
 }
 
 void Storage::consolidate(){
-	for (map< string, Storage::File& >::iterator i=Storage::filesTable.begin(); i!=Storage::filesTable.end(); i++){
-		i->second.close();
+	for (map< string, Storage::File* >::iterator i=Storage::filesTable.begin(); i!=Storage::filesTable.end(); i++){
+		i->second->close();
+		vector< Storage::File::Record* > records = i->second->getRecords();
+
+		for (int j = 0; j < records.size(); j++)
+		{
+			cout << records[j]->getField("username*!") << endl;
+			map< string, string > content = records[j]->getContent();
+
+			for (map< string, string >::iterator k=content.begin(); k!=content.end(); k++){
+				//cout << j->first << ":" << j->second << endl;
+			}
+
+			
+			delete records[j];
+		}
+		delete i->second;
 	}
 }
 
@@ -126,19 +164,19 @@ void Storage::loadRecords(){
 	This function is called before main().
 	It opens all storage files blocking them and putting their references into Storage::files;
 */
-map< string, Storage::File& > Storage::getFilesTable(){
+map< string, Storage::File* > Storage::getFilesTable(){
 	Storage::is_ready = true;
 	bool error;
-	map< string, Storage::File& > output;
+	map< string, Storage::File* > output;
 	map< string, vector< string > > configContent = Storage::parseConfigFile(Storage::loadConfigFile(), error);
 	if(!error){
 		for (map< string, vector< string > >::iterator i=configContent.begin(); i!=configContent.end(); i++){
-			Storage::File fileObj(i->first, i->second);
-			if(fileObj.isOpen()){
-				pair< string, Storage::File& > record(i->first, fileObj);
+			Storage::File* fileObj = new Storage::File(i->first, i->second);
+			if(fileObj->isOpen()){
+				pair< string, Storage::File* > record(i->first, fileObj);
 				Storage::filesTable.insert(record);
 			} else {
-				Helper::log("Storage init error: File " + fileObj.getName() + " couldn't be opened", Storage::DATA_DIRECTORY);
+				Helper::log("Storage init error: File " + fileObj->getName() + " couldn't be opened", Storage::DATA_DIRECTORY);
 				error = false;
 			}
 		}
@@ -198,9 +236,20 @@ bool Storage::isReady(){
 					Nested Record class
 ----------------------------------------------------------*/
 
-Storage::File::Record::Record(Storage::File * file){
-	
+Storage::File::Record::Record(Storage::File * file, map< string, string > content){
+	this->file = file;
+	this->content = content;
 };
 
+map< string, string > Storage::File::Record::getContent(){
+	return this->content;
+};
+
+string Storage::File::Record::getField(string field){
+	string value = "";
+	if(this->content.count(field))
+		value = this->content.at(field);
+	return value;
+}
 
 
