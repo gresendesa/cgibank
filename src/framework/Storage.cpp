@@ -11,6 +11,7 @@ Storage::File::File(string filename, vector< string > fields){
 	bool error;
 	Storage::File::open(&this->file, filename, error);
 	this->is_open = !error;
+	this->is_active = false;
 	this->name = filename;
 	this->fields = fields;
 };
@@ -23,7 +24,7 @@ vector< string > Storage::File::getFields(){
 	return this->fields;
 }
 
-fstream * Storage::File::getFile(){
+ifstream * Storage::File::getFile(){
 	return &this->file;
 }
 
@@ -31,12 +32,17 @@ bool Storage::File::isOpen(){
 	return this->is_open;
 }
 
-fstream* Storage::File::open(fstream * fs, string filename, bool &error){
-	error = false;
-	fs->open (Storage::DATA_DIRECTORY + filename, fstream::in | fstream::out);
-	if(!fs->is_open())
+bool Storage::File::isActive(){
+	return this->is_active;
+}
+
+ifstream* Storage::File::open(ifstream * fs, string filename, bool &error){
+	fs->open(Storage::DATA_DIRECTORY + filename.c_str());
+	if(fs->is_open()){
+		error = false;
+	} else {
 		error = true;
-	return fs;
+	}
 };
 
 void Storage::File::close(){
@@ -44,57 +50,105 @@ void Storage::File::close(){
 		this->file.close();
 }
 
+bool Storage::File::loadRecords(){
+	bool result = true;
+	if(this->is_open){
+		this->is_active = true;
+		string line;
+		while(getline(this->file, line)){
+			cout << line << endl;
+		}
+	} else {
+		//Helper::log("Storage::File load error: File " + this->name + " couldn't be loaded", Storage::DATA_DIRECTORY);
+		result = false;
+	}
+	return result;
+}
+
+
+
+
+
 /*----------------------------------------------------------
 					Storage class
 ----------------------------------------------------------*/
 Storage::Storage(string name){
 	this->name = name;
-	if(Storage::filesTable.count(name))
+	if(Storage::filesTable.count(name)){
 		this->is_loaded = true;
-	else
+		//Storage::filesTable.at(name).loadRecords();
+	} else {
 		this->is_loaded = false;
+	}
 };
 
 Storage::~Storage(){
 	
 };
 
+/*
+	Remove specified file and create a new with the same name
+*/
+bool Storage::resetFile(string name){
+	bool result = true;
+	if(Storage::filesTable.count(name)){
+		vector< string > fields = Storage::filesTable.at(name).getFields();
+		Storage::filesTable.at(name).close();
+		Storage::filesTable.erase(name);
+		Storage::File newFile(name, fields);
+		pair< string, Storage::File& > record(name, newFile);
+		Storage::filesTable.insert(record);
+	} else {
+		result = false;
+	}
+	return result;
+}
+
 bool Storage::isLoaded(){
 	return this->is_loaded;
 }
 
-void Storage::closeAllFiles(){
+string Storage::getName(){
+	return this->name;
+}
+
+void Storage::consolidate(){
 	for (map< string, Storage::File& >::iterator i=Storage::filesTable.begin(); i!=Storage::filesTable.end(); i++){
 		i->second.close();
 	}
 }
 
 void Storage::loadRecords(){
-	fstream * file = Storage::filesTable.at(this->name).getFile();
+	
 }
 
 /*
 	This function is called before main().
 	It opens all storage files blocking them and putting their references into Storage::files;
 */
-vector< string > Storage::loadConfigFile(){
-	string line;
-	vector< string > lines;
-	ifstream configFile (Storage::DATA_DIRECTORY + "Storages.config");
-	if (configFile.is_open())
-	{
-		while (getline(configFile, line))
-		{
-			lines.push_back(line);
+map< string, Storage::File& > Storage::getFilesTable(){
+	Storage::is_ready = true;
+	bool error;
+	map< string, Storage::File& > output;
+	map< string, vector< string > > configContent = Storage::parseConfigFile(Storage::loadConfigFile(), error);
+	if(!error){
+		for (map< string, vector< string > >::iterator i=configContent.begin(); i!=configContent.end(); i++){
+			Storage::File fileObj(i->first, i->second);
+			if(fileObj.isOpen()){
+				pair< string, Storage::File& > record(i->first, fileObj);
+				Storage::filesTable.insert(record);
+			} else {
+				Helper::log("Storage init error: File " + fileObj.getName() + " couldn't be opened", Storage::DATA_DIRECTORY);
+				error = false;
+			}
 		}
-		configFile.close();
-	} else {
-		Helper::log("Storage init error: Config file not found", Storage::DATA_DIRECTORY);
-	}
-	return lines;
-};
+	};
+	return output;
+}
 
-
+/*
+	Get the config file lines and parse it
+*/
 map< string, vector< string > > Storage::parseConfigFile(vector< string > lines, bool &error){
 	map< string, vector< string > > configContent;
 	error = false;
@@ -115,31 +169,26 @@ map< string, vector< string > > Storage::parseConfigFile(vector< string > lines,
 	return configContent;
 }
 
-map< string, Storage::File& > Storage::getFilesTable(){
-	Storage::is_ready = true;
-	bool error;
-	map< string, Storage::File& > output;
-	map< string, vector< string > > configContent = Storage::parseConfigFile(Storage::loadConfigFile(), error);
-	if(!error){
-		for (map< string, vector< string > >::iterator i=configContent.begin(); i!=configContent.end(); i++){
-			Storage::File file(i->first, i->second);
-			if(file.isOpen()){
-				pair< string, Storage::File& > record(i->first, file);
-				Storage::filesTable.insert(record);
-			} else {
-				Helper::log("Storage init error: File " + file.getName() + " couldn't be opened", Storage::DATA_DIRECTORY);
-				error = false;
-			}
+/*
+	Return config file lines
+*/
+vector< string > Storage::loadConfigFile(){
+	string line;
+	vector< string > lines;
+	ifstream configFile (Storage::DATA_DIRECTORY + "Storages.config");
+	if (configFile.is_open())
+	{
+		while (getline(configFile, line))
+		{
+			lines.push_back(line);
 		}
+		configFile.close();
+	} else {
+		Helper::log("Storage init error: Config file not found", Storage::DATA_DIRECTORY);
 	}
-	
-	if(error){
-		Storage::is_ready = false;
-		Helper::log("Storage init error: Process aborted", Storage::DATA_DIRECTORY);
-	}
-	
-	return output;
-}
+	return lines;
+};
+
 
 bool Storage::isReady(){
 	return Storage::is_ready;
@@ -149,7 +198,7 @@ bool Storage::isReady(){
 					Nested Record class
 ----------------------------------------------------------*/
 
-Storage::Record::Record(Storage * storage){
+Storage::File::Record::Record(Storage::File * file){
 	
 };
 

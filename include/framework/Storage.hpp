@@ -21,37 +21,40 @@
 		*/
 		class File{
 		private:
-			fstream file;
+			/*
+				Record class
+			*/
+			class Record{
+			private:
+				Storage::File *file;
+				map< string, string > content;
+			public:
+				Record(Storage::File *);
+			};
+
 			string name;
 			bool is_open;
+			bool is_active;
 			vector< string > fields;
-			static fstream * open(fstream *, string, bool&);
+			vector< Storage::File::Record > records;
+			static ifstream * open(ifstream *, string, bool&);
 		public:
+			ifstream file;
 			File(string, vector< string >);
 			string getName();
 			bool isOpen();
+			bool isActive();
+			bool loadRecords();
 			vector< string > getFields();
-			fstream * getFile();
+			ifstream * getFile();
 			void close();
-		};
-
-		/*
-			Record class
-		*/
-		class Record{
-		private:
-			Storage *storage;
-			map< string, string > content;
-		public:
-			Record(Storage *);
-
 		};
 
 		static map< string, Storage::File& > filesTable;
 		static bool is_ready;
+
 		bool is_loaded;
 		string name;
-		map< string, Storage::Record& > records;
 		//static fstream * openFile(fstream *, string filename, bool&);
 	public:
 		Storage(string);
@@ -70,9 +73,11 @@
 		static vector< string > loadConfigFile();
 		static map< string, vector< string > > parseConfigFile(vector< string >, bool&);
 		static map< string, Storage::File& > getFilesTable();
-		static void closeAllFiles();
+		static void consolidate();
+		static bool resetFile(string);
 		bool isLoaded();
-		void loadRecords();	
+		void loadRecords();
+		string getName();	
 	};
 
 #endif
