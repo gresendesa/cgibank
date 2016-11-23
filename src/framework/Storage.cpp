@@ -108,11 +108,27 @@ map< string, string > Storage::File::parseLine(vector< string > values){
 
 bool Storage::File::loadRecords(){
 	bool result = true;
+	this->current_rid = 1;
+	int rid;
 	if(this->is_open){
 		this->is_active = true;
 		string line;
 		while(getline(this->file, line)){
 			vector< string > values = Helper::explode(line, Storage::SEPARATOR);
+			try {
+				if(values.size() > 0)
+				rid = stoi(values[0]);
+				cout << rid << endl;
+			}
+			catch(exception& e){
+				this->is_active = false;
+				result = false;
+				Helper::log("Storage error: RID couldn't be converted", Storage::DATA_DIRECTORY);
+				break;
+			}
+			if(rid > this->current_rid) //Take for the biggest rid
+				this->current_rid = rid;
+			
 			Storage::File::Record* recordObj = new Storage::File::Record(this, this->parseLine(values));
 			this->addRecord(recordObj);
 		}
@@ -142,6 +158,11 @@ bool Storage::File::saveRecords(){
 vector< Storage::File::Record* > Storage::File::getRecords(){
 	return this->records;
 };
+
+int Storage::File::getNewCurrentRID(){
+	this->current_rid += 1;
+	return this->current_rid;
+}
 
 
 /*----------------------------------------------------------
@@ -217,7 +238,14 @@ bool Storage::set(map< string, string > keys_values, map< string, int > &errors)
 		if(errors.size() == 0){
 			result = true;
 			Storage::File * file = Storage::filesTable.at(this->name);
-			Storage::File::Record* recordObj = new Storage::File::Record(file, keys_values);
+			map< string, string > new_values = {
+				{Storage::RID, to_string(file->getNewCurrentRID())}
+			};
+			for (map< string, string >::iterator i=keys_values.begin(); i!=keys_values.end(); i++){
+				pair< string, string > record(i->first, i->second);
+				new_values.insert(record);
+			}
+			Storage::File::Record* recordObj = new Storage::File::Record(file, new_values);
 			file->addRecord(recordObj);
 		}
 	}

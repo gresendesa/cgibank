@@ -48,11 +48,13 @@
 			vector< string > getFields();
 			map< string, bool > getFieldInfo(string);
 			ifstream * getFile();
+			int getNewCurrentRID();
 			void close();	
 		private:
 			string name;
 			bool is_open;
 			bool is_active;
+			int current_rid;
 			vector< string > fields;
 			vector< Storage::File::Record* > records;
 			static ifstream * open(ifstream *, string, bool&);
@@ -73,10 +75,11 @@
 		static const int UNDEFINED = 3;
 		static const int ERROR = 4;
 		static map< string, int > DEFAULT_SET_ERROR;
-			
+
 		static void consolidate();
 		bool isLoaded();
 		vector< map< string, string > > getAll();
+		//vector< map< string, string > > get();
 		bool set(map< string, string >, map< string, int >& = DEFAULT_SET_ERROR);
 		static bool isReady();
 
