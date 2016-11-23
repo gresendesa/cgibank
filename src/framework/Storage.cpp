@@ -210,11 +210,17 @@ map< string, int > Storage::findInputErrors(map< string, string > keys_values){
 
 bool Storage::set(map< string, string > keys_values, map< string, int > &errors){
 	bool result = false;	
-	if(keys_values.count(Storage::RID))
-		keys_values.erase(Storage::RID);
-	errors = Storage::findInputErrors(keys_values);
-	if(errors.size())
-		result = true;
+	if(this->is_loaded){
+		if(keys_values.count(Storage::RID))
+			keys_values.erase(Storage::RID);
+		errors = Storage::findInputErrors(keys_values);
+		if(errors.size() == 0){
+			result = true;
+			Storage::File * file = Storage::filesTable.at(this->name);
+			Storage::File::Record* recordObj = new Storage::File::Record(file, keys_values);
+			file->addRecord(recordObj);
+		}
+	}
 	return result;
 }
 

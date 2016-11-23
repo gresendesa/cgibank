@@ -73,22 +73,24 @@
 		static const int UNDEFINED = 3;
 		static const int ERROR = 4;
 		static map< string, int > DEFAULT_SET_ERROR;
-
-		static bool isReady();
-		static vector< string > loadConfigFile();
-		static string removeFieldFlags(string);
-		static map< string, vector< string > > parseConfigFile(vector< string >, bool&);
-		static map< string, Storage::File* > getFilesTable();
+			
 		static void consolidate();
 		bool isLoaded();
 		vector< map< string, string > > getAll();
 		bool set(map< string, string >, map< string, int >& = DEFAULT_SET_ERROR);
-		map< string, int > findInputErrors(map< string, string >);
+		static bool isReady();
+
 		string getName();
 
 	private:
 		static map< string, Storage::File* > filesTable;
 		static bool is_ready;
+
+		static vector< string > loadConfigFile();
+		static string removeFieldFlags(string);
+		static map< string, vector< string > > parseConfigFile(vector< string >, bool&);
+		static map< string, Storage::File* > getFilesTable();
+		map< string, int > findInputErrors(map< string, string >);
 
 		bool is_loaded;
 		string name;
