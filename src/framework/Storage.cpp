@@ -5,6 +5,8 @@ bool Storage::is_ready = true;
 map< string, Storage::File* > Storage::filesTable = Storage::getFilesTable();
 const string Storage::REQUIRED_FIELD = "!";
 const string Storage::UNIQUE_FIELD = "*";
+string Storage::RID = "_RECORD_ID_";
+map< string, int > Storage::DEFAULT_SET_ERROR = map< string, int >();
 
 /*----------------------------------------------------------
 					Nested File class
@@ -42,6 +44,41 @@ bool Storage::File::isActive(){
 	return this->is_active;
 }
 
+map< string, bool > Storage::File::getFieldInfo(string field){
+	bool exist = false;
+	bool required = false;
+	bool unique = false;
+	for (int i = 0; i < this->fields.size(); i++)
+	{
+		if(Storage::removeFieldFlags(this->fields[i]) == Storage::removeFieldFlags(field)){
+			exist = true;
+			if(this->fields[i].find(Storage::REQUIRED_FIELD) != string::npos)
+				required = true;
+			if(this->fields[i].find(Storage::UNIQUE_FIELD) != string::npos)
+				unique = true;
+			break;
+		}
+	}
+	map< string, bool > info = {
+		{"exist", exist},
+		{"required", required},
+		{"unique", unique}
+	};
+	return info;
+}
+
+bool Storage::File::recordMatch(map< string, string > keys_values){
+	bool result = false;
+	for (int i = 0; i < this->records.size(); ++i)
+	{
+		if(Helper::mapMatch(keys_values, this->records[i]->getContent())){
+			result = true;
+			break;
+		}
+	}
+	return result;
+}
+
 ifstream* Storage::File::open(ifstream * fs, string filename, bool &error){
 	fs->open(Storage::DATA_DIRECTORY + filename.c_str());
 	if(fs->is_open()){
@@ -56,13 +93,13 @@ void Storage::File::close(){
 		this->file.close();
 }
 
-map< string, string > Storage::File::parseLine(vector< string > fields){
+map< string, string > Storage::File::parseLine(vector< string > values){
 	map< string, string > content;
 	for (int i = 0; i < this->fields.size(); ++i)
 	{
 		string value = "";
-		if(i <= fields.size() - 1)
-		value = fields[i];
+		if(i <= values.size() - 1)
+		value = values[i];
 		pair< string, string > record(Storage::removeFieldFlags(this->fields[i]), value);
 		content.insert(record);
 	}
@@ -75,8 +112,8 @@ bool Storage::File::loadRecords(){
 		this->is_active = true;
 		string line;
 		while(getline(this->file, line)){
-			vector< string > fields = Helper::explode(line, Storage::SEPARATOR);
-			Storage::File::Record* recordObj = new Storage::File::Record(this, this->parseLine(fields));
+			vector< string > values = Helper::explode(line, Storage::SEPARATOR);
+			Storage::File::Record* recordObj = new Storage::File::Record(this, this->parseLine(values));
 			this->addRecord(recordObj);
 		}
 	} else {
@@ -128,30 +165,57 @@ string Storage::removeFieldFlags(string input){
 	return Helper::replace(Storage::REQUIRED_FIELD, "", Helper::replace(Storage::UNIQUE_FIELD, "", input));
 }
 
-/*
-	Remove specified file and create a new with the same name
-*/
-bool Storage::resetFile(string name){
-	bool result = true;
-	if(Storage::filesTable.count(name)){
-		vector< string > fields = Storage::filesTable.at(name)->getFields();
-		Storage::filesTable.at(name)->close();
-		Storage::filesTable.erase(name);
-		Storage::File newFile(name, fields);
-		pair< string, Storage::File* > record(name, &newFile);
-		Storage::filesTable.insert(record);
-	} else {
-		result = false;
-	}
-	return result;
-}
-
 bool Storage::isLoaded(){
 	return this->is_loaded;
 }
 
 string Storage::getName(){
 	return this->name;
+}
+
+vector< map< string, string > > Storage::getAll(){
+	vector< map< string, string > > output;
+	vector< Storage::File::Record* > records = Storage::filesTable.at(this->name)->getRecords();
+	for (int i = 0; i < records.size(); i++)
+		output.push_back(records[i]->getContent());
+	return output;
+};
+
+map< string, int > Storage::findInputErrors(map< string, string > keys_values){
+	map< string, int > errors;
+	Storage::File * file = Storage::filesTable.at(this->name);
+	for (map< string, string >::iterator i=keys_values.begin(); i!=keys_values.end(); i++){
+		map< string, bool > info = file->getFieldInfo(i->first);
+		if(info.at("exist")){
+			if(info.at("required") && (i->second.size() == 0)){
+				pair< string, int > record(i->first, Storage::EMPTY);
+				errors.insert(record);
+			}
+			if(info.at("unique")){
+				map< string, string > arrange = {
+					{i->first, i->second}
+				};
+				if(file->recordMatch(arrange)){
+					pair< string, int > record(i->first, Storage::DUPLICATE);
+					errors.insert(record);
+				}
+			}
+		} else {
+			pair< string, int > record(i->first, Storage::UNDEFINED);
+			errors.insert(record);
+		}
+	}
+	return errors;
+}
+
+bool Storage::set(map< string, string > keys_values, map< string, int > &errors){
+	bool result = false;	
+	if(keys_values.count(Storage::RID))
+		keys_values.erase(Storage::RID);
+	errors = Storage::findInputErrors(keys_values);
+	if(errors.size())
+		result = true;
+	return result;
 }
 
 /*
@@ -173,10 +237,6 @@ void Storage::consolidate(){
 			delete i->second;
 		}
 	}
-}
-
-void Storage::loadRecords(){
-	
 }
 
 /*
@@ -214,8 +274,11 @@ map< string, vector< string > > Storage::parseConfigFile(vector< string > lines,
 		vector< string > lineElements = Helper::explode(lines[i], Storage::SEPARATOR);
 		if(lineElements.size() > 1){
 			string filename = lineElements.front();
-			lineElements.erase(lineElements.begin());
-			pair< string, vector< string > > record(filename, lineElements);
+			vector< string > fields;
+			fields.push_back("_RECORD_ID_"); //Injects RID field
+			for (int j = 1; j < lineElements.size(); j++) //Remove first element
+				fields.push_back(lineElements[j]);
+			pair< string, vector< string > > record(filename, fields);
 			configContent.insert(record);
 		} else {
 			Helper::log("Storage init error: Sintax error on config file", Storage::DATA_DIRECTORY);

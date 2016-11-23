@@ -25,6 +25,7 @@
 		static bool isAlphanum(string);
 		static string serializeStrMap(map< string, string >, string valueSeparator = " :: ", string recordSeparator = " >> ");
 		static void log(string, string = "../data/");
+		static bool mapMatch(map< string, string >, map< string, string >);
 	};
 
 #endif

@@ -15,7 +15,7 @@
 
 	class Storage
 	{
-	private:
+	public:
 		/*
 			File class
 		*/
@@ -41,10 +41,12 @@
 			bool isActive();
 			bool loadRecords();
 			bool saveRecords();
+			bool recordMatch(map< string, string >);
 			vector< Storage::File::Record* > getRecords();
 			map< string, string > parseLine(vector< string >);
 			void addRecord(Storage::File::Record*);
 			vector< string > getFields();
+			map< string, bool > getFieldInfo(string);
 			ifstream * getFile();
 			void close();	
 		private:
@@ -56,36 +58,42 @@
 			static ifstream * open(ifstream *, string, bool&);
 
 		};
-
-		static map< string, Storage::File* > filesTable;
-		static bool is_ready;
-
-		bool is_loaded;
-		string name;
-		//static fstream * openFile(fstream *, string filename, bool&);
-	public:
+		
 		Storage(string);
 		~Storage();
 		static const char SEPARATOR = '#';
 		static const string REQUIRED_FIELD;
 		static const string UNIQUE_FIELD;
 		static const string DATA_DIRECTORY;
+		static string RID;
+
 		static const int SUCCESS = 0;
 		static const int DUPLICATE = 1;
-		static const int INCONSISTENCY = 2;
-		static const int ERROR = 3;
+		static const int EMPTY = 2;
+		static const int UNDEFINED = 3;
+		static const int ERROR = 4;
+		static map< string, int > DEFAULT_SET_ERROR;
 
 		static bool isReady();
-
 		static vector< string > loadConfigFile();
 		static string removeFieldFlags(string);
 		static map< string, vector< string > > parseConfigFile(vector< string >, bool&);
 		static map< string, Storage::File* > getFilesTable();
 		static void consolidate();
-		static bool resetFile(string);
 		bool isLoaded();
-		void loadRecords();
-		string getName();	
+		vector< map< string, string > > getAll();
+		bool set(map< string, string >, map< string, int >& = DEFAULT_SET_ERROR);
+		map< string, int > findInputErrors(map< string, string >);
+		string getName();
+
+	private:
+		static map< string, Storage::File* > filesTable;
+		static bool is_ready;
+
+		bool is_loaded;
+		string name;
+		//static fstream * openFile(fstream *, string filename, bool&);
+
 	};
 
 #endif

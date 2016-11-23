@@ -156,3 +156,19 @@ void Helper::log(string input, string directory){
 		file.close();
 	}
 }
+
+bool Helper::mapMatch(map< string, string > search, map< string, string > subject){
+	bool result = true;
+	for (map< string, string >::iterator i=search.begin(); i!=search.end(); i++){
+		if(subject.count(i->first)){
+			if(subject.at(i->first) != i->second){
+				result= false;
+				break;
+			}
+		} else {
+			result= false;
+			break;
+		}
+	}
+	return result;
+}
