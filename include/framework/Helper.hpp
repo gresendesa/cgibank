@@ -26,6 +26,7 @@
 		static string serializeStrMap(map< string, string >, string valueSeparator = " :: ", string recordSeparator = " >> ");
 		static void log(string, string = "../data/");
 		static bool mapMatch(map< string, string >, map< string, string >);
+		static string getKey(map< string, string >, string, string);
 	};
 
 #endif

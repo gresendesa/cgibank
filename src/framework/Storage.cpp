@@ -9,7 +9,7 @@ const int Storage::DUPLICATE = 1;
 const int Storage::EMPTY = 2;
 const int Storage::UNDEFINED = 3;
 const int Storage::ERROR = 4;
-map< string, Storage::File* > Storage::filesTable;
+map< string, Storage::File* > Storage::filesTable = Storage::getFilesTable();
 string Storage::RID = "_RECORD_ID_";
 map< string, int > Storage::DEFAULT_SET_ERROR = map< string, int >();
 
@@ -189,10 +189,6 @@ Storage::~Storage(){
 	
 };
 
-void Storage::init(){
-	Storage::filesTable = Storage::getFilesTable();
-}
-
 string Storage::removeFieldFlags(string input){
 	return Helper::replace(Storage::REQUIRED_FIELD, "", Helper::replace(Storage::UNIQUE_FIELD, "", input));
 }
@@ -302,8 +298,10 @@ bool Storage::update(map< string, string > keys_values, map< string, int > &erro
 	Saves all modified files, closes open files and frees dinamically allocated memory
 */
 void Storage::consolidate(){
+	Helper::log("Storage consolidate: " + to_string(Storage::filesTable.size()) + " Files to unload", Storage::DATA_DIRECTORY);
 	for (map< string, Storage::File* >::iterator i=Storage::filesTable.begin(); i!=Storage::filesTable.end(); i++){
 		if(i->second->isActive()){
+			Helper::log("Storage consolidate: " + i->first + " is free", Storage::DATA_DIRECTORY);
 			vector< Storage::File::Record* > records = i->second->getRecords();
 			string filename = Storage::DATA_DIRECTORY + i->second->getName();
 			remove(filename.c_str());
@@ -313,6 +311,7 @@ void Storage::consolidate(){
 				delete records[j];
 			delete i->second;
 		} else {
+			Helper::log("Storage consolidate: " + i->first + " wasn't active", Storage::DATA_DIRECTORY);
 			i->second->close();
 			delete i->second;
 		}
@@ -349,6 +348,8 @@ map< string, Storage::File* > Storage::getFilesTable(){
 map< string, vector< string > > Storage::parseConfigFile(vector< string > lines, bool &error){
 	map< string, vector< string > > configContent;
 	error = false;
+	if(!lines.size())
+		Helper::log("Storage init warning: Config file is empty", Storage::DATA_DIRECTORY);
 	for (int i = 0; i < lines.size(); i++)
 	{
 		vector< string > lineElements = Helper::explode(lines[i], Storage::SEPARATOR);

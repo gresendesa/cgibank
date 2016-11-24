@@ -1,19 +1,14 @@
 #include "../../include/framework/Model.hpp"
 
+map< string, int > Framework::Model::STD_DB_ERRORS = map< string, int >();
+
 Framework::Model::Model(string storageName){
 	this->storageName = storageName;
 }
 
-bool Framework::Model::save(){
-	bool result = true;
-	/*Storage model = Storage::getOrCreate(this->storageName, this->getFieldLabels());
-	if(model.getStatus() == Storage::SUCCESS){
-		model.insert(this->getFields());
-	} else {
-		bool result = false;
-		Helper::log("Error: Framework::Model::save()");
-	}*/
-	return result;
+bool Framework::Model::save(map< string, int > &errors){
+	Storage storage(this->storageName);
+	return storage.set(this->getFields(), errors);
 }
 
 bool Framework::Model::find(map< string, string > snippets){

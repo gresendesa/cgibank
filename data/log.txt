@@ -1,9 +1,176 @@
-Storage init error: File Authr couldn't be opened
-Storage init error: File Authr couldn't be opened
-Storage init error: File Authr couldn't be opened
-Storage init error: Sintax error on config file
-Storage init error: Sintax error on config file
-Storage init error: Sintax error on config file
-Storage init error: Config file not found
-Storage init error: Config file not found
-Storage init error: Config file not found
+Storage consolidate: 1 Files to unload
+Storage consolidate: User is free
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User is free
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User is free
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User is free
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User is free
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User is free
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User is free
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User is free
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User is free
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User is free
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User is free
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active
+Storage consolidate: 1 Files to unload
+Storage consolidate: User wasn't active

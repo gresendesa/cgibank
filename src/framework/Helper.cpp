@@ -172,3 +172,13 @@ bool Helper::mapMatch(map< string, string > search, map< string, string > subjec
 	}
 	return result;
 }
+
+string Helper::getKey(map< string, string > valuesTable, string key, string defaultValue){
+	string result;
+	if(valuesTable.count(key)){
+		result = valuesTable.at(key);
+	} else {
+		result = defaultValue;
+	}
+	return result;
+};
