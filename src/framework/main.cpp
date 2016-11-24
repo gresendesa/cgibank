@@ -1,4 +1,4 @@
-#include "../../include/framework/Core.hpp"
+#include "../../include/framework/main.hpp"
 
 int main()
 {

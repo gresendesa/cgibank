@@ -10,7 +10,6 @@
 	#include <cstdlib>
 
 	using namespace std;
-	
 
 	#include "Core.hpp"
 
