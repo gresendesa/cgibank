@@ -7,7 +7,9 @@ bool Core::bootstrap(){
 	/*
 		The output system must converge here :)
 	*/
+	Storage::init();
 	Output globalOutput = Route::route();
+	Storage::consolidate();
 	cout << Core::getResponseMetadata() << "Content-type: text/html\n\n" << globalOutput << "\r\n";
 }
 

@@ -16,3 +16,17 @@ bool Route::match(string path){
 	}
 	return result;
 }
+
+Output Route::redirect(string uri){
+	Core::setAResponseMetadata("Location: " + Core::getEnvironmentValue("REQUEST_SCHEME", "http") + "://" + Core::getEnvironmentValue("HTTP_HOST", "bank.com") + uri + "\n\n");
+	return "Redirecting to " + uri;
+}
+
+Output Route::externalRedirect(string url){
+	Core::setAResponseMetadata("Location: " + url + "\n\n");
+	return "Redirecting to " + url;
+}
+
+void Route::setCookie(string name, string value){
+	Core::setAResponseMetadata("Set-Cookie: " + name + "=" + value + "; httponly;");
+}

@@ -1,8 +1,7 @@
 #include "../../include/framework/Storage.hpp"
 
-const string Storage::DATA_DIRECTORY = "data/";
+const string Storage::DATA_DIRECTORY = "../data/";
 bool Storage::is_ready = true;
-map< string, Storage::File* > Storage::filesTable = Storage::getFilesTable();
 const string Storage::REQUIRED_FIELD = "!";
 const string Storage::UNIQUE_FIELD = "*";
 const int Storage::SUCCESS = 0;
@@ -10,6 +9,7 @@ const int Storage::DUPLICATE = 1;
 const int Storage::EMPTY = 2;
 const int Storage::UNDEFINED = 3;
 const int Storage::ERROR = 4;
+map< string, Storage::File* > Storage::filesTable;
 string Storage::RID = "_RECORD_ID_";
 map< string, int > Storage::DEFAULT_SET_ERROR = map< string, int >();
 
@@ -188,6 +188,10 @@ Storage::Storage(string name){
 Storage::~Storage(){
 	
 };
+
+void Storage::init(){
+	Storage::filesTable = Storage::getFilesTable();
+}
 
 string Storage::removeFieldFlags(string input){
 	return Helper::replace(Storage::REQUIRED_FIELD, "", Helper::replace(Storage::UNIQUE_FIELD, "", input));

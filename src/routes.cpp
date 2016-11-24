@@ -3,6 +3,7 @@
 Output Route::route(){
 	if (Route::match("/")) {
 		if(Route::match("/welcome")){
+			Route::setCookie("besta", "mane");
 			return Controller::Login::run();
 		} else 
 		if(Route::match("/main")){
@@ -15,7 +16,7 @@ Output Route::route(){
 			return Controller::Main::run();
 		} else
 		if(Route::match("/redirect")){
-			return Framework::Controller::redirect("/teste");
+			return Route::redirect("/welcome");
 		} else 
 		if(Route::match("/foo")){
 			vector<string> a = {"teste", "amora", "melão"};
@@ -25,7 +26,7 @@ Output Route::route(){
 		else {
 			//View::NotFoundPage not_found_page;
 			//return not_found_page.run();
-			return Framework::Controller::redirect("/welcome ");
+			return Route::redirect("/welcome");
 		}
 	} else {
 		return " ";

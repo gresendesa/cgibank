@@ -1,5 +1,9 @@
-
-
-
-User
-User
+Storage init error: File Authr couldn't be opened
+Storage init error: File Authr couldn't be opened
+Storage init error: File Authr couldn't be opened
+Storage init error: Sintax error on config file
+Storage init error: Sintax error on config file
+Storage init error: Sintax error on config file
+Storage init error: Config file not found
+Storage init error: Config file not found
+Storage init error: Config file not found

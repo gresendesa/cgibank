@@ -12,6 +12,7 @@
 	using namespace std;
 
 	#include "Core.hpp"
+	#include "Storage.hpp"
 
 	using namespace std;
 
@@ -24,6 +25,9 @@
 		//~Route();
 		static bool match(string);
 		static Output route();
+		static Output redirect(string);
+		static Output externalRedirect(string);
+		static void setCookie(string, string);
 	};
 
 #endif

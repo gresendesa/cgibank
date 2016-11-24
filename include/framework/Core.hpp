@@ -10,7 +10,6 @@
 	#include <cstdlib>
 
 	using namespace std;
-	
 
 	#include "Helper.hpp"	
 
@@ -26,7 +25,7 @@
 		//~Core();
 
 		static bool bootstrap();
-		static string getEnvironmentValue(string, string);
+		static string getEnvironmentValue(string, string = "");
 		static vector< string > getURIElements();
 		static map< string, string > getPOST();
 		static void setAResponseMetadata(string);

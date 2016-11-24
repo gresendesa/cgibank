@@ -78,6 +78,7 @@
 		static map< string, int > DEFAULT_SET_ERROR;
 
 		static void consolidate();
+		static void init();
 		bool isLoaded();
 		vector< map< string, string > > getAll();
 		vector< map< string, string > > get(map< string, string >);
