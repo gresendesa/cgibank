@@ -9,5 +9,5 @@ Output Controller::Signup::run(){
 	manager.setPassword(variables["password"]);
 	manager.save();*/
 	//return Helper::serializeStrMap(variables);
-	return "Debug: Ok. POST request caught. {name: " + variables["username"] + " # email: " + variables["email"] + " # password: " + variables["password"] + "} User saved in data/User. <a href=\"/welcome\">Back</a>";
+	return "Guilhermre!!! Debug: Ok. POST request caught. {name: " + variables["username"] + " # email: " + variables["email"] + " # password: " + variables["password"] + "} User saved in data/User. <a href=\"/welcome\">Back</a>";
 }

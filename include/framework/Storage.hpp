@@ -1,7 +1,7 @@
 #ifndef STORAGE_HPP
 #define STORAGE_HPP
 	
-	/*
+	
 	#include <iostream>
 	#include <string>
 	#include <vector>
@@ -9,7 +9,7 @@
 	#include <fstream>
 
 	using namespace std;
-	*/
+	
 
 	#include "Helper.hpp"
 
@@ -31,6 +31,7 @@
 			public:
 				Record(Storage::File *, map< string, string >);
 				map< string, string > getContent();
+				void setContent(map< string, string >);
 				string getField(string);
 			};
 
@@ -41,7 +42,7 @@
 			bool isActive();
 			bool loadRecords();
 			bool saveRecords();
-			bool recordMatch(map< string, string >);
+			bool recordMatch(map< string, string >, string = "0");
 			vector< Storage::File::Record* > getRecords();
 			map< string, string > parseLine(vector< string >);
 			void addRecord(Storage::File::Record*);
@@ -69,17 +70,18 @@
 		static const string DATA_DIRECTORY;
 		static string RID;
 
-		static const int SUCCESS = 0;
-		static const int DUPLICATE = 1;
-		static const int EMPTY = 2;
-		static const int UNDEFINED = 3;
-		static const int ERROR = 4;
+		static const int SUCCESS;
+		static const int DUPLICATE;
+		static const int EMPTY;
+		static const int UNDEFINED;
+		static const int ERROR;
 		static map< string, int > DEFAULT_SET_ERROR;
 
 		static void consolidate();
 		bool isLoaded();
 		vector< map< string, string > > getAll();
-		//vector< map< string, string > > get();
+		vector< map< string, string > > get(map< string, string >);
+		bool update(map< string, string >, map< string, int >& = DEFAULT_SET_ERROR);
 		bool set(map< string, string >, map< string, int >& = DEFAULT_SET_ERROR);
 		static bool isReady();
 
@@ -93,7 +95,7 @@
 		static string removeFieldFlags(string);
 		static map< string, vector< string > > parseConfigFile(vector< string >, bool&);
 		static map< string, Storage::File* > getFilesTable();
-		map< string, int > findInputErrors(map< string, string >);
+		map< string, int > findInputErrors(map< string, string >, string = "0");
 
 		bool is_loaded;
 		string name;

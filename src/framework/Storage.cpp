@@ -5,6 +5,11 @@ bool Storage::is_ready = true;
 map< string, Storage::File* > Storage::filesTable = Storage::getFilesTable();
 const string Storage::REQUIRED_FIELD = "!";
 const string Storage::UNIQUE_FIELD = "*";
+const int Storage::SUCCESS = 0;
+const int Storage::DUPLICATE = 1;
+const int Storage::EMPTY = 2;
+const int Storage::UNDEFINED = 3;
+const int Storage::ERROR = 4;
 string Storage::RID = "_RECORD_ID_";
 map< string, int > Storage::DEFAULT_SET_ERROR = map< string, int >();
 
@@ -67,13 +72,15 @@ map< string, bool > Storage::File::getFieldInfo(string field){
 	return info;
 }
 
-bool Storage::File::recordMatch(map< string, string > keys_values){
+bool Storage::File::recordMatch(map< string, string > keys_values, string rid_ignore){
 	bool result = false;
 	for (int i = 0; i < this->records.size(); ++i)
 	{
-		if(Helper::mapMatch(keys_values, this->records[i]->getContent())){
-			result = true;
-			break;
+		if(this->records[i]->getContent()[Storage::RID] != rid_ignore){
+			if(Helper::mapMatch(keys_values, this->records[i]->getContent())){
+				result = true;
+				break;
+			}
 		}
 	}
 	return result;
@@ -118,7 +125,6 @@ bool Storage::File::loadRecords(){
 			try {
 				if(values.size() > 0)
 				rid = stoi(values[0]);
-				cout << rid << endl;
 			}
 			catch(exception& e){
 				this->is_active = false;
@@ -175,6 +181,7 @@ Storage::Storage(string name){
 		Storage::filesTable.at(name)->loadRecords();
 	} else {
 		this->is_loaded = false;
+		Helper::log("Storage error: File " + name + " is not defined into Storages.conf", Storage::DATA_DIRECTORY);
 	}
 };
 
@@ -202,7 +209,17 @@ vector< map< string, string > > Storage::getAll(){
 	return output;
 };
 
-map< string, int > Storage::findInputErrors(map< string, string > keys_values){
+vector< map< string, string > > Storage::get(map< string, string > keys_values){
+	vector< map< string, string > > output;
+	vector< Storage::File::Record* > records = Storage::filesTable.at(this->name)->getRecords();
+	for (int i = 0; i < records.size(); i++){
+		if(Helper::mapMatch(keys_values, records[i]->getContent()))
+			output.push_back(records[i]->getContent());
+	}
+	return output;
+};
+
+map< string, int > Storage::findInputErrors(map< string, string > keys_values, string rid_ignore){
 	map< string, int > errors;
 	Storage::File * file = Storage::filesTable.at(this->name);
 	for (map< string, string >::iterator i=keys_values.begin(); i!=keys_values.end(); i++){
@@ -216,7 +233,7 @@ map< string, int > Storage::findInputErrors(map< string, string > keys_values){
 				map< string, string > arrange = {
 					{i->first, i->second}
 				};
-				if(file->recordMatch(arrange)){
+				if(file->recordMatch(arrange, rid_ignore)){
 					pair< string, int > record(i->first, Storage::DUPLICATE);
 					errors.insert(record);
 				}
@@ -247,6 +264,31 @@ bool Storage::set(map< string, string > keys_values, map< string, int > &errors)
 			}
 			Storage::File::Record* recordObj = new Storage::File::Record(file, new_values);
 			file->addRecord(recordObj);
+		}
+	}
+	return result;
+}
+
+bool Storage::update(map< string, string > keys_values, map< string, int > &errors){
+	bool result = false;	
+	if(this->is_loaded){
+		if(keys_values.count(Storage::RID)){
+			map< string, string > arrange = {
+				{Storage::RID, keys_values.at(Storage::RID)}
+			};
+			Storage::File * file = Storage::filesTable.at(this->name);
+			if(file->recordMatch(arrange)){
+				errors = Storage::findInputErrors(keys_values, keys_values.at(Storage::RID));
+				if(errors.size() == 0){
+					for (int i = 0; i < file->getRecords().size(); ++i)
+					{
+						if(file->getRecords()[i]->getContent().at(Storage::RID) == keys_values.at(Storage::RID)){
+							file->getRecords()[i]->setContent(keys_values);
+							result = true;
+						}
+					}
+				}
+			}
 		}
 	}
 	return result;
@@ -359,6 +401,10 @@ Storage::File::Record::Record(Storage::File * file, map< string, string > conten
 
 map< string, string > Storage::File::Record::getContent(){
 	return this->content;
+};
+
+void Storage::File::Record::setContent(map< string, string > content){
+	this->content = content;
 };
 
 string Storage::File::Record::getField(string field){

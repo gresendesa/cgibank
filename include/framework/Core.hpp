@@ -1,15 +1,16 @@
 #ifndef CORE_HPP
 #define CORE_HPP
 
-	/*
+	
 	#include <iostream>
 	#include <string>
 	#include <vector>
 	#include <map>
 	#include <fstream>
+	#include <cstdlib>
 
 	using namespace std;
-	*/
+	
 
 	#include "Helper.hpp"	
 

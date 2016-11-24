@@ -1,7 +1,6 @@
 #ifndef MODEL_HPP
 #define MODEL_HPP
 
-	/*
 	#include <iostream>
 	#include <string>
 	#include <vector>
@@ -9,7 +8,6 @@
 	#include <fstream>
 
 	using namespace std;
-	*/
 
 	#include "Storage.hpp"
 
