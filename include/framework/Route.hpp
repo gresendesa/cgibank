@@ -27,7 +27,6 @@
 		static Output route();
 		static Output redirect(string);
 		static Output externalRedirect(string);
-		static void setCookie(string, string);
 	};
 
 #endif

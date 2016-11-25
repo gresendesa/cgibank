@@ -1,13 +1,13 @@
 #include "../include/framework/routes.hpp"
 
 Output Route::route(){
+	Auth::init();
 	if (Route::match("/")) {
 		if(Route::match("/welcome")){
-			Route::setCookie("testeCoo", "mane");
 			return Controller::Login::run();
 		} else 
 		if(Route::match("/main")){
-			return Controller::Main::run();
+			return "You are logged in " + Auth::get("name") + " :::: " + Core::getEnvironmentValue("HTTP_COOKIE", "");
 		} else
 		if(Route::match("/signup")){
 			return Controller::Signup::run();

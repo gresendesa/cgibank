@@ -8,8 +8,9 @@ bool Core::bootstrap(){
 		The output system must converge here :)
 	*/
 	Output globalOutput;
-	if(Storage::isReady())
+	if(Storage::isReady()){
 		globalOutput = Route::route();
+	}
 	else
 		globalOutput = "<b>I'm sorry Dave</b>. Bootstrap aborted. <br> There's something wrong with the Storage :/ <br> Check out logs to understand what is happening";
 	Storage::consolidate();
@@ -61,14 +62,19 @@ map< string, string > Core::getPOST(){
 	Set a metadata like headers to be sent with the server response
 */
 void Core::setAResponseMetadata(string metadata){
-	Core::responseMetadata.push_back(metadata + " ");
+	Core::responseMetadata.push_back(metadata);
 }
 
 /*
 	Get all set metadata and returns them as a string
 */
 string Core::getResponseMetadata(){
-	return Helper::implode(Core::responseMetadata, ' ');
+	string output = Helper::implode(Core::responseMetadata, '\n');
+	if(output.size())
+		output += '\n';
+	else
+		output = "";
+	return output;
 }
 
 vector< string > Core::responseMetadata;

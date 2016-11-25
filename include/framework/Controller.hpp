@@ -9,6 +9,7 @@
 
 	#include "Core.hpp"
 	#include "Route.hpp"
+	#include "Auth.hpp"
 
 	using namespace std;
 

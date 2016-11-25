@@ -84,6 +84,7 @@
 		vector< map< string, string > > get(map< string, string >);
 		bool update(map< string, string >, map< string, int >& = DEFAULT_SET_ERROR);
 		bool set(map< string, string >, map< string, int >& = DEFAULT_SET_ERROR);
+		map< string, string > getByRID(string);
 		static bool isReady();
 
 		string getName();

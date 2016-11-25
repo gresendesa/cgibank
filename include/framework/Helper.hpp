@@ -27,6 +27,7 @@
 		static void log(string, string = "../data/");
 		static bool mapMatch(map< string, string >, map< string, string >);
 		static string getKey(map< string, string >, string, string);
+		static string getRandomAlphanum(int length);
 	};
 
 #endif

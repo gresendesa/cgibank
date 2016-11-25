@@ -115,7 +115,7 @@ map< string, string > Storage::File::parseLine(vector< string > values){
 
 bool Storage::File::loadRecords(){
 	bool result = true;
-	this->current_rid = 1;
+	this->current_rid = 0;
 	int rid;
 	if(this->is_open){
 		this->is_active = true;
@@ -218,6 +218,18 @@ vector< map< string, string > > Storage::get(map< string, string > keys_values){
 	}
 	return output;
 };
+
+map< string, string > Storage::getByRID(string rid){
+	map< string, string > record;
+	map< string, string > rid_query = {
+		{Storage::RID, rid}
+	};
+	vector< map< string, string > > records = this->get(rid_query);
+	if(records.size()){
+		record = records[0];
+	};
+	return record;
+}
 
 map< string, int > Storage::findInputErrors(map< string, string > keys_values, string rid_ignore){
 	map< string, int > errors;

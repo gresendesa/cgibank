@@ -173,6 +173,16 @@ bool Helper::mapMatch(map< string, string > search, map< string, string > subjec
 	return result;
 }
 
+string Helper::getRandomAlphanum(int length){
+	string source = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789";
+	string output = "";
+	for (int i = 0; i < length; ++i)
+	{
+		output += source.at(rand() % source.size());
+	}
+	return output;
+}
+
 string Helper::getKey(map< string, string > valuesTable, string key, string defaultValue){
 	string result;
 	if(valuesTable.count(key)){

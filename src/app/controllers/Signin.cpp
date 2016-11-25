@@ -1,7 +1,6 @@
 #include "../../../include/app/controllers/Signin.hpp"
 
 Output Controller::Signin::run(){
-
 	map< string, string > parameters = Core::getPOST();
 	map< string, string > credentials = {
 		{"email", Helper::getKey(parameters, "email", "")},
@@ -9,14 +8,17 @@ Output Controller::Signin::run(){
 	};
 
 	Model::User user;
-	if (user.find(credentials).size()){
+	vector< map< string, string > > result = user.find(credentials);
+	if (result.size()){
+		Auth::auth(result[0].at(Storage::RID));
+		Route::redirect("/main");
 		return "logged";
 	} else {
 		View::Login view;
 		map< string, string > page_parameters;
 		if(parameters.size()){
 			page_parameters = {
-				{"signin-failed-msg", "User not registered"},
+				{"signin-failed-msg", "Incorrect email or password"},
 				{"signin-email", Helper::getKey(parameters, "email", "")}
 			};
 		}
