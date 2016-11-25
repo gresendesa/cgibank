@@ -23,7 +23,7 @@
 		public:
 			static map< string, int > STD_DB_ERRORS;
 			bool save(map< string, int >&);
-			bool find(map< string, string >);
+			vector< map< string, string > > find(map< string, string >);
 			void put(map< string, string >);
 			string getId();
 			void setStorageName(string);

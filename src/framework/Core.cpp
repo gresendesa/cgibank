@@ -7,7 +7,11 @@ bool Core::bootstrap(){
 	/*
 		The output system must converge here :)
 	*/
-	Output globalOutput = Route::route();
+	Output globalOutput;
+	if(Storage::isReady())
+		globalOutput = Route::route();
+	else
+		globalOutput = "<b>I'm sorry Dave</b>. Bootstrap aborted. <br> There's something wrong with the Storage :/ <br> Check out logs to understand what is happening";
 	Storage::consolidate();
 	cout << Core::getResponseMetadata() << "Content-type: text/html\n\n" << globalOutput << "\r\n";
 }
@@ -47,7 +51,8 @@ map< string, string > Core::getPOST(){
 	for (int i = 0; i < parameters.size(); i++)
 	{
 		vector<string> record = Helper::explode(parameters[i], '=');
-		variablesTable.insert(pair< string, string > (Helper::urlDecode(Helper::replace("+", " ", record[0])), Helper::urlDecode(Helper::replace("+", " ", record[1]))));
+		if(record.size() > 1)
+			variablesTable.insert(pair< string, string > (Helper::urlDecode(Helper::replace("+", " ", record[0])), Helper::urlDecode(Helper::replace("+", " ", record[1]))));
 	}
 	return variablesTable;
 };

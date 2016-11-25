@@ -11,8 +11,9 @@ bool Framework::Model::save(map< string, int > &errors){
 	return storage.set(this->getFields(), errors);
 }
 
-bool Framework::Model::find(map< string, string > snippets){
-	
+vector< map< string, string > > Framework::Model::find(map< string, string > keys_values){
+	Storage storage(this->storageName);
+	return storage.get(keys_values);
 }
 
 void Framework::Model::put(map< string, string > fields){

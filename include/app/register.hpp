@@ -2,7 +2,6 @@
 #define APP_REGISTER_HPP
 
 	//Models
-	#include "User.hpp"
 	#include "Manager.hpp"
 
 	//Views
@@ -14,5 +13,6 @@
 	#include "../app/controllers/Login.hpp"
 	#include "../app/controllers/Main.hpp"
 	#include "../app/controllers/Signup.hpp"
+	#include "../app/controllers/Signin.hpp"
 
 #endif

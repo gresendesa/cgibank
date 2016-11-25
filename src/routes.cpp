@@ -3,7 +3,7 @@
 Output Route::route(){
 	if (Route::match("/")) {
 		if(Route::match("/welcome")){
-			Route::setCookie("besta", "mane");
+			Route::setCookie("testeCoo", "mane");
 			return Controller::Login::run();
 		} else 
 		if(Route::match("/main")){
@@ -13,7 +13,7 @@ Output Route::route(){
 			return Controller::Signup::run();
 		} else
 		if(Route::match("/signin")){
-			return Controller::Main::run();
+			return Controller::Signin::run();
 		} else
 		if(Route::match("/redirect")){
 			return Route::redirect("/welcome");

@@ -1,4 +1,4 @@
-#include "../../include/app/User.hpp"
+#include "../../include/framework/User.hpp"
 
 void Model::User::setName(string name){
 	this->name = name;

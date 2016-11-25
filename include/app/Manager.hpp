@@ -1,7 +1,7 @@
 #ifndef MANAGER_HPP
 #define MANAGER_HPP
 
-	#include "User.hpp"
+	#include "../framework/User.hpp"
 
 	#include <iostream>
 	#include <string>

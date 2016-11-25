@@ -298,10 +298,10 @@ bool Storage::update(map< string, string > keys_values, map< string, int > &erro
 	Saves all modified files, closes open files and frees dinamically allocated memory
 */
 void Storage::consolidate(){
-	Helper::log("Storage consolidate: " + to_string(Storage::filesTable.size()) + " Files to unload", Storage::DATA_DIRECTORY);
+	//Helper::log("Storage consolidate: " + to_string(Storage::filesTable.size()) + " Files to unload", Storage::DATA_DIRECTORY);
 	for (map< string, Storage::File* >::iterator i=Storage::filesTable.begin(); i!=Storage::filesTable.end(); i++){
 		if(i->second->isActive()){
-			Helper::log("Storage consolidate: " + i->first + " is free", Storage::DATA_DIRECTORY);
+			//Helper::log("Storage consolidate: " + i->first + " is free", Storage::DATA_DIRECTORY);
 			vector< Storage::File::Record* > records = i->second->getRecords();
 			string filename = Storage::DATA_DIRECTORY + i->second->getName();
 			remove(filename.c_str());
@@ -311,7 +311,7 @@ void Storage::consolidate(){
 				delete records[j];
 			delete i->second;
 		} else {
-			Helper::log("Storage consolidate: " + i->first + " wasn't active", Storage::DATA_DIRECTORY);
+			//Helper::log("Storage consolidate: " + i->first + " wasn't active", Storage::DATA_DIRECTORY);
 			i->second->close();
 			delete i->second;
 		}
@@ -334,11 +334,14 @@ map< string, Storage::File* > Storage::getFilesTable(){
 				pair< string, Storage::File* > record(i->first, fileObj);
 				Storage::filesTable.insert(record);
 			} else {
+				Storage::is_ready = false;
 				Helper::log("Storage init error: File " + fileObj->getName() + " couldn't be opened", Storage::DATA_DIRECTORY);
 				error = false;
 			}
 		}
-	};
+	} else {
+		Storage::is_ready = false;
+	}
 	return output;
 }
 

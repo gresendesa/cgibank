@@ -14,11 +14,14 @@
 	namespace Framework{
 		class View
 		{
+		private:
+			bool checkNextFlagPosition(vector< int >&);
 		protected:
 			Output content;
 			void appendHTML(string);
 			void appendText(string);
 			void replaceFlags(map< string, string>);
+			void cleanUnusedFlags();
 			virtual void program(map< string, string> = map< string, string>());
 		public:
 			//View(arguments);
