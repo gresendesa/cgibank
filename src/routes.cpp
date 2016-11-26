@@ -4,8 +4,8 @@ Output Route::route(){
 	Auth::init();
 	if (Route::match("/")) {
 		if(Auth::isAuthenticated()){
-			if(Route::match("/poop")){
-				return "foi";
+			if(Route::match("/home")){
+				return Controller::Main::run();
 			} else
 			if(Route::match("/signout")){
 				return Controller::Signout::run();
@@ -17,7 +17,8 @@ Output Route::route(){
 				return Controller::Login::run();
 			} else 
 			if(Route::match("/main")){
-				return "You are logged in " + Auth::get("name") + " :::: " + Core::getEnvironmentValue("HTTP_COOKIE", "");
+				return "";
+				//return "You are logged in " + Auth::get("name") + " :::: " + Core::getEnvironmentValue("HTTP_COOKIE", "");
 			} else
 			if(Route::match("/signup")){
 				return Controller::Signup::run();

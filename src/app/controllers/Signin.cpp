@@ -11,7 +11,7 @@ Output Controller::Signin::run(){
 	vector< map< string, string > > result = user.find(credentials);
 	if (result.size()){
 		Auth::auth(result[0].at(Storage::RID));
-		Route::redirect("/main");
+		Route::redirect("/home");
 		return "logged";
 	} else {
 		View::Login view;
@@ -24,4 +24,5 @@ Output Controller::Signin::run(){
 		}
 		return view.run(page_parameters);
 	}
+	return "";
 }

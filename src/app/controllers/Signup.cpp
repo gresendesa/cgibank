@@ -1,7 +1,7 @@
 #include "../../../include/app/controllers/Signup.hpp"
 
 Output Controller::Signup::run(){
-	Route::redirect("/main");
+	Route::redirect("/welcome");
 	map< string, string > variables = Core::getPOST();
 	Model::Manager manager;
 	manager.setName(Helper::getKey(variables, "username", ""));

@@ -2,6 +2,10 @@
 
 Output Controller::Main::run(){
 	View::Main view;
-
-	return view.run();
+	map< string, string > parameters; 
+	if(Auth::isAuthenticated()){
+		pair< string, string > parameter("user-name", Auth::get("name"));
+		parameters.insert(parameter);
+	}
+	return view.run(parameters);
 }
