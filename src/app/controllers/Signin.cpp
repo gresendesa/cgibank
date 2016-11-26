@@ -18,7 +18,7 @@ Output Controller::Signin::run(){
 		map< string, string > page_parameters;
 		if(parameters.size()){
 			page_parameters = {
-				{"signin-failed-msg", "Incorrect email or password"},
+				{"signin-failed-msg", Helper::getMessage("app.view.sigin.wrongcredentials")},
 				{"signin-email", Helper::getKey(parameters, "email", "")}
 			};
 		}

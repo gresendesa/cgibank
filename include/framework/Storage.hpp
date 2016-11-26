@@ -34,29 +34,28 @@
 				void setContent(map< string, string >);
 				string getField(string);
 			};
-
-			ifstream file;
 			File(string, vector< string >);
 			string getName();
 			bool isOpen();
 			bool isActive();
 			bool loadRecords();
-			bool saveRecords();
+			void saveRecords();
 			bool recordMatch(map< string, string >, string = "0");
 			vector< Storage::File::Record* > getRecords();
 			map< string, string > parseLine(vector< string >);
 			void addRecord(Storage::File::Record*);
 			vector< string > getFields();
+			int removeRecord(map< string, string >);
 			map< string, bool > getFieldInfo(string);
 			ifstream * getFile();
-			int getNewCurrentRID();
-			void close();	
+			void close();
+			string getNextRID();
 		private:
 			string name;
 			bool is_open;
 			bool is_active;
-			int current_rid;
 			vector< string > fields;
+			ifstream file;
 			vector< Storage::File::Record* > records;
 			static ifstream * open(ifstream *, string, bool&);
 
@@ -69,7 +68,6 @@
 		static const string UNIQUE_FIELD;
 		static const string DATA_DIRECTORY;
 		static string RID;
-
 		static const int SUCCESS;
 		static const int DUPLICATE;
 		static const int EMPTY;
@@ -78,27 +76,24 @@
 		static map< string, int > DEFAULT_SET_ERROR;
 
 		static void consolidate();
-		static void init();
 		bool isLoaded();
 		vector< map< string, string > > getAll();
 		vector< map< string, string > > get(map< string, string >);
 		bool update(map< string, string >, map< string, int >& = DEFAULT_SET_ERROR);
 		bool set(map< string, string >, map< string, int >& = DEFAULT_SET_ERROR);
+		int dump(map< string, string >);
 		map< string, string > getByRID(string);
 		static bool isReady();
-
 		string getName();
 
 	private:
-		static map< string, Storage::File* > filesTable;
+		static map< string, Storage::File* > files_table;
 		static bool is_ready;
-
-		static vector< string > loadConfigFile();
+		static vector< string > loadConfigFile(bool&);
 		static string removeFieldFlags(string);
-		static map< string, vector< string > > parseConfigFile(vector< string >, bool&);
-		static map< string, Storage::File* > getFilesTable();
+		static map< string, vector< string > > processConfig(vector< string >, bool&);
+		static map< string, Storage::File* > init();
 		map< string, int > findInputErrors(map< string, string >, string = "0");
-
 		bool is_loaded;
 		string name;
 		//static fstream * openFile(fstream *, string filename, bool&);

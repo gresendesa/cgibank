@@ -113,6 +113,25 @@ string Helper::getFileContent(string path, bool &errorFlag){
 	return fullContent;
 };
 
+string Helper::getMessage(string key, string snippet, string directory){
+	bool error;
+	map< string, string > messages;
+	string output = "";
+	string file_content = Helper::getFileContent(directory + "Messages", error);
+	vector< string > lines = Helper::explode(file_content, '\n');
+	for (int i = 0; i < lines.size(); ++i)
+	{
+		vector< string > line = Helper::explode(lines[i], '#');
+		if(line.size() > 1){
+			pair< string, string > record(line[0], line[1]);
+			messages.insert(record);
+		}
+	}
+	if(messages.count(key))
+		output = Helper::replace("$", snippet, messages.at(key));
+	return output;
+}
+
 /*
 	It checks if a files exists
 */
@@ -148,7 +167,7 @@ string Helper::serializeStrMap(map< string, string > mapList, string valueSepara
 }
 
 void Helper::log(string input, string directory){
-	string filename = directory + "logs.txt"; 
+	string filename = directory + "Logs.System"; 
 	ofstream file;
 	file.open(filename.c_str(), ios::app);
 	if(file.is_open()){

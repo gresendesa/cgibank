@@ -14,5 +14,6 @@
 	#include "../app/controllers/Main.hpp"
 	#include "../app/controllers/Signup.hpp"
 	#include "../app/controllers/Signin.hpp"
+	#include "../app/controllers/Signout.hpp"
 
 #endif

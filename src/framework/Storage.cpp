@@ -1,17 +1,19 @@
 #include "../../include/framework/Storage.hpp"
 
 const string Storage::DATA_DIRECTORY = "../data/";
-bool Storage::is_ready = true;
 const string Storage::REQUIRED_FIELD = "!";
 const string Storage::UNIQUE_FIELD = "*";
+
 const int Storage::SUCCESS = 0;
 const int Storage::DUPLICATE = 1;
 const int Storage::EMPTY = 2;
 const int Storage::UNDEFINED = 3;
 const int Storage::ERROR = 4;
-map< string, Storage::File* > Storage::filesTable = Storage::getFilesTable();
+
+map< string, Storage::File* > Storage::files_table = Storage::init();
 string Storage::RID = "_RECORD_ID_";
 map< string, int > Storage::DEFAULT_SET_ERROR = map< string, int >();
+bool Storage::is_ready = true;
 
 /*----------------------------------------------------------
 					Nested File class
@@ -35,6 +37,20 @@ vector< string > Storage::File::getFields(){
 
 ifstream * Storage::File::getFile(){
 	return &this->file;
+}
+
+int Storage::File::removeRecord(map< string, string > keys_values){
+	int deleted_quantity = 0;	
+	for (int i = 0; i < this->records.size(); i++)
+	{
+		if(Helper::mapMatch(keys_values, records[i]->getContent())){
+			delete records[i];
+			records.erase(records.begin()+i);
+			deleted_quantity++;
+			i--;
+		}
+	}
+	return deleted_quantity;
 }
 
 bool Storage::File::isOpen(){
@@ -113,28 +129,30 @@ map< string, string > Storage::File::parseLine(vector< string > values){
 	return content;
 }
 
+string Storage::File::getNextRID(){
+	int rid, greatest_rid = 0;
+	for (int i = 0; i < this->records.size(); ++i)
+	{
+		try{
+			rid = stoi(records[i]->getContent().at(Storage::RID));
+		}
+		catch(exception& e){
+			Helper::log(Helper::getMessage("storage.error.ridnotconverted"));
+		}
+		if(rid > greatest_rid) //Take for the biggest rid
+			greatest_rid = rid;
+	}
+	return to_string(greatest_rid + 1);
+}
+
 bool Storage::File::loadRecords(){
 	bool result = true;
-	this->current_rid = 0;
 	int rid;
 	if(this->is_open){
 		this->is_active = true;
 		string line;
 		while(getline(this->file, line)){
 			vector< string > values = Helper::explode(line, Storage::SEPARATOR);
-			try {
-				if(values.size() > 0)
-				rid = stoi(values[0]);
-			}
-			catch(exception& e){
-				this->is_active = false;
-				result = false;
-				Helper::log("Storage error: RID couldn't be converted", Storage::DATA_DIRECTORY);
-				break;
-			}
-			if(rid > this->current_rid) //Take for the biggest rid
-				this->current_rid = rid;
-			
 			Storage::File::Record* recordObj = new Storage::File::Record(this, this->parseLine(values));
 			this->addRecord(recordObj);
 		}
@@ -144,7 +162,7 @@ bool Storage::File::loadRecords(){
 	return result;
 }
 
-bool Storage::File::saveRecords(){
+void Storage::File::saveRecords(){
 	ofstream file(Storage::DATA_DIRECTORY + this->name);
 	for (int i = 0; i < this->records.size(); i++)
 	{
@@ -165,23 +183,18 @@ vector< Storage::File::Record* > Storage::File::getRecords(){
 	return this->records;
 };
 
-int Storage::File::getNewCurrentRID(){
-	this->current_rid += 1;
-	return this->current_rid;
-}
-
 
 /*----------------------------------------------------------
 					Storage class
 ----------------------------------------------------------*/
 Storage::Storage(string name){
 	this->name = name;
-	if(Storage::filesTable.count(name)){
+	if(Storage::files_table.count(name)){
 		this->is_loaded = true;
-		Storage::filesTable.at(name)->loadRecords();
+		Storage::files_table.at(name)->loadRecords();
 	} else {
 		this->is_loaded = false;
-		Helper::log("Storage error: File " + name + " is not defined into Storages.conf", Storage::DATA_DIRECTORY);
+		Helper::log(Helper::getMessage("storage.error.filenotdefined", name));
 	}
 };
 
@@ -203,7 +216,7 @@ string Storage::getName(){
 
 vector< map< string, string > > Storage::getAll(){
 	vector< map< string, string > > output;
-	vector< Storage::File::Record* > records = Storage::filesTable.at(this->name)->getRecords();
+	vector< Storage::File::Record* > records = Storage::files_table.at(this->name)->getRecords();
 	for (int i = 0; i < records.size(); i++)
 		output.push_back(records[i]->getContent());
 	return output;
@@ -211,7 +224,7 @@ vector< map< string, string > > Storage::getAll(){
 
 vector< map< string, string > > Storage::get(map< string, string > keys_values){
 	vector< map< string, string > > output;
-	vector< Storage::File::Record* > records = Storage::filesTable.at(this->name)->getRecords();
+	vector< Storage::File::Record* > records = Storage::files_table.at(this->name)->getRecords();
 	for (int i = 0; i < records.size(); i++){
 		if(Helper::mapMatch(keys_values, records[i]->getContent()))
 			output.push_back(records[i]->getContent());
@@ -233,7 +246,7 @@ map< string, string > Storage::getByRID(string rid){
 
 map< string, int > Storage::findInputErrors(map< string, string > keys_values, string rid_ignore){
 	map< string, int > errors;
-	Storage::File * file = Storage::filesTable.at(this->name);
+	Storage::File * file = Storage::files_table.at(this->name);
 	for (map< string, string >::iterator i=keys_values.begin(); i!=keys_values.end(); i++){
 		map< string, bool > info = file->getFieldInfo(i->first);
 		if(info.at("exist")){
@@ -266,9 +279,9 @@ bool Storage::set(map< string, string > keys_values, map< string, int > &errors)
 		errors = Storage::findInputErrors(keys_values);
 		if(errors.size() == 0){
 			result = true;
-			Storage::File * file = Storage::filesTable.at(this->name);
+			Storage::File * file = Storage::files_table.at(this->name);
 			map< string, string > new_values = {
-				{Storage::RID, to_string(file->getNewCurrentRID())}
+				{Storage::RID, file->getNextRID()}
 			};
 			for (map< string, string >::iterator i=keys_values.begin(); i!=keys_values.end(); i++){
 				pair< string, string > record(i->first, i->second);
@@ -281,6 +294,11 @@ bool Storage::set(map< string, string > keys_values, map< string, int > &errors)
 	return result;
 }
 
+int Storage::dump(map< string, string > keys_values){
+	Storage::File * file = Storage::files_table.at(this->name);
+	return file->removeRecord(keys_values);
+}
+
 bool Storage::update(map< string, string > keys_values, map< string, int > &errors){
 	bool result = false;	
 	if(this->is_loaded){
@@ -288,7 +306,7 @@ bool Storage::update(map< string, string > keys_values, map< string, int > &erro
 			map< string, string > arrange = {
 				{Storage::RID, keys_values.at(Storage::RID)}
 			};
-			Storage::File * file = Storage::filesTable.at(this->name);
+			Storage::File * file = Storage::files_table.at(this->name);
 			if(file->recordMatch(arrange)){
 				errors = Storage::findInputErrors(keys_values, keys_values.at(Storage::RID));
 				if(errors.size() == 0){
@@ -310,10 +328,8 @@ bool Storage::update(map< string, string > keys_values, map< string, int > &erro
 	Saves all modified files, closes open files and frees dinamically allocated memory
 */
 void Storage::consolidate(){
-	//Helper::log("Storage consolidate: " + to_string(Storage::filesTable.size()) + " Files to unload", Storage::DATA_DIRECTORY);
-	for (map< string, Storage::File* >::iterator i=Storage::filesTable.begin(); i!=Storage::filesTable.end(); i++){
+	for (map< string, Storage::File* >::iterator i=Storage::files_table.begin(); i!=Storage::files_table.end(); i++){
 		if(i->second->isActive()){
-			//Helper::log("Storage consolidate: " + i->first + " is free", Storage::DATA_DIRECTORY);
 			vector< Storage::File::Record* > records = i->second->getRecords();
 			string filename = Storage::DATA_DIRECTORY + i->second->getName();
 			remove(filename.c_str());
@@ -323,7 +339,6 @@ void Storage::consolidate(){
 				delete records[j];
 			delete i->second;
 		} else {
-			//Helper::log("Storage consolidate: " + i->first + " wasn't active", Storage::DATA_DIRECTORY);
 			i->second->close();
 			delete i->second;
 		}
@@ -334,75 +349,63 @@ void Storage::consolidate(){
 	This function is called before main().
 	It opens all storage files blocking them and putting their references into Storage::files;
 */
-map< string, Storage::File* > Storage::getFilesTable(){
+map< string, Storage::File* > Storage::init(){
 	Storage::is_ready = true;
-	bool error;
-	map< string, Storage::File* > output;
-	map< string, vector< string > > configContent = Storage::parseConfigFile(Storage::loadConfigFile(), error);
-	if(!error){
-		for (map< string, vector< string > >::iterator i=configContent.begin(); i!=configContent.end(); i++){
-			Storage::File* fileObj = new Storage::File(i->first, i->second);
-			if(fileObj->isOpen()){
-				pair< string, Storage::File* > record(i->first, fileObj);
-				Storage::filesTable.insert(record);
+	bool loadError, processError;
+	map< string, Storage::File* > files_table;
+	map< string, vector< string > > config_content = Storage::processConfig(Storage::loadConfigFile(loadError), processError);
+	if(loadError || processError){
+		Storage::is_ready = false;
+		Helper::log(Helper::getMessage("storage.error.aborted"));
+	} else {
+		for (map< string, vector< string > >::iterator i=config_content.begin(); i!=config_content.end(); i++){
+			Storage::File* file = new Storage::File(i->first, i->second);
+			if(file->isOpen()){
+				pair< string, Storage::File* > record(i->first, file);
+				files_table.insert(record);
 			} else {
 				Storage::is_ready = false;
-				Helper::log("Storage init error: File " + fileObj->getName() + " couldn't be opened", Storage::DATA_DIRECTORY);
-				error = false;
+				Helper::log(Helper::getMessage("storage.error.openfile", file->getName()));
 			}
 		}
-	} else {
-		Storage::is_ready = false;
 	}
-	return output;
+	return files_table;
 }
 
 /*
 	Get the config file lines and parse it
 */
-map< string, vector< string > > Storage::parseConfigFile(vector< string > lines, bool &error){
-	map< string, vector< string > > configContent;
+map< string, vector< string > > Storage::processConfig(vector< string > lines, bool &error){
+	map< string, vector< string > > config_content;
 	error = false;
-	if(!lines.size())
-		Helper::log("Storage init warning: Config file is empty", Storage::DATA_DIRECTORY);
-	for (int i = 0; i < lines.size(); i++)
-	{
-		vector< string > lineElements = Helper::explode(lines[i], Storage::SEPARATOR);
-		if(lineElements.size() > 1){
-			string filename = lineElements.front();
-			vector< string > fields;
-			fields.push_back("_RECORD_ID_"); //Injects RID field
-			for (int j = 1; j < lineElements.size(); j++) //Remove first element
-				fields.push_back(lineElements[j]);
-			pair< string, vector< string > > record(filename, fields);
-			configContent.insert(record);
-		} else {
-			Helper::log("Storage init error: Sintax error on config file", Storage::DATA_DIRECTORY);
-			error = true;
-			break;
+	if(lines.size()){
+		for (int i = 0; i < lines.size(); ++i)
+		{
+			vector< string > line_elements = Helper::explode(lines[i], Storage::SEPARATOR);
+			if(line_elements.size() > 1){
+				vector< string > record_fields = {"_RECORD_ID_"};
+				for (int j = 1; j < line_elements.size(); j++)
+					record_fields.push_back(line_elements[j]);
+				pair< string, vector< string > > record(line_elements.front(), record_fields);
+				config_content.insert(record);
+			} else {
+				error = true;
+				Helper::log(Helper::getMessage("storage.error.configfile.syntaxerror"));
+				break;
+			}
 		}
+	} else {
+		error = true;
+		Helper::log(Helper::getMessage("storage.error.configfile.empty"));
 	}
-	return configContent;
+	return config_content;
 }
 
 /*
 	Return config file lines
 */
-vector< string > Storage::loadConfigFile(){
-	string line;
-	vector< string > lines;
-	ifstream configFile (Storage::DATA_DIRECTORY + "Storages.config");
-	if (configFile.is_open())
-	{
-		while (getline(configFile, line))
-		{
-			lines.push_back(line);
-		}
-		configFile.close();
-	} else {
-		Helper::log("Storage init error: Config file not found", Storage::DATA_DIRECTORY);
-	}
-	return lines;
+vector< string > Storage::loadConfigFile(bool &error){
+	return Helper::explode(Helper::getFileContent(Storage::DATA_DIRECTORY + "Data.Config", error), '\n');
 };
 
 

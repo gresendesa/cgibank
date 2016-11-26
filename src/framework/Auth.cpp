@@ -15,6 +15,7 @@ string Auth::get(string key){
 
 void Auth::auth(string user_id){
 	srand(time(NULL));
+	Auth::is_authenticated = true;
 	string cookie_id = Helper::getRandomAlphanum(20);
 	Auth::setCookie(Auth::cookie_label, cookie_id);
 	Storage storage("Auth");
@@ -61,10 +62,12 @@ void Auth::init(){
 		vector< map< string, string > > records = auth.get(input);
 		if(records.size()){
 			Storage users("User");
-			map< string, string > user = users.getByRID(records[0]["user_id"]);
+			map< string, string > user = users.getByRID(records.front()["user_id"]);
 			if(user.size()){
 				result = true;
 				Auth::info = user;
+			} else {
+				auth.dump(records.front()); //Remove register from Auth if user does not exist anymore
 			}
 		}
 	}
