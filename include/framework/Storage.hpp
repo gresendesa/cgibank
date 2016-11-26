@@ -74,6 +74,7 @@
 		static const int UNDEFINED;
 		static const int ERROR;
 		static map< string, int > DEFAULT_SET_ERROR;
+		static map< string, string > translateErrors(map< string, int >);
 
 		static void consolidate();
 		bool isLoaded();

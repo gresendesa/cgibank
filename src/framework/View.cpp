@@ -1,7 +1,7 @@
 #include "../../include/framework/View.hpp"
 #include "../../include/framework/Helper.hpp"
 
-void Framework::View::appendHTML(string path){
+void Framework::View::appendHTML(string path, map< string, string> parameters){
 	bool error;
 	string result = Helper::getFileContent("../src/app/views/html/" + path + ".html", error);
 	if(error){
@@ -9,6 +9,7 @@ void Framework::View::appendHTML(string path){
 	} else {
 		this->content = result;
 	}
+	this->replaceFlags(parameters);
 }
 
 void Framework::View::appendText(string content){

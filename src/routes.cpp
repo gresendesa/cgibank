@@ -8,35 +8,20 @@ Output Route::route(){
 				return Controller::Main::run();
 			} else
 			if(Route::match("/signout")){
-				return Controller::Signout::run();
+				return Controller::Authentication::signout();
 			} else {
 				return "You are logged in " + Auth::get("name") + " :::: " + Core::getEnvironmentValue("HTTP_COOKIE", "");
 			}
 		} else {
-			if(Route::match("/welcome")){
-				return Controller::Login::run();
-			} else 
-			if(Route::match("/main")){
-				return "";
-				//return "You are logged in " + Auth::get("name") + " :::: " + Core::getEnvironmentValue("HTTP_COOKIE", "");
-			} else
 			if(Route::match("/signup")){
-				return Controller::Signup::run();
+				return Controller::Authentication::signup();
 			} else
 			if(Route::match("/signin")){
-				return Controller::Signin::run();
-			} else
-			if(Route::match("/redirect")){
-				return Route::redirect("/welcome");
-			} else 
-			if(Route::match("/foo")){
-				vector<string> a = {"teste", "amora", "melão"};
-				return "foo <a href=\"/redirect\">click me</a>";
-			}
-			else {
+				return Controller::Authentication::signin();
+			} else {
 				//View::NotFoundPage not_found_page;
 				//return not_found_page.run();
-				return Route::redirect("/welcome");
+				return Route::redirect("/signin");
 			}
 		}
 			

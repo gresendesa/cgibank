@@ -1,6 +1,6 @@
 #include "../../include/framework/Model.hpp"
 
-map< string, int > Framework::Model::STD_DB_ERRORS = map< string, int >();
+map< string, int > Framework::Model::STD_STORAGE_ERRORS = map< string, int >();
 
 Framework::Model::Model(string storageName){
 	this->storageName = storageName;

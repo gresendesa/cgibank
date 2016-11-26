@@ -21,7 +21,7 @@
 		protected:
 			Model(string storageName);
 		public:
-			static map< string, int > STD_DB_ERRORS;
+			static map< string, int > STD_STORAGE_ERRORS;
 			bool save(map< string, int >&);
 			vector< map< string, string > > find(map< string, string >);
 			void put(map< string, string >);

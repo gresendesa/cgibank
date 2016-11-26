@@ -214,6 +214,14 @@ string Storage::getName(){
 	return this->name;
 }
 
+map< string, string > Storage::translateErrors(map< string, int > errors){
+	map< string, string > output;
+	for (map< string, int >::iterator i=errors.begin(); i!=errors.end(); i++){
+		output.insert(pair< string, string >("error." + i->first, Helper::getMessage("storage.translate.error." + to_string(i->second), i->first)));
+	}
+	return output;
+};
+
 vector< map< string, string > > Storage::getAll(){
 	vector< map< string, string > > output;
 	vector< Storage::File::Record* > records = Storage::files_table.at(this->name)->getRecords();

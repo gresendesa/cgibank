@@ -18,7 +18,7 @@
 			bool checkNextFlagPosition(vector< int >&);
 		protected:
 			Output content;
-			void appendHTML(string);
+			void appendHTML(string, map< string, string> = map< string, string>());
 			void appendText(string);
 			void replaceFlags(map< string, string>);
 			void cleanUnusedFlags();
