@@ -10,7 +10,7 @@ const string Storage::EMAIL = "@";
 const int Storage::SUCCESS = 0;
 const int Storage::DUPLICATE = 1;
 const int Storage::EMPTY = 2;
-const int Storage::INCOMPATIBLE = 3;
+const int Storage::INVALID = 3;
 const int Storage::UNDEFINED = 4;
 const int Storage::ERROR = 5;
 
@@ -282,15 +282,14 @@ map< string, int > Storage::findInputErrors(map< string, string > keys_values, s
 					errors.insert(pair< string, int >(i->first, Storage::DUPLICATE));
 				}
 			}
-			if(info.at("integer") && !Helper::isInteger(i->second)){
-				errors.insert(pair< string, int >(i->first, Storage::INCOMPATIBLE));
-			}
-			if(info.at("float") && !Helper::isFloat(i->second)){
-				errors.insert(pair< string, int >(i->first, Storage::INCOMPATIBLE));
-			}
-			if(info.at("email") && !Helper::isEmail(i->second)){
-				errors.insert(pair< string, int >(i->first, Storage::INCOMPATIBLE));
-			}
+			if(info.at("integer") && !Helper::isInteger(i->second))
+				errors.insert(pair< string, int >(i->first, Storage::INVALID));
+			if(info.at("float") && !Helper::isFloat(i->second))
+				errors.insert(pair< string, int >(i->first, Storage::INVALID));
+			if(info.at("email") && !Helper::isEmail(i->second))
+				errors.insert(pair< string, int >(i->first, Storage::INVALID));
+			if(i->second.find(Storage::SEPARATOR) != string::npos)
+				errors.insert(pair< string, int >(i->first, Storage::INVALID));
 		} else {
 			pair< string, int > record(i->first, Storage::UNDEFINED);
 			errors.insert(record);

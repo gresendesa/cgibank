@@ -218,7 +218,7 @@ bool Helper::isEmail(string input){
 };
 
 bool Helper::isFloat(string input){
-	regex floaty("(\\+)?[0-9]+\\.?[0-9]+");
+	regex floaty("[+-]?(?=[.]?[0-9])[0-9]*(?:[.][0-9]*)?(?:[Ee][+-]?[0-9]+)?");
 	return regex_match(input, floaty);
 };
 

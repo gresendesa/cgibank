@@ -2,6 +2,7 @@
 #define VIEW_LOGIN_HPP
 
 	#include "../../framework/View.hpp"
+	#include "../register.hpp"
 
 	#include <string>
 

@@ -74,7 +74,7 @@
 		static const int SUCCESS;
 		static const int DUPLICATE;
 		static const int EMPTY;
-		static const int INCOMPATIBLE;
+		static const int INVALID;
 		static const int UNDEFINED;
 		static const int ERROR;
 		static map< string, int > DEFAULT_SET_ERROR;

@@ -9,6 +9,9 @@ Output Route::route(){
 			} else
 			if(Route::match("/signout")){
 				return Controller::Authentication::signout();
+			} else
+			if(Route::match("/accounts")){
+				return Controller::Account::index();
 			} else {
 				return Route::redirect("/home");
 			}

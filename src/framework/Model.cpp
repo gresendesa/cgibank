@@ -17,7 +17,11 @@ vector< map< string, string > > Framework::Model::find(map< string, string > key
 }
 
 void Framework::Model::put(map< string, string > fields){
-	
+	for (map< string, string >::iterator i=fields.begin(); i!=fields.end(); i++){
+		if(this->fieldsMap.count(i->first)){
+			*this->fieldsMap.at(i->first) = fields.at(i->first);
+		}
+	}
 }
 
 string Framework::Model::getId(){

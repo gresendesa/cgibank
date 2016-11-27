@@ -1,5 +1,5 @@
-#ifndef VIEW_NOTFOUNDPAGE_HPP
-#define VIEW_NOTFOUNDPAGE_HPP
+#ifndef VIEW_ACCOUNT_HPP
+#define VIEW_ACCOUNT_HPP
 
 	#include "../../framework/View.hpp"
 	#include "../register.hpp"
@@ -11,10 +11,10 @@
 	typedef string Output;
 
 	namespace View{
-		class NotFoundPage: public Framework::View
+		class Account: public Framework::View
 		{
 		public:
-			void program(map< string, string> = map< string, string>());
+			void program(map< string, string> = map< string, string>()); 
 		};
 	};
 		

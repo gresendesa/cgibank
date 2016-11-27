@@ -1,23 +1,27 @@
 #include "../../include/framework/View.hpp"
-#include "../../include/framework/Helper.hpp"
 
 void Framework::View::appendHTML(string path, map< string, string> parameters){
 	bool error;
-	string result = Helper::getFileContent("../src/app/views/html/" + path + ".html", error);
-	if(error){
-		this->content = "Warning: <b>src/app/views/html/" + path + ".html</b> not found";
-	} else {
-		this->content = result;
-	}
+	this->content = Framework::View::getHTML(path);
 	this->replaceFlags(parameters);
 }
 
-void Framework::View::appendText(string content){
+void Framework::View::appendText(string content, map< string, string> parameters){
 	if (this->content.size()){
 		this->content += content;
 	} else {
 		this->content = content;
 	}
+	this->replaceFlags(parameters);
+}
+
+string Framework::View::getHTML(string path){
+	bool error;
+	string result = Helper::getFileContent("../src/app/views/html/" + path + ".html", error);
+	if(error){
+		result = Helper::getMessage("framework.view.html.notfound", path);
+	}
+	return result;
 }
 
 void Framework::View::replaceFlags(map< string, string> replaceList){
@@ -30,10 +34,29 @@ void Framework::View::program(map< string, string> parameters){
 
 }
 
+Output Framework::View::makeTableLine(vector< string > data, string data_tag){
+	string output = "<tr>";
+	string data_tag_close = data_tag;
+	if(data_tag.size())
+		data_tag_close.insert(1, "/");
+	else 
+		data_tag_close = "</td>";
+	for (int i = 0; i < data.size(); i++)
+		output += data_tag + data.at(i) + data_tag_close; 
+	output += "</tr>";
+	return output;
+}
+
 Output Framework::View::run(map< string, string> parameters){
 	this->program(parameters);
 	this->replaceFlags(parameters);
 	this->cleanUnusedFlags();
+	return this->content;
+}
+
+Output Framework::View::prepare(map< string, string> parameters){
+	this->program(parameters);
+	this->replaceFlags(parameters);
 	return this->content;
 }
 

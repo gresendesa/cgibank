@@ -1,5 +1,4 @@
 #include "../../include/framework/Core.hpp"
-#include "../../include/framework/Route.hpp"
 /*
 	Bootstrap system
 */
@@ -12,7 +11,7 @@ bool Core::bootstrap(){
 		globalOutput = Route::route();
 	}
 	else
-		globalOutput = "<b>I'm sorry Dave</b>. Bootstrap aborted. <br> There's something wrong with the Storage :/ <br> Check out logs to understand what is happening";
+		globalOutput = Helper::getMessage("framework.core.bootstrap.storage.fail");
 	Storage::consolidate();
 	cout << Core::getResponseMetadata() << "Content-type: text/html\n\n" << globalOutput << "\r\n";
 }

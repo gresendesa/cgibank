@@ -66,3 +66,7 @@ clear:
 
 see:
 	echo $(fw_sources)
+
+permissions:
+	sudo chmod 777 -R data/
+	sudo chmod 777 -R src/app/views/html

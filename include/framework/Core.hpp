@@ -11,7 +11,8 @@
 
 	using namespace std;
 
-	#include "Helper.hpp"	
+	#include "Helper.hpp"
+	#include "Route.hpp"
 
 	typedef string Output;
 

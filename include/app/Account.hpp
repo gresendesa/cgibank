@@ -17,20 +17,24 @@
 		private:
 			string user_id;
 			string balance;
-			string accountnumber;
+			string account_number;
+			void load();
 		public:
-			Account(string storageName = "Account") : Framework::Model(storageName){
+			Account(string account_number, string storageName = "Account") : Framework::Model(storageName){
 				map< string, string *> fieldsMap = {
 					{"user_id", &this->user_id},
 					{"balance", &this->balance},
-					{"accountnumber", &this->accountnumber}
+					{"account_number", &this->account_number}
 				};
 				this->appendFields(fieldsMap);
+				this->load();
 			};
 			string getUserId();
 			string getBalance();
 			string getAccountNumber();
 			bool transfer(float, string);
+			static bool create(string, string, map< string, int >&);
+			static bool finalize(string);
 			bool deposit(float);
 			void deleteAccount();
 			string generateStatement();
