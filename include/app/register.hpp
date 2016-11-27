@@ -3,6 +3,9 @@
 
 	//Models
 	#include "Manager.hpp"
+	#include "Transfer.hpp"
+	#include "Deposit.hpp"
+	#include "Account.hpp"
 
 	//Views
 	#include "../app/views/Main.hpp"

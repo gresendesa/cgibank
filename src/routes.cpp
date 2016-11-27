@@ -10,7 +10,7 @@ Output Route::route(){
 			if(Route::match("/signout")){
 				return Controller::Authentication::signout();
 			} else {
-				return "You are logged in " + Auth::get("name") + " :::: " + Core::getEnvironmentValue("HTTP_COOKIE", "");
+				return Route::redirect("/home");
 			}
 		} else {
 			if(Route::match("/signup")){
@@ -19,8 +19,6 @@ Output Route::route(){
 			if(Route::match("/signin")){
 				return Controller::Authentication::signin();
 			} else {
-				//View::NotFoundPage not_found_page;
-				//return not_found_page.run();
 				return Route::redirect("/signin");
 			}
 		}

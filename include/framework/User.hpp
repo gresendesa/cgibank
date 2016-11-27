@@ -1,7 +1,7 @@
 #ifndef USER_HPP
 #define USER_HPP
 
-	#include "../framework/Model.hpp"
+	#include "Model.hpp"
 
 	#include <iostream>
 	#include <string>

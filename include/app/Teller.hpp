@@ -1,5 +1,5 @@
-#ifndef MANAGER_HPP
-#define MANAGER_HPP
+#ifndef TELLER_HPP
+#define TELLER_HPP
 
 	#include "Employee.hpp"
 
@@ -12,11 +12,11 @@
 	using namespace std;
 	
 	namespace Model{
-		class Manager: public Model::Employee
+		class Teller: public Model::Employee
 		{
 		public:
-			Manager() : Employee(){
-				this->level = "Manager";
+			Teller() : Employee(){
+				this->level = "Teller";
 			};
 		};
 	}		
