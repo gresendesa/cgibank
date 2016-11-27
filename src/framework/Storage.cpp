@@ -3,12 +3,16 @@
 const string Storage::DATA_DIRECTORY = "../data/";
 const string Storage::REQUIRED_FIELD = "!";
 const string Storage::UNIQUE_FIELD = "*";
+const string Storage::INTEGER = "&";
+const string Storage::FLOAT = "$";
+const string Storage::EMAIL = "@";
 
 const int Storage::SUCCESS = 0;
 const int Storage::DUPLICATE = 1;
 const int Storage::EMPTY = 2;
-const int Storage::UNDEFINED = 3;
-const int Storage::ERROR = 4;
+const int Storage::INCOMPATIBLE = 3;
+const int Storage::UNDEFINED = 4;
+const int Storage::ERROR = 5;
 
 map< string, Storage::File* > Storage::files_table = Storage::init();
 string Storage::RID = "_RECORD_ID_";
@@ -69,6 +73,9 @@ map< string, bool > Storage::File::getFieldInfo(string field){
 	bool exist = false;
 	bool required = false;
 	bool unique = false;
+	bool integer = false;
+	bool floaty = false;
+	bool email = false;
 	for (int i = 0; i < this->fields.size(); i++)
 	{
 		if(Storage::removeFieldFlags(this->fields[i]) == Storage::removeFieldFlags(field)){
@@ -77,14 +84,16 @@ map< string, bool > Storage::File::getFieldInfo(string field){
 				required = true;
 			if(this->fields[i].find(Storage::UNIQUE_FIELD) != string::npos)
 				unique = true;
+			if(this->fields[i].find(Storage::INTEGER) != string::npos)
+				integer = true;
+			if(this->fields[i].find(Storage::FLOAT) != string::npos)
+				floaty = true;
+			if(this->fields[i].find(Storage::EMAIL) != string::npos)
+				email = true;
 			break;
 		}
 	}
-	map< string, bool > info = {
-		{"exist", exist},
-		{"required", required},
-		{"unique", unique}
-	};
+	map< string, bool > info = {{"exist", exist}, {"required", required}, {"unique", unique}, {"integer", integer}, {"float", floaty}, {"email", email}};
 	return info;
 }
 
@@ -203,7 +212,11 @@ Storage::~Storage(){
 };
 
 string Storage::removeFieldFlags(string input){
-	return Helper::replace(Storage::REQUIRED_FIELD, "", Helper::replace(Storage::UNIQUE_FIELD, "", input));
+	return Helper::replace(Storage::REQUIRED_FIELD, "", 
+		Helper::replace(Storage::UNIQUE_FIELD, "",
+			Helper::replace(Storage::EMAIL, "", 
+				Helper::replace(Storage::INTEGER, "", 
+					Helper::replace(Storage::FLOAT, "", input)))));
 }
 
 bool Storage::isLoaded(){
@@ -259,17 +272,24 @@ map< string, int > Storage::findInputErrors(map< string, string > keys_values, s
 		map< string, bool > info = file->getFieldInfo(i->first);
 		if(info.at("exist")){
 			if(info.at("required") && (i->second.size() == 0)){
-				pair< string, int > record(i->first, Storage::EMPTY);
-				errors.insert(record);
+				errors.insert(pair< string, int >(i->first, Storage::EMPTY));
 			}
 			if(info.at("unique")){
 				map< string, string > arrange = {
 					{i->first, i->second}
 				};
 				if(file->recordMatch(arrange, rid_ignore)){
-					pair< string, int > record(i->first, Storage::DUPLICATE);
-					errors.insert(record);
+					errors.insert(pair< string, int >(i->first, Storage::DUPLICATE));
 				}
+			}
+			if(info.at("integer") && !Helper::isInteger(i->second)){
+				errors.insert(pair< string, int >(i->first, Storage::INCOMPATIBLE));
+			}
+			if(info.at("float") && !Helper::isFloat(i->second)){
+				errors.insert(pair< string, int >(i->first, Storage::INCOMPATIBLE));
+			}
+			if(info.at("email") && !Helper::isEmail(i->second)){
+				errors.insert(pair< string, int >(i->first, Storage::INCOMPATIBLE));
 			}
 		} else {
 			pair< string, int > record(i->first, Storage::UNDEFINED);

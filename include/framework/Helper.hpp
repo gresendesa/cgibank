@@ -7,6 +7,7 @@
 	#include <map>
 	#include <fstream>
 	#include <locale>
+	#include <regex>
 
 	using namespace std;
 
@@ -29,6 +30,9 @@
 		static bool mapMatch(map< string, string >, map< string, string >);
 		static string getKey(map< string, string >, string, string);
 		static string getRandomAlphanum(int length);
+		static bool isEmail(string);
+		static bool isFloat(string);
+		static bool isInteger(string);
 	};
 
 #endif

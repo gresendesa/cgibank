@@ -18,7 +18,13 @@
 			string account;
 			string value;
 		public:
-			Deposit(string storageName = "Deposit") : Framework::Model(storageName){};
+			Deposit(string storageName = "Deposit") : Framework::Model(storageName){
+				map< string, string *> fieldsMap = {
+					{"account", &this->account},
+					{"value", &this->value}
+				};
+				this->appendFields(fieldsMap);
+			};
 			bool execute();
 			static vector< map< string, string > > get(string);
 		};

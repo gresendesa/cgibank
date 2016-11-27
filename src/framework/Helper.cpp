@@ -211,3 +211,18 @@ string Helper::getKey(map< string, string > valuesTable, string key, string defa
 	}
 	return result;
 };
+
+bool Helper::isEmail(string input){
+	regex email("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+");
+	return regex_match(input, email);
+};
+
+bool Helper::isFloat(string input){
+	regex floaty("(\\+)?[0-9]+\\.?[0-9]+");
+	return regex_match(input, floaty);
+};
+
+bool Helper::isInteger(string input){
+	regex integer("(\\+)?[[:digit:]]+");
+	return regex_match(input, integer);
+};

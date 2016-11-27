@@ -66,11 +66,15 @@
 		static const char SEPARATOR = '#';
 		static const string REQUIRED_FIELD;
 		static const string UNIQUE_FIELD;
+		static const string INTEGER;
+		static const string FLOAT;
+		static const string EMAIL;
 		static const string DATA_DIRECTORY;
 		static string RID;
 		static const int SUCCESS;
 		static const int DUPLICATE;
 		static const int EMPTY;
+		static const int INCOMPATIBLE;
 		static const int UNDEFINED;
 		static const int ERROR;
 		static map< string, int > DEFAULT_SET_ERROR;
