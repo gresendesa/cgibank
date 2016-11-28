@@ -1,15 +1,15 @@
-#ifndef CONTROLLER_ACCOUNT_HPP
-#define CONTROLLER_ACCOUNT_HPP
+#ifndef CONTROLLER_USER_HPP
+#define CONTROLLER_USER_HPP
 
 	#include "../../framework/Controller.hpp"
 	#include "../register.hpp"
 
 	namespace Controller{
-		class Account: public Framework::Controller
+		class User: public Framework::Controller
 		{
 		public:
-			//Account(arguments);
-			//~Account();
+			//User(arguments);
+			//~User();
 			static Output index();
 			static Output dump();
 			static Output create();

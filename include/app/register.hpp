@@ -12,11 +12,13 @@
 	#include "../app/views/Login.hpp"
 	#include "../app/views/NotFoundPage.hpp"
 	#include "../app/views/Account.hpp"
+	#include "../app/views/About.hpp"
 
 	//Controllers
 	#include "../app/controllers/Login.hpp"
 	#include "../app/controllers/Main.hpp"
 	#include "../app/controllers/Authentication.hpp"
 	#include "../app/controllers/Account.hpp"
+	#include "../app/controllers/User.hpp"
 
 #endif

@@ -30,9 +30,10 @@
 			//~View();	
 			Output run(map< string, string> = map< string, string>());
 			Output prepare(map< string, string> = map< string, string>());
-			static string getHTML(string);
+			static Output getHTML(string, map< string, string> = map< string, string>());
 			void replaceFlags(map< string, string>);
 			static Output makeTableLine(vector< string >, string = "<td>");
+			static Output replace(string, map< string, string>);
 		};
 	}
 	

@@ -1,0 +1,45 @@
+ <div class="col-lg-12">
+	<div class="table-responsive">
+		<form role="form" method="POST" action="/users/create">
+
+			<div class="form-group" name="account_number">
+				<label>Name</label>
+				<input class="form-control">
+				<p class="help-block">Unique name</p>
+			</div>
+
+			<div class="form-group" name="account_number">
+				<label>Email</label>
+				<input class="form-control">
+			</div>
+
+			<div class="form-group" name="account_number">
+				<label>Password</label>
+				<input class="form-control" type="password">
+			</div>
+
+			<div class="form-group">
+				<label>Level</label>
+				<div class="radio">
+					<label>
+						<input type="radio" name="level" id="optionsRadios1" value="Manager" checked>Manager
+					</label>
+				</div>
+				<div class="radio">
+					<label>
+						<input type="radio" name="level" id="optionsRadios2" value="Teller">Teller
+					</label>
+				</div>
+				<div class="radio">
+					<label>
+						<input type="radio" name="level" id="optionsRadios3" value="Client">Client
+					</label>
+				</div>
+			</div>
+			
+			<button type="submit" class="btn btn-primary">Done</button>
+			<a class="btn btn-default" href="/users">Cancel</a>
+
+		</form>
+	</div>
+</div>

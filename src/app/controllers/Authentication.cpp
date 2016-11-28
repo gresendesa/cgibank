@@ -16,7 +16,7 @@ Output Controller::Authentication::signin(){
 	vector< map< string, string > > result = user.find(credentials);
 	if (result.size()){
 		Auth::auth(result[0].at(Storage::RID));
-		Route::redirect("/home");
+		Route::redirect("/about");
 	} else {
 		if(parameters.size()){
 			page_parameters.insert(pair< string, string >("signin-failed-msg", Helper::getMessage("app.view.sigin.wrongcredentials")));

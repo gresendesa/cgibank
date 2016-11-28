@@ -15,19 +15,24 @@ void Framework::View::appendText(string content, map< string, string> parameters
 	this->replaceFlags(parameters);
 }
 
-string Framework::View::getHTML(string path){
+Output Framework::View::getHTML(string path, map< string, string> replace_list){
 	bool error;
 	string result = Helper::getFileContent("../src/app/views/html/" + path + ".html", error);
 	if(error){
 		result = Helper::getMessage("framework.view.html.notfound", path);
 	}
-	return result;
+	return Framework::View::replace(result, replace_list);
 }
 
-void Framework::View::replaceFlags(map< string, string> replaceList){
-	for (map<string,string>::iterator i=replaceList.begin(); i!=replaceList.end(); i++){
-		this->content = Helper::replace("{{" + i->first + "}}", i->second, this->content);
+void Framework::View::replaceFlags(map< string, string> replace_list){
+	this->content = Framework::View::replace(this->content, replace_list);
+}
+
+Output Framework::View::replace(string input, map< string, string> replace_list){
+	for (map<string,string>::iterator i=replace_list.begin(); i!=replace_list.end(); i++){
+		input = Helper::replace("{{" + i->first + "}}", i->second, input);
 	}
+	return input;
 }
 
 void Framework::View::program(map< string, string> parameters){
