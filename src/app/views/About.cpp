@@ -1,6 +1,6 @@
 #include "../../../include/app/views/About.hpp"
 
-void View::About::program(map< string, string> parameters){
+void View::About::program(map< string, string> parameters, vector< map< string, string > > data){
 	::View::Main main;
 	map< string, string > page_parameters = {
 		{"page-title", "About"},

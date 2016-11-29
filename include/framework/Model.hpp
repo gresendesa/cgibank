@@ -26,7 +26,10 @@
 			vector< map< string, string > > find(map< string, string >);
 			void put(map< string, string >);
 			string getId();
+			map< string, string > getOne(string);
+			vector< map< string, string > > getAll();
 			void setStorageName(string);
+			void dump(string);
 			void setId(string);
 			void setFieldsMap(map< string, string *>);
 			void appendFields(map< string, string *>);

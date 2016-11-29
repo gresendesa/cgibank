@@ -1,5 +1,5 @@
-#ifndef VIEW_LOGIN_HPP
-#define VIEW_LOGIN_HPP
+#ifndef VIEW_USER_HPP
+#define VIEW_USER_HPP
 
 	#include "../../framework/View.hpp"
 	#include "../register.hpp"
@@ -11,7 +11,7 @@
 	typedef string Output;
 
 	namespace View{
-		class Login: public Framework::View
+		class User: public Framework::View
 		{
 		public:
 			void program(map< string, string> = map< string, string>(), vector< map< string, string > > = vector< map< string, string > >()); 

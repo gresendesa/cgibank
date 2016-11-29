@@ -24,12 +24,12 @@
 			void appendHTML(string, map< string, string> = map< string, string>());
 			void appendText(string, map< string, string> = map< string, string>());
 			void cleanUnusedFlags();
-			virtual void program(map< string, string> = map< string, string>());
+			virtual void program(map< string, string> = map< string, string>(), vector< map< string, string > > = vector< map< string, string > >());
 		public:
 			//View(arguments);
 			//~View();	
-			Output run(map< string, string> = map< string, string>());
-			Output prepare(map< string, string> = map< string, string>());
+			Output run(map< string, string> = map< string, string>(), vector< map< string, string > > = vector< map< string, string > >());
+			Output prepare(map< string, string> = map< string, string>(), vector< map< string, string > > = vector< map< string, string > >());
 			static Output getHTML(string, map< string, string> = map< string, string>());
 			void replaceFlags(map< string, string>);
 			static Output makeTableLine(vector< string >, string = "<td>");

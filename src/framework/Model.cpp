@@ -24,8 +24,33 @@ void Framework::Model::put(map< string, string > fields){
 	}
 }
 
+map< string, string > Framework::Model::getOne(string rid){
+	map< string, string > output;
+	Storage storage(this->storageName);
+	map< string, string > rid_field = {
+		{Storage::RID, rid}
+	};
+	vector< map< string, string > > results = storage.get(rid_field);
+	if(results.size())
+		output = results.front();
+	return output;
+}
+
 string Framework::Model::getId(){
 	return this->id;
+}
+
+vector< map< string, string > > Framework::Model::getAll(){
+	Storage storage(this->storageName);
+	return storage.getAll();
+}
+
+void Framework::Model::dump(string rid){
+	Storage storage(this->storageName);
+	map< string, string > rid_field = {
+		{Storage::RID, rid}
+	};
+	storage.dump(rid_field);
 }
 
 void Framework::Model::setStorageName(string storageName){

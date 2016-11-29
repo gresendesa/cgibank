@@ -1,6 +1,6 @@
 #include "../../../include/app/views/Main.hpp"
 
-void View::Main::program(map< string, string> parameters){
+void View::Main::program(map< string, string> parameters, vector< map< string, string > > data){
 	parameters.insert(pair< string, string >("user-name", Auth::get("name")));
 	parameters.insert(pair< string, string >("profile-name", Auth::get("level")));
 	if(Auth::isAuthenticated()){ //Insert sidebar

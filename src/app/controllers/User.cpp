@@ -2,7 +2,7 @@
 
 Output Controller::User::index(){
 	Output output;
-	View::Account view;
+	View::User view;
 	map< string, string > parameters = {
 		{"page-title", "Users"},
 		{"page-subtitle", "Control muggles"},
@@ -10,24 +10,9 @@ Output Controller::User::index(){
 		{"page-content", Framework::View::getHTML("users.table")}
 	};
 	view.replaceFlags(parameters);
-	Storage account("User");
-	vector< map< string, string > > accounts = account.getAll();
-	string table_content = "";
-	for (int i = 0; i < accounts.size(); i++){
-		map< string, string > record = accounts.at(i);
-		map< string, string > delete_link = {{"delete-link", "/users/dump/" + Helper::getKey(record, Storage::RID, "")}};
-		vector< string > line_content = {
-			Helper::getKey(record, "name", ""),
-			Helper::getKey(record, "email", ""),
-			Helper::getKey(record, "level", ""),
-			Framework::View::getHTML("edit.button", delete_link),
-			Framework::View::getHTML("delete.button", delete_link)
-
-		};
-		table_content += Framework::View::makeTableLine(line_content);
-	}
-	parameters.insert(pair< string, string >("table-content", table_content));
-	return view.prepare(parameters);
+	Model::User user;
+	vector< map< string, string > > users = user.getAll();
+	return view.prepare(parameters, users);
 }
 
 
@@ -35,10 +20,8 @@ Output Controller::User::dump(){
 	if(Auth::isAuthenticated() && Auth::get("level") == "Manager"){
 		if(Core::getURIElements().size() == 3){
 			string user_id = Core::getURIElements().at(2);
-			Storage user("User");
-			map< string, string > u = user.getByRID(user_id);
-			if(u.size())
-				user.dump(u);
+			Model::User user;
+			user.dump(user_id);
 		}
 	}
 	return Route::redirect("/users");
@@ -46,7 +29,7 @@ Output Controller::User::dump(){
 
 Output Controller::User::create(){
 	Output output;
-	View::Account view;
+	View::Standard view;
 	map< string, string > parameters = {
 		{"page-title", "User"},
 		{"page-subtitle", "Create"},

@@ -11,15 +11,10 @@ Output Route::route(){
 				return Controller::Authentication::signout();
 			} else
 			if(Route::match("/goo")){
-				/*map< string, int > errors;
-				Model::Account::create("23445", "14", errors);
-				Model::Account::create("23446", "14", errors);
-				Model::Account::create("23447", "15", errors);
-				Model::Account::create("23448", "16", errors);
-				Model::Account::create("23449", "17", errors);
-				Model::Account::create("23449", "18", errors);
-				Model::Account::create("23490", "19", errors);
-				Model::Account::create("", "20", errors);*/
+				map< string, int > errors;
+				Model::Account::create("23445", "24", errors);
+				Model::Account::create("23446", "26", errors);
+				Model::Account::create("23447", "27", errors);
 				return "fsgfd";
 			} else
 			if(Route::match("/accounts")){

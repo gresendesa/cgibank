@@ -1,6 +1,6 @@
 #include "../../../include/app/controllers/Main.hpp"
 
 Output Controller::Main::run(){
-	View::Account view;
+	View::Standard view;
 	return view.prepare();
 }

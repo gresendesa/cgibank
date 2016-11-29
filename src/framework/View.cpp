@@ -35,7 +35,7 @@ Output Framework::View::replace(string input, map< string, string> replace_list)
 	return input;
 }
 
-void Framework::View::program(map< string, string> parameters){
+void Framework::View::program(map< string, string> parameters, vector< map< string, string > > data){
 
 }
 
@@ -52,16 +52,16 @@ Output Framework::View::makeTableLine(vector< string > data, string data_tag){
 	return output;
 }
 
-Output Framework::View::run(map< string, string> parameters){
-	this->program(parameters);
-	this->replaceFlags(parameters);
+Output Framework::View::run(map< string, string> flags, vector< map< string, string > > data){
+	this->program(flags, data);
+	this->replaceFlags(flags);
 	this->cleanUnusedFlags();
 	return this->content;
 }
 
-Output Framework::View::prepare(map< string, string> parameters){
-	this->program(parameters);
-	this->replaceFlags(parameters);
+Output Framework::View::prepare(map< string, string> flags, vector< map< string, string > > data){
+	this->program(flags, data);
+	this->replaceFlags(flags);
 	return this->content;
 }
 

@@ -18,16 +18,14 @@
 			string user_id;
 			string balance;
 			string account_number;
-			void load();
 		public:
-			Account(string account_number, string storageName = "Account") : Framework::Model(storageName){
+			Account(string storageName = "Account") : Framework::Model(storageName){
 				map< string, string *> fieldsMap = {
 					{"user_id", &this->user_id},
 					{"balance", &this->balance},
 					{"account_number", &this->account_number}
 				};
 				this->appendFields(fieldsMap);
-				this->load();
 			};
 			string getUserId();
 			string getBalance();
