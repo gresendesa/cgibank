@@ -28,14 +28,38 @@ Output Controller::User::dump(){
 }
 
 Output Controller::User::create(){
+	View::FormUser view;
+	map< string, string > parameters;
+	map< string, string > variables = Core::getPOST();
+	if(variables.size()){
+		vector< string > valid_level = {"Client", "Teller", "Manager"};
+		map< string, string > user_data = {
+			{"name", Helper::getKey(variables, "name", "")},
+			{"email", Helper::getKey(variables, "email", "")},
+			{"password", Helper::getKey(variables, "password", "")},
+			{"level", Helper::normalize(Helper::getKey(variables, "level", ""), valid_level, "Client")}
+		};
+		Model::User user;
+		user.put(user_data);
+		map< string, string > errors;
+		if(user.save(errors)){
+			Route::redirect("/users");
+		} else {
+			parameters.insert(user_data.begin(), user_data.end());
+			parameters.insert(errors.begin(), errors.end());
+		}
+	}
+	return view.run(parameters);
+}
+
+
+Output Controller::User::edit(){
 	Output output;
 	View::Standard view;
 	map< string, string > parameters = {
 		{"page-title", "User"},
 		{"page-subtitle", "Create"},
 		{"ative-tab-users", "active"},
-		{"page-content", Framework::View::getHTML("user.create.form")}
+		{"page-content", Framework::View::getHTML("user.form")}
 	};
-	return view.prepare(parameters);
 }
-

@@ -202,12 +202,12 @@ string Helper::getRandomAlphanum(int length){
 	return output;
 }
 
-string Helper::getKey(map< string, string > valuesTable, string key, string defaultValue){
+string Helper::getKey(map< string, string > valuesTable, string key, string default_value){
 	string result;
 	if(valuesTable.count(key)){
 		result = valuesTable.at(key);
 	} else {
-		result = defaultValue;
+		result = default_value;
 	}
 	return result;
 };
@@ -225,4 +225,20 @@ bool Helper::isFloat(string input){
 bool Helper::isInteger(string input){
 	regex integer("(\\+)?[[:digit:]]+");
 	return regex_match(input, integer);
+};
+
+string Helper::normalize(string input, vector< string > white_list, string default_value){
+	bool contains = false;
+	string output;
+	for (int i = 0; i < white_list.size(); i++){
+		if(white_list[i] == input){
+			contains = true;
+			break;
+		}
+	}
+	if(contains)
+		output = input;
+	else
+		output = default_value;
+	return output;
 };

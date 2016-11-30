@@ -30,6 +30,7 @@
 			string getUserId();
 			string getBalance();
 			string getAccountNumber();
+			static bool userHasAccount(string);
 			bool transfer(float, string);
 			static bool create(string, string, map< string, int >&);
 			static bool finalize(string);

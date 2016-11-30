@@ -7,12 +7,18 @@
 				<select id="disabledSelect" class="form-control" name="user_id">
 					{{select-content}}
 				</select>
+				<span class="help-block">
+					<strong>{{error.user_id}}</strong>
+				</span>
 			</div>	
 
-			<div class="form-group" name="account_number">
+			<div class="form-group">
 				<label>Account number</label>
-				<input class="form-control">
+				<input class="form-control" type="text" name="account_number" value="{{account_number}}">
 				<p class="help-block">Only numbers</p>
+				<span class="help-block">
+					<strong>{{error.account_number}}</strong>
+				</span>
 			</div>
 			
 			<button type="submit" class="btn btn-primary">Done</button>

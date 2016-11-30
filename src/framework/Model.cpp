@@ -6,9 +6,12 @@ Framework::Model::Model(string storageName){
 	this->storageName = storageName;
 }
 
-bool Framework::Model::save(map< string, int > &errors){
+bool Framework::Model::save(map< string, string > &errors){
 	Storage storage(this->storageName);
-	return storage.set(this->getFields(), errors);
+	map< string, int > errors_raw;
+	bool result = storage.set(this->getFields(), errors_raw);
+	errors = Storage::translateErrors(errors_raw);
+	return result;
 }
 
 vector< map< string, string > > Framework::Model::find(map< string, string > keys_values){

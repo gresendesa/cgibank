@@ -16,6 +16,7 @@
 	#include "../app/views/User.hpp"
 	#include "../app/views/Account.hpp"
 	#include "../app/views/CreateAccount.hpp"
+	#include "../app/views/FormUser.hpp"
 
 	//Controllers
 	#include "../app/controllers/Login.hpp"

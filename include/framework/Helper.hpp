@@ -33,6 +33,7 @@
 		static bool isEmail(string);
 		static bool isFloat(string);
 		static bool isInteger(string);
+		static string normalize(string, vector< string >, string);
 	};
 
 #endif

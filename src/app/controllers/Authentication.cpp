@@ -50,11 +50,10 @@ Output Controller::Authentication::signup(){
 			{"password", Helper::getKey(variables, "password", "")}
 		};
 		manager.put(data);
-		map< string, int > errors;
+		map< string, string > errors;
 		manager.save(errors);
 		if(errors.size()){
-			map< string, string > translatedErrors = Storage::translateErrors(errors);
-			page_parameters.insert(translatedErrors.begin(), translatedErrors.end());
+			page_parameters.insert(errors.begin(), errors.end());
 			page_parameters.insert(pair< string, string >("name", Helper::getKey(variables, "name", "")));
 			page_parameters.insert(pair< string, string >("email", Helper::getKey(variables, "email", "")));
 			output = view.run(page_parameters);

@@ -2,7 +2,6 @@
 
 void View::User::program(map< string, string> parameters, vector< map< string, string > > data){
 	Output table_content;
-	Model::User user;
 	for (int i = 0; i < data.size(); i++){
 		map< string, string > record = data.at(i);
 		map< string, string > delete_link = {{"link", "/users/dump/" + Helper::getKey(record, Storage::RID, "")}};
