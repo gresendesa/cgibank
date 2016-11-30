@@ -23,9 +23,6 @@ Output Route::route(){
 				} else
 				if(Route::match("/accounts/create/")){
 					return Controller::Account::create();
-				} else
-				if(Route::match("/accounts/edit/")){
-					return "edit";
 				} else {
 					return Controller::Account::index();
 				}
@@ -38,7 +35,7 @@ Output Route::route(){
 					return Controller::User::create();
 				} else
 				if(Route::match("/users/edit/")){
-					return "edit";
+					return Controller::User::edit();
 				} else {
 					return Controller::User::index();
 				}

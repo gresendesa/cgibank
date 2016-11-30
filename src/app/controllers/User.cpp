@@ -17,19 +17,20 @@ Output Controller::User::index(){
 
 
 Output Controller::User::dump(){
-	if(Auth::isAuthenticated() && Auth::get("level") == "Manager"){
-		if(Core::getURIElements().size() == 3){
-			string user_id = Core::getURIElements().at(2);
-			Model::User user;
-			user.dump(user_id);
-		}
+	if(Core::getURIElements().size() == 3){
+		string user_id = Core::getURIElements().at(2);
+		Model::User user;
+		user.dump(user_id);
 	}
 	return Route::redirect("/users");
 }
 
 Output Controller::User::create(){
 	View::FormUser view;
-	map< string, string > parameters;
+	map< string, string > parameters = {
+		{"page-subtitle", "Create"},
+		{"form-action", "/users/create"}
+	};
 	map< string, string > variables = Core::getPOST();
 	if(variables.size()){
 		vector< string > valid_level = {"Client", "Teller", "Manager"};
@@ -55,11 +56,36 @@ Output Controller::User::create(){
 
 Output Controller::User::edit(){
 	Output output;
-	View::Standard view;
+	View::FormUser view;
 	map< string, string > parameters = {
-		{"page-title", "User"},
-		{"page-subtitle", "Create"},
-		{"ative-tab-users", "active"},
-		{"page-content", Framework::View::getHTML("user.form")}
+		{"page-subtitle", "Edit"},
+		{"form-action", "/users/edit"}
 	};
+	::Model::User user;
+	map< string, string > variables = Core::getPOST();
+	if(variables.size()){
+		user.put(variables);
+		user.setId(Helper::getKey(variables, "user-id", ""));
+		map< string, string > errors;
+		if(user.update(errors))
+			Route::redirect("/users");
+		else {
+			parameters.insert(variables.begin(), variables.end());
+			parameters.insert(errors.begin(), errors.end());
+		}
+	} else {
+		if(Core::getURIElements().size() == 3){
+			string user_id = Core::getURIElements().at(2);
+			parameters.insert(pair< string, string >("user-id", user_id));
+			map< string, string > loaded_user = user.getOne(user_id);
+			if(loaded_user.size()){
+				parameters.insert(loaded_user.begin(), loaded_user.end());
+			} else {
+				Route::redirect("/users");
+			}
+		} else {
+			Route::redirect("/users");
+		}
+	}
+	return view.run(parameters);
 }
