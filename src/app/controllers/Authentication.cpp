@@ -43,15 +43,16 @@ Output Controller::Authentication::signup(){
 	Output output;
 	map< string, string > variables = Core::getPOST();
 	if(variables.size()){
-		Model::Manager manager;
+		Model::User user;
 		map< string, string > data = {
 			{"name", Helper::getKey(variables, "name", "")},
 			{"email", Helper::getKey(variables, "email", "")},
-			{"password", Helper::getKey(variables, "password", "")}
+			{"password", Helper::getKey(variables, "password", "")},
+			{"level", "Client"}
 		};
-		manager.put(data);
+		user.put(data);
 		map< string, string > errors;
-		manager.save(errors);
+		user.save(errors);
 		if(errors.size()){
 			page_parameters.insert(errors.begin(), errors.end());
 			page_parameters.insert(pair< string, string >("name", Helper::getKey(variables, "name", "")));

@@ -13,6 +13,7 @@
 
 	#include "Core.hpp"
 	#include "Storage.hpp"
+	#include "Auth.hpp"
 
 	using namespace std;
 
@@ -20,10 +21,12 @@
 
 	class Route
 	{
+	private:
+		static bool isAuthorized(string);
 	public:
 		//Route();
 		//~Route();
-		static bool match(string);
+		static bool match(string, string = "");
 		static Output route();
 		static Output redirect(string);
 		static Output externalRedirect(string);

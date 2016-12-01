@@ -242,3 +242,14 @@ string Helper::normalize(string input, vector< string > white_list, string defau
 		output = default_value;
 	return output;
 };
+
+bool Helper::strVectorContains(vector< string > vect, string value){
+	bool result = false;
+	for (int i = 0; i < vect.size(); ++i){
+		if(vect.at(i) == value){
+			result = true;
+			break;
+		}
+	}
+	return result;
+}

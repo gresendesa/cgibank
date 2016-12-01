@@ -8,8 +8,10 @@
 		class Transaction: public Framework::Controller
 		{
 		public:
-			//Login(arguments);
-			//~Login();
+			//Transaction(arguments);
+			//~Transaction();
+			static Output index();
+			static Output transfer();
 		};
 	}
 

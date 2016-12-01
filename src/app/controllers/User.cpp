@@ -9,6 +9,8 @@ Output Controller::User::index(){
 		{"ative-tab-users", "active"},
 		{"page-content", Framework::View::getHTML("users.table")}
 	};
+	if(Auth::get("level") != "Manager")
+		parameters.insert(pair< string, string >("disabled-class", "disabled"));
 	view.replaceFlags(parameters);
 	Model::User user;
 	vector< map< string, string > > users = user.getAll();

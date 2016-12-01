@@ -18,8 +18,6 @@
 			Client() : User(){
 				this->level = "Client";
 			};
-			bool transfer(string);
-			bool generateStatement();
 		};
 	}		
 

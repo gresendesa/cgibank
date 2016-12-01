@@ -3,8 +3,6 @@
 
 	//Models
 	#include "Manager.hpp"
-	#include "Transfer.hpp"
-	#include "Deposit.hpp"
 	#include "Account.hpp"
 
 	//Views
@@ -17,6 +15,7 @@
 	#include "../app/views/Account.hpp"
 	#include "../app/views/CreateAccount.hpp"
 	#include "../app/views/FormUser.hpp"
+	#include "../app/views/FormTransaction.hpp"
 
 	//Controllers
 	#include "../app/controllers/Login.hpp"
@@ -24,5 +23,6 @@
 	#include "../app/controllers/Authentication.hpp"
 	#include "../app/controllers/Account.hpp"
 	#include "../app/controllers/User.hpp"
+	#include "../app/controllers/Transaction.hpp"
 
 #endif

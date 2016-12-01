@@ -31,11 +31,12 @@ app_views_sources = $(shell ls $(views_in_dir) | grep '\.cpp')
 
 fw_units = $(fw_sources:%.cpp=%.o)
 route_file = routes.o
+credential_file = credentials.o
 app_models = $(app_models_sources:%.cpp=%.o)
 app_controllers = $(app_controllers_sources:%.cpp=%.o)
 app_views = $(app_views_sources:%.cpp=%.o)
 
-all: $(fw_units:%=$(fw_out_dir)%) $(route_file:%=$(fw_out_dir)%) $(app_models:%=$(models_out_dir)%) $(app_controllers:%=$(controllers_out_dir)%) $(app_views:%=$(views_out_dir)%) link
+all: $(fw_units:%=$(fw_out_dir)%) $(route_file:%=$(fw_out_dir)%) $(credential_file:%=$(fw_out_dir)%) $(app_models:%=$(models_out_dir)%) $(app_controllers:%=$(controllers_out_dir)%) $(app_views:%=$(views_out_dir)%) link
 
 #Framework objects
 $(fw_units:%=$(fw_out_dir)%): $(fw_out_dir)%.o: $(fw_in_dir)%.cpp $(fw_hpp_dir)%.hpp
@@ -43,6 +44,10 @@ $(fw_units:%=$(fw_out_dir)%): $(fw_out_dir)%.o: $(fw_in_dir)%.cpp $(fw_hpp_dir)%
 
 #Routes file
 $(route_file:%=$(fw_out_dir)%): $(fw_out_dir)%.o: $(src_dir)%.cpp $(fw_hpp_dir)%.hpp
+	$(GPP) -c $< -o $@
+
+#Credentials file
+$(credential_file:%=$(fw_out_dir)%): $(fw_out_dir)%.o: $(src_dir)%.cpp $(fw_hpp_dir)%.hpp
 	$(GPP) -c $< -o $@
 
 #App models
@@ -59,7 +64,7 @@ $(app_views:%=$(views_out_dir)%): $(views_out_dir)%.o: $(views_in_dir)%.cpp $(vi
 
 #Brings everything together
 link:
-	$(GPP) -o public/index.cgi $(fw_units:%=$(fw_out_dir)%) $(route_file:%=$(fw_out_dir)%) $(app_models:%=$(models_out_dir)%) $(app_controllers:%=$(controllers_out_dir)%) $(app_views:%=$(views_out_dir)%)
+	$(GPP) -o public/index.cgi $(fw_units:%=$(fw_out_dir)%) $(route_file:%=$(fw_out_dir)%) $(credential_file:%=$(fw_out_dir)%) $(app_models:%=$(models_out_dir)%) $(app_controllers:%=$(controllers_out_dir)%) $(app_views:%=$(views_out_dir)%)
 
 clear:
 	rm -f $(fw_out_dir)*.o $(models_out_dir)*.o $(controllers_out_dir)*.o $(views_out_dir)*.o

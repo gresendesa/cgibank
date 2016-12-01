@@ -9,6 +9,8 @@ Output Controller::Account::index(){
 		{"ative-tab-accounts", "active"},
 		{"page-content", Framework::View::getHTML("accounts.table")}
 	};
+	if(Auth::get("level") != "Manager")
+		parameters.insert(pair< string, string >("disabled-class", "disabled"));
 	view.replaceFlags(parameters);
 	Model::Account account;
 	vector< map< string, string > > accounts = account.getAll();

@@ -20,6 +20,6 @@
 			bool deposit(string, string);
 			bool generateStatement(string);
 		};
-	}		
+	}
 
 #endif

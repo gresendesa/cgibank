@@ -9,7 +9,6 @@
 	#include <ctime>
 
 	#include "Core.hpp"
-	#include "Route.hpp"
 
 	using namespace std;
 
@@ -25,6 +24,7 @@
 		//Auth(arguments);
 		//~Auth();
 		static bool isAuthenticated();
+		static map< string, vector< string > > credentials();
 		static string get(string);
 		static void auth(string);
 		static void init();
