@@ -37,7 +37,14 @@ Output Route::route(){
 			}
 		} else
 		if(Route::match("/transactions", "Employee")){
-			return Controller::Transaction::index();
+			if(Route::match("/transactions/deposit/")){
+				return Controller::Transaction::deposit();
+			} else
+			if(Route::match("/transactions/transfer/")){
+				return Controller::Transaction::transfer();
+			} else {
+				return Controller::Transaction::index();
+			}
 		} else
 		if(Route::match("/about")){
 			View::About view;

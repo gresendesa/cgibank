@@ -12,6 +12,7 @@
 			//~Transaction();
 			static Output index();
 			static Output transfer();
+			static Output deposit();
 		};
 	}
 

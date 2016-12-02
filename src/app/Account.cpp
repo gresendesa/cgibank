@@ -34,3 +34,32 @@ bool Model::Account::userHasAccount(string user_id){
 	}
 	return result;
 }
+
+bool Model::Account::exists(string account_number){
+	bool result = false;
+	::Model::Account account;
+	if(account.find({{"account_number", account_number}}).size())
+		result = true;
+	return result;
+}
+
+bool Model::Account::updateBalance(string value){
+	bool result = false;
+	if(Helper::isFloat(value)){
+		this->balance = value;
+		result = true;
+	}
+	return result;
+}
+
+string Model::Account::getBalance(){
+	return this->balance;
+};
+
+void Model::Account::check(string account_number, map< string, string > &errors, string label){
+	if(Helper::isInteger(account_number)){
+		if(!::Model::Account::exists(account_number))
+			errors.insert(pair< string, string >("error." + label, Helper::getMessage("app.account.nfound.error")));
+	} else
+		errors.insert(pair< string, string >("error." + label, Helper::getMessage("app.account.invalid.error")));
+};

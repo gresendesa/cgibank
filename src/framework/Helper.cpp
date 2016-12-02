@@ -212,13 +212,19 @@ string Helper::getKey(map< string, string > valuesTable, string key, string defa
 	return result;
 };
 
+void Helper::setKey(map< string, string > &valuesTable, string key, string value){
+	string result;
+	if(valuesTable.count(key))
+		valuesTable.at(key) = value;
+};
+
 bool Helper::isEmail(string input){
 	regex email("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+");
 	return regex_match(input, email);
 };
 
 bool Helper::isFloat(string input){
-	regex floaty("[+-]?(?=[.]?[0-9])[0-9]*(?:[.][0-9]*)?(?:[Ee][+-]?[0-9]+)?");
+	regex floaty("[+]?(?=[.]?[0-9])[0-9]*(?:[.][0-9]*)?(?:[Ee][+-]?[0-9]+)?");
 	return regex_match(input, floaty);
 };
 
@@ -226,6 +232,11 @@ bool Helper::isInteger(string input){
 	regex integer("(\\+)?[[:digit:]]+");
 	return regex_match(input, integer);
 };
+
+float Helper::toFloat(string str_float){
+	char* pEnd;
+	return strtof(str_float.c_str(), &pEnd);
+}
 
 string Helper::normalize(string input, vector< string > white_list, string default_value){
 	bool contains = false;

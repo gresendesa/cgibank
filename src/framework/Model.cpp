@@ -12,7 +12,8 @@ bool Framework::Model::save(map< string, string > &errors){
 	Storage storage(this->storageName);
 	map< string, int > errors_raw;
 	bool result = storage.set(this->getFields(), errors_raw);
-	errors = Storage::translateErrors(errors_raw);
+	map< string, string > nerrors = Storage::translateErrors(errors_raw);
+	errors.insert(nerrors.begin(), nerrors.end());
 	return result;
 }
 
@@ -20,7 +21,8 @@ bool Framework::Model::update(map< string, string > &errors){
 	Storage storage(this->storageName);
 	map< string, int > errors_raw;
 	bool result = storage.update(this->getFields(), errors_raw);
-	errors = Storage::translateErrors(errors_raw);
+	map< string, string > nerrors = Storage::translateErrors(errors_raw);
+	errors.insert(nerrors.begin(), nerrors.end());
 	return result;
 }
 

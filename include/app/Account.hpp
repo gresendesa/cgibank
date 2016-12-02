@@ -30,11 +30,12 @@
 			string getUserId();
 			string getBalance();
 			string getAccountNumber();
+			static bool exists(string);
+			static void check(string, map< string, string > &, string = "account_number");
 			static bool userHasAccount(string);
-			bool transfer(float, string);
+			bool updateBalance(string);
 			static bool create(string, string, map< string, int >&);
 			static bool finalize(string);
-			bool deposit(float);
 			void deleteAccount();
 			string generateStatement();
 		};

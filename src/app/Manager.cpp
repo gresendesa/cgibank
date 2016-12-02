@@ -1,1 +1,0 @@
-#include "../../include/app/Manager.hpp"

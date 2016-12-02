@@ -5,7 +5,7 @@ void View::FormTransaction::program(map< string, string> parameters, vector< map
 		{"page-title", "Transactions"},
 		{"page-subtitle", "Yes you can!"},
 		{"ative-tab-transactions", "active"},
-		{"page-content", Framework::View::getHTML("manager.transactions")}
+		{"page-content", Framework::View::getHTML("form.transactions")}
 	};
 	::View::Main main;
 	this->appendText(main.prepare(), page_parameters);

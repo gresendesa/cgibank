@@ -1,9 +1,12 @@
 #ifndef APP_REGISTER_HPP
 #define APP_REGISTER_HPP
 
+	//User class
+	#include "../framework/User.hpp"
+
 	//Models
-	#include "Manager.hpp"
 	#include "Account.hpp"
+	#include "Transaction.hpp"
 
 	//Views
 	#include "../app/views/Main.hpp"

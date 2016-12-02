@@ -4,6 +4,7 @@
 			<h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Deposit</h3>
 		</div>
 		<div class="panel-body">
+			{{deposit-success}}
 			<form role="form" method="POST" action="/transactions/deposit">
 
 				<div class="form-group">
@@ -16,10 +17,10 @@
 
 				<div class="form-group">
 					<label>Value</label>
-					<input class="form-control" type="text" name="account_number" value="{{account_number}}">
-					<p class="help-block">$10000.00 max</p>
+					<input class="form-control" type="text" name="deposit_value" value="{{deposit_value}}">
+					<p class="help-block">$100000.00 max</p>
 					<span class="help-block">
-						<strong>{{error.account_number}}</strong>
+						<strong>{{error.deposit_value}}</strong>
 					</span>
 				</div>
 				
@@ -36,31 +37,32 @@
 			<h3 class="panel-title"><i class="fa fa-dollar fa-fw"></i> Transfer</h3>
 		</div>
 		<div class="panel-body">
+			{{transfer-success}}
 			<form role="form" method="POST" action="/transactions/transfer">
 
 				<div class="form-group">
 					<label>From</label>
-					<input class="form-control" type="text" name="account_number" value="{{account_number}}">
+					<input class="form-control" type="text" name="from_account_number" value="{{from_account_number}}">
 					<p class="help-block">Account number</p>	
 					<span class="help-block">
-						<strong>{{error.account_number}}</strong>
+						<strong>{{error.from_account_number}}</strong>
 					</span>
 				</div>
 
 				<div class="form-group">
 					<label>To</label>
-					<input class="form-control" type="text" name="account_number" value="{{account_number}}">
+					<input class="form-control" type="text" name="to_account_number" value="{{to_account_number}}">
 					<p class="help-block">Account number</p>
 					<span class="help-block">
-						<strong>{{error.account_number}}</strong>
+						<strong>{{error.to_account_number}}</strong>
 					</span>
 				</div>
 				
 				<div class="form-group">
 					<label>Value</label>
-					<input class="form-control" type="text" name="account_number" value="{{account_number}}">
+					<input class="form-control" type="text" name="transfer_value" value="{{transfer_value}}">
 					<span class="help-block">
-						<strong>{{error.account_number}}</strong>
+						<strong>{{error.transfer_value}}</strong>
 					</span>
 				</div>
 
