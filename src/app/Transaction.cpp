@@ -1,6 +1,19 @@
 #include "../../include/app/Transaction.hpp"
 
-void Model::Transaction::incrementAccount(string account_number, string value, string label, map< string, string > &errors){
+void Model::Transaction::makeRegister(string value, string details, string account_id){
+	::Model::Transaction transaction;
+	transaction.put({
+		{"value", value},
+		{"details", details},
+		{"account_id", account_id}
+	});
+	map< string, string > errors;
+	transaction.save(errors);
+	Helper::log(Helper::serializeStrMap(errors, ":", "#"));
+}
+
+bool Model::Transaction::incrementAccount(string account_number, string value, string label, map< string, string > &errors){
+	bool result = false;
 	::Model::Account account;
 	vector< map< string, string > > accounts = account.find({{"account_number", account_number}});
 	if(accounts.size()){
@@ -8,9 +21,13 @@ void Model::Transaction::incrementAccount(string account_number, string value, s
 		account.updateBalance(to_string(Helper::toFloat(account.getBalance()) + Helper::toFloat(value)));
 		account.update(errors);
 	}
+	if(!errors.size())
+		result = true;
+	return result;
 }
 
-void Model::Transaction::decrementAccount(string account_number, string value, string label, map< string, string > &errors){
+bool Model::Transaction::decrementAccount(string account_number, string value, string label, map< string, string > &errors){
+	bool result = false;
 	::Model::Account account;
 	vector< map< string, string > > accounts = account.find({{"account_number", account_number}});
 	if(accounts.size()){
@@ -21,6 +38,9 @@ void Model::Transaction::decrementAccount(string account_number, string value, s
 		} else 
 			errors.insert(pair< string, string >("error." + label, Helper::getMessage("app.transaction.value.amount.error")));
 	}
+	if(!errors.size())
+		result = true;
+	return result;
 }
 
 map< string, string > Model::Transaction::transfer(string value, string from_account_number, string to_account_number){
@@ -30,8 +50,10 @@ map< string, string > Model::Transaction::transfer(string value, string from_acc
 	if(!Helper::isFloat(value))
 		errors.insert(pair< string, string >("error.transfer_value", Helper::getMessage("app.transaction.value.invalid.error")));
 	else if(!errors.size()){
-		::Model::Transaction::decrementAccount(from_account_number, value, "transfer_value", errors);
-		::Model::Transaction::incrementAccount(to_account_number, value, "transfer_value", errors);
+		if (::Model::Transaction::decrementAccount(from_account_number, value, "transfer_value", errors))
+			if(::Model::Transaction::incrementAccount(to_account_number, value, "transfer_value", errors))
+				::Model::Transaction::makeRegister(value, "Transfer from " + from_account_number, to_account_number);
+		
 	}
 	return errors;
 }
@@ -42,8 +64,11 @@ map< string, string > Model::Transaction::deposit(string value, string account_n
 	if(Helper::isFloat(value)){
 		if(Helper::toFloat(value) > 100000)
 			errors.insert(pair< string, string >("error.deposit_value", Helper::getMessage("app.transaction.value.max.error")));
-		else
-			::Model::Transaction::incrementAccount(account_number, value, "deposit_value", errors);
+		else {
+			if(::Model::Transaction::incrementAccount(account_number, value, "deposit_value", errors))
+				::Model::Transaction::makeRegister(value, "Deposit", account_number);
+			
+		}
 	} else 
 		errors.insert(pair< string, string >("error.deposit_value", Helper::getMessage("app.transaction.value.invalid.error")));	
 	return errors;
