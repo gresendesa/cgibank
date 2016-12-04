@@ -87,3 +87,7 @@ bool Framework::View::checkNextFlagPosition(vector< int > &posContainer){
 	}
 	return result;
 };
+
+Output Framework::View::get(){
+	return this->content;
+}

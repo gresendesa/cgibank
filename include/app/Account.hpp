@@ -30,6 +30,7 @@
 			string getUserId();
 			string getBalance();
 			string getAccountNumber();
+			static map< string, string > getByNumber(string);
 			static bool exists(string);
 			static void check(string, map< string, string > &, string = "account_number");
 			static bool userHasAccount(string);

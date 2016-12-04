@@ -18,16 +18,18 @@
 		private:
 			string value;
 			string details;
-			string account_id;
+			string to_account_id;
+			string from_account_id;
 			static bool incrementAccount(string, string, string, map< string, string > &);
 			static bool decrementAccount(string, string, string, map< string, string > &);
-			static void makeRegister(string, string, string);
+			static void makeRegister(string, string, string, string = "");
 		public:
 			Transaction(string storageName = "Transaction") : Framework::Model(storageName){
 				map< string, string *> fieldsMap = {
 					{"value", &this->value},
 					{"details", &this->details},
-					{"account_id", &this->account_id}
+					{"to_account_id", &this->to_account_id},
+					{"from_account_id", &this->from_account_id}
 				};
 				this->appendFields(fieldsMap);
 			}

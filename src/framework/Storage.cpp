@@ -271,25 +271,28 @@ map< string, int > Storage::findInputErrors(map< string, string > keys_values, s
 	for (map< string, string >::iterator i=keys_values.begin(); i!=keys_values.end(); i++){
 		map< string, bool > info = file->getFieldInfo(i->first);
 		if(info.at("exist")){
-			if(info.at("required") && (i->second.size() == 0)){
-				errors.insert(pair< string, int >(i->first, Storage::EMPTY));
-			}
-			if(info.at("unique")){
-				map< string, string > arrange = {
-					{i->first, i->second}
-				};
-				if(file->recordMatch(arrange, rid_ignore)){
-					errors.insert(pair< string, int >(i->first, Storage::DUPLICATE));
+			if(!info.at("required") && i->second.size() == 0){
+
+			} else {
+				if(info.at("required") && (i->second.size() == 0))
+					errors.insert(pair< string, int >(i->first, Storage::EMPTY));
+				if(info.at("unique")){
+					map< string, string > arrange = {
+						{i->first, i->second}
+					};
+					if(file->recordMatch(arrange, rid_ignore)){
+						errors.insert(pair< string, int >(i->first, Storage::DUPLICATE));
+					}
 				}
+				if(info.at("integer") && !Helper::isInteger(i->second))
+					errors.insert(pair< string, int >(i->first, Storage::INVALID));
+				if(info.at("float") && !Helper::isFloat(i->second))
+					errors.insert(pair< string, int >(i->first, Storage::INVALID));
+				if(info.at("email") && !Helper::isEmail(i->second))
+					errors.insert(pair< string, int >(i->first, Storage::INVALID));
+				if(i->second.find(Storage::SEPARATOR) != string::npos)
+					errors.insert(pair< string, int >(i->first, Storage::INVALID));
 			}
-			if(info.at("integer") && !Helper::isInteger(i->second))
-				errors.insert(pair< string, int >(i->first, Storage::INVALID));
-			if(info.at("float") && !Helper::isFloat(i->second))
-				errors.insert(pair< string, int >(i->first, Storage::INVALID));
-			if(info.at("email") && !Helper::isEmail(i->second))
-				errors.insert(pair< string, int >(i->first, Storage::INVALID));
-			if(i->second.find(Storage::SEPARATOR) != string::npos)
-				errors.insert(pair< string, int >(i->first, Storage::INVALID));
 		} else {
 			pair< string, int > record(i->first, Storage::UNDEFINED);
 			errors.insert(record);

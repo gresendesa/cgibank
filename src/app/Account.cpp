@@ -35,6 +35,15 @@ bool Model::Account::userHasAccount(string user_id){
 	return result;
 }
 
+map< string, string > Model::Account::getByNumber(string account_number){
+	::Model::Account account;
+	vector< map< string, string > > accounts = account.find({{"account_number", account_number}});
+	map< string, string > acc;
+	if(accounts.size())
+		acc = accounts.at(0);
+	return acc;
+}
+
 bool Model::Account::exists(string account_number){
 	bool result = false;
 	::Model::Account account;

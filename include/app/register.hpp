@@ -22,7 +22,6 @@
 
 	//Controllers
 	#include "../app/controllers/Login.hpp"
-	#include "../app/controllers/Main.hpp"
 	#include "../app/controllers/Authentication.hpp"
 	#include "../app/controllers/Account.hpp"
 	#include "../app/controllers/User.hpp"

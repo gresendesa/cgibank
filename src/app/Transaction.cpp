@@ -1,15 +1,16 @@
 #include "../../include/app/Transaction.hpp"
 
-void Model::Transaction::makeRegister(string value, string details, string account_id){
+void Model::Transaction::makeRegister(string value, string details, string to_account_id, string from_account_id){
 	::Model::Transaction transaction;
 	transaction.put({
 		{"value", value},
 		{"details", details},
-		{"account_id", account_id}
+		{"to_account_id", to_account_id},
+		{"from_account_id", from_account_id}
 	});
 	map< string, string > errors;
 	transaction.save(errors);
-	Helper::log(Helper::serializeStrMap(errors, ":", "#"));
+	//Helper::log(Helper::serializeStrMap(errors, ":", "#"));
 }
 
 bool Model::Transaction::incrementAccount(string account_number, string value, string label, map< string, string > &errors){
@@ -52,7 +53,7 @@ map< string, string > Model::Transaction::transfer(string value, string from_acc
 	else if(!errors.size()){
 		if (::Model::Transaction::decrementAccount(from_account_number, value, "transfer_value", errors))
 			if(::Model::Transaction::incrementAccount(to_account_number, value, "transfer_value", errors))
-				::Model::Transaction::makeRegister(value, "Transfer from " + from_account_number, to_account_number);
+				::Model::Transaction::makeRegister(value, "Transfer", Helper::getKey(::Model::Account::getByNumber(to_account_number), Storage::RID, ""), Helper::getKey(::Model::Account::getByNumber(from_account_number), Storage::RID, ""));
 		
 	}
 	return errors;
@@ -66,7 +67,7 @@ map< string, string > Model::Transaction::deposit(string value, string account_n
 			errors.insert(pair< string, string >("error.deposit_value", Helper::getMessage("app.transaction.value.max.error")));
 		else {
 			if(::Model::Transaction::incrementAccount(account_number, value, "deposit_value", errors))
-				::Model::Transaction::makeRegister(value, "Deposit", account_number);
+				::Model::Transaction::makeRegister(value, "Deposit", Helper::getKey(::Model::Account::getByNumber(account_number), Storage::RID, ""));
 			
 		}
 	} else 
