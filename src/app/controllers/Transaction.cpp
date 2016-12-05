@@ -2,12 +2,12 @@
 
 Output Controller::Transaction::index(){
 	Output output;
-	View::FormTransaction view;
-	return view.run();
+	View::Transaction view;
+	return view.index();
 }
 
 Output Controller::Transaction::transfer(){
-	View::FormTransaction view;
+	View::Transaction view;
 	map< string, string > page_parameters;
 	map< string, string > parameters = Core::getPOST();
 	if(parameters.size()){
@@ -21,11 +21,11 @@ Output Controller::Transaction::transfer(){
 		else
 			page_parameters.insert(parameters.begin(), parameters.end());
 	}
-	return view.run(page_parameters);
+	return view.index(page_parameters);
 }
 
 Output Controller::Transaction::deposit(){
-	View::FormTransaction view;
+	View::Transaction view;
 	map< string, string > page_parameters;
 	map< string, string > parameters = Core::getPOST();
 	if(parameters.size()){
@@ -38,5 +38,5 @@ Output Controller::Transaction::deposit(){
 		else
 			page_parameters.insert(parameters.begin(), parameters.end());
 	}
-	return view.run(page_parameters);
+	return view.index(page_parameters);
 }

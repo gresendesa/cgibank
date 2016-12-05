@@ -48,7 +48,7 @@ Output Route::route(){
 		} else
 		if(Route::match("/about")){
 			View::About view;
-			return view.run();
+			return view.index();
 		} else {
 			return Route::redirect("/about");
 		}

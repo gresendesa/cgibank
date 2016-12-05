@@ -24,7 +24,7 @@
 			void appendHTML(string, map< string, string> = map< string, string>());
 			void appendText(string, map< string, string> = map< string, string>());
 			void cleanUnusedFlags();
-			Output get();
+			Output self();
 			virtual void program(map< string, string> = map< string, string>(), vector< map< string, string > > = vector< map< string, string > >());
 		public:
 			//View(arguments);
@@ -33,6 +33,7 @@
 			Output prepare(map< string, string> = map< string, string>(), vector< map< string, string > > = vector< map< string, string > >());
 			static Output getHTML(string, map< string, string> = map< string, string>());
 			void replaceFlags(map< string, string>);
+			void replaceFlag(string, string);
 			static Output makeTableLine(vector< string >, string = "<td>");
 			static Output replace(string, map< string, string>);
 		};

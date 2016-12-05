@@ -14,13 +14,10 @@
 		class User: public Framework::View
 		{
 		public:
-			User() : View(){
-				::View::Main main;
-				this->appendText(main.prepare());
-			}
+			User();
 			void program(map< string, string> = map< string, string>(), vector< map< string, string > > = vector< map< string, string > >()); 
-			Output index();
-			Output form();
+			Output index(map< string, string>, vector< map< string, string > >);
+			Output form(map< string, string>);
 		};
 	};
 		

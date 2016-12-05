@@ -1,23 +1,13 @@
 #include "../../../include/app/controllers/Account.hpp"
 
 Output Controller::Account::index(){
-	Output output;
-	View::Account view;
-	map< string, string > parameters = {
-		{"page-title", "Accounts"},
-		{"page-subtitle", "You got money here"},
-		{"ative-tab-accounts", "active"},
-		{"page-content", Framework::View::getHTML("accounts.table")}
-	};
-	if(Auth::get("level") != "Manager")
-		parameters.insert(pair< string, string >("disabled-class", "disabled"));
-	view.replaceFlags(parameters);
 	Model::Account account;
 	vector< map< string, string > > accounts = account.getAll();
 	Model::User user;
 	for (int i = 0; i < accounts.size(); i++)
 		accounts[i].insert(pair< string, string >("username", Helper::getKey(user.getOne(Helper::getKey(accounts[i], "user_id", "")), "name", "")));
-	return view.prepare(parameters, accounts);
+	View::Account view;
+	return view.index(accounts);
 }
 
 
@@ -32,7 +22,7 @@ Output Controller::Account::dump(){
 }
 
 Output Controller::Account::create(){
-	View::CreateAccount view;
+	View::Account view;
 	map< string, string > parameters;
 	Model::User user;
 	vector< map< string, string > > users = user.getAll();
@@ -57,9 +47,8 @@ Output Controller::Account::create(){
 		} else {
 			parameters.insert(account_data.begin(), account_data.end());
 			parameters.insert(errors.begin(), errors.end());	
-		}
-			
+		}	
 	}
-	return view.run(parameters, users_without_account);
+	return view.create(parameters, users_without_account);
 }
 

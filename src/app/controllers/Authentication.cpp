@@ -23,7 +23,7 @@ Output Controller::Authentication::signin(){
 			page_parameters.insert(pair< string, string >("signin-email", Helper::getKey(parameters, "email", "")));
 		}
 	}
-	return view.run(page_parameters);
+	return view.index(page_parameters);
 }
 
 Output Controller::Authentication::signout(){
@@ -57,13 +57,13 @@ Output Controller::Authentication::signup(){
 			page_parameters.insert(errors.begin(), errors.end());
 			page_parameters.insert(pair< string, string >("name", Helper::getKey(variables, "name", "")));
 			page_parameters.insert(pair< string, string >("email", Helper::getKey(variables, "email", "")));
-			output = view.run(page_parameters);
+			output = view.index(page_parameters);
 		} else {
 			map< string, string > sucess_page_parameters = {{"signin-active-class", "active"},{"signin-display", "block"},{"signup-display", "none"}, {"signup-success", Helper::getMessage("app.view.signup.success")}};
-			output = view.run(sucess_page_parameters);
+			output = view.index(sucess_page_parameters);
 		}
 	} else {
-		output = view.run(page_parameters);
+		output = view.index(page_parameters);
 	}
 	return output;
 }

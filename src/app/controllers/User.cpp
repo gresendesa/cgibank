@@ -2,7 +2,6 @@
 
 Output Controller::User::index(){
 	Output output;
-	View::User view;
 	map< string, string > parameters = {
 		{"page-title", "Users"},
 		{"page-subtitle", "Control muggles"},
@@ -11,10 +10,10 @@ Output Controller::User::index(){
 	};
 	if(Auth::get("level") != "Manager")
 		parameters.insert(pair< string, string >("disabled-class", "disabled"));
-	view.replaceFlags(parameters);
 	Model::User user;
 	vector< map< string, string > > users = user.getAll();
-	return view.prepare(parameters, users);
+	View::User view;
+	return view.index(parameters, users);
 }
 
 
@@ -28,7 +27,6 @@ Output Controller::User::dump(){
 }
 
 Output Controller::User::create(){
-	View::FormUser view;
 	map< string, string > parameters = {
 		{"page-subtitle", "Create"},
 		{"form-action", "/users/create"}
@@ -52,13 +50,12 @@ Output Controller::User::create(){
 			parameters.insert(errors.begin(), errors.end());
 		}
 	}
-	return view.run(parameters);
+	View::User view;
+	return view.form(parameters);
 }
 
 
 Output Controller::User::edit(){
-	Output output;
-	View::FormUser view;
 	map< string, string > parameters = {
 		{"page-subtitle", "Edit"},
 		{"form-action", "/users/edit"}
@@ -89,5 +86,6 @@ Output Controller::User::edit(){
 			Route::redirect("/users");
 		}
 	}
-	return view.run(parameters);
+	View::User view;
+	return view.form(parameters);
 }

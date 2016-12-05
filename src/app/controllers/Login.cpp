@@ -2,5 +2,5 @@
 
 Output Controller::Login::run(){
 	View::Login view;
-	return view.run();
+	return view.index();
 }

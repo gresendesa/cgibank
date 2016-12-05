@@ -2,5 +2,5 @@
 
 void View::Standard::program(map< string, string> parameters, vector< map< string, string > > data){
 	::View::Main main;
-	this->appendText(main.prepare(), parameters);
+	this->appendText(main.index(), parameters);
 }

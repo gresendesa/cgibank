@@ -14,5 +14,5 @@ void View::CreateAccount::program(map< string, string> parameters, vector< map< 
 		{"page-content", Framework::View::getHTML("account.create.form", flags)}
 	};
 	::View::Main main;
-	this->appendText(main.prepare(), page_parameters);
+	this->appendText(main.index(), page_parameters);
 }

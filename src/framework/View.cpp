@@ -28,6 +28,10 @@ void Framework::View::replaceFlags(map< string, string> replace_list){
 	this->content = Framework::View::replace(this->content, replace_list);
 }
 
+void Framework::View::replaceFlag(string flag_name, string content){
+	this->content = Framework::View::replace(this->content, {{flag_name, content}});
+}
+
 Output Framework::View::replace(string input, map< string, string> replace_list){
 	for (map<string,string>::iterator i=replace_list.begin(); i!=replace_list.end(); i++){
 		input = Helper::replace("{{" + i->first + "}}", i->second, input);
@@ -88,6 +92,6 @@ bool Framework::View::checkNextFlagPosition(vector< int > &posContainer){
 	return result;
 };
 
-Output Framework::View::get(){
+Output Framework::View::self(){
 	return this->content;
 }
