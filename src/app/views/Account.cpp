@@ -5,34 +5,14 @@ View::Account::Account(){
 	this->appendText(main.index());
 }
 
-void View::Account::program(map< string, string> parameters, vector< map< string, string > > data){
-	Output table_content;
-	for (int i = 0; i < data.size(); i++){
-		map< string, string > record = data.at(i);
-		map< string, string > delete_link = {{"link", "/accounts/dump/" + Helper::getKey(record, Storage::RID, "")}};
-		vector< string > line_content = {
-			Helper::getKey(record, "account_number", ""),
-			Helper::getKey(record, "username", ""),
-			"$" + Helper::getKey(record, "balance", ""),
-			Framework::View::getHTML("delete.button", delete_link)
-		};
-		table_content += Framework::View::makeTableLine(line_content);
-	}
-	parameters.insert(pair< string, string >("table-content", table_content));
-	::View::Main main;
-	this->appendText(main.index(), parameters);
-}
-
 Output View::Account::index(vector< map< string, string > > data){
+	this->replaceFlag("page-content", Framework::View::getHTML("accounts.table"));
 	map< string, string > parameters;
 	this->replaceFlags({
 		{"page-title", "Accounts"},
 		{"page-subtitle", "You got money here"},
-		{"ative-tab-accounts", "active"},
-		{"page-content", Framework::View::getHTML("accounts.table")}
+		{"ative-tab-accounts", "active"}
 	});
-	if(Auth::get("level") != "Manager")
-		parameters.insert(pair< string, string >("disabled-class", "disabled"));
 	Output table_content;
 	for (int i = 0; i < data.size(); i++){
 		map< string, string > record = data.at(i);
@@ -46,6 +26,8 @@ Output View::Account::index(vector< map< string, string > > data){
 	}
 	parameters.insert(pair< string, string >("table-content", table_content));
 	this->replaceFlags(parameters);
+	if(Auth::get("level") != "Manager")
+		this->replaceFlag("disabled-class", "disabled");
 	return this->self();
 }
 

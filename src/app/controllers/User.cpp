@@ -89,3 +89,25 @@ Output Controller::User::edit(){
 	View::User view;
 	return view.form(parameters);
 }
+
+Output Controller::User::profile(){
+	View::User view;
+	map< string, string > parameters;
+	::Model::User user;
+	map< string, string > variables = Core::getPOST();
+	if(variables.size()){
+		user.put(variables);
+		user.setLevel(Auth::get("level"));
+		user.setId(Auth::get(Storage::RID));
+		parameters.insert(variables.begin(), variables.end());
+		map< string, string > errors;
+		if(user.update(errors))
+			parameters.insert(pair< string, string >("profile-success", Helper::getMessage("app.view.profile.success")));
+		else
+			parameters.insert(errors.begin(), errors.end());
+	} else {
+		map< string, string > current_user = user.getOne(Auth::get(Storage::RID)); 
+		parameters.insert(current_user.begin(), current_user.end());
+	}
+	return view.profile(parameters);
+}

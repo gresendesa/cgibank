@@ -5,10 +5,6 @@ View::User::User(){
 	this->appendText(main.index());
 }
 
-void View::User::program(map< string, string> parameters, vector< map< string, string > > data){
-	
-}
-
 Output View::User::index(map< string, string> parameters, vector< map< string, string > > data){
 	Output table_content;
 	for (int i = 0; i < data.size(); i++){
@@ -26,6 +22,8 @@ Output View::User::index(map< string, string> parameters, vector< map< string, s
 	}
 	parameters.insert(pair< string, string >("table-content", table_content));
 	this->replaceFlags(parameters);
+	if(Auth::get("level") != "Manager")
+		this->replaceFlag("disabled-class", "disabled");
 	return this->self();
 }
 
@@ -44,6 +42,17 @@ Output View::User::form(map< string, string> parameters){
 	parameters.insert(pair< string, string >("page-title", "User"));
 	parameters.insert(pair< string, string >("ative-tab-users", "active"));
 	this->replaceFlags(parameters);
+	this->cleanUnusedFlags();
+	return this->self();
+}
+
+
+Output View::User::profile(map< string, string> parameters){
+	this->replaceFlag("page-content", Framework::View::getHTML("profile.form", parameters));
+	this->replaceFlags({
+		{"page-title", "Profile"},
+		{"page-subtitle", "Everybody changes"}
+	});
 	this->cleanUnusedFlags();
 	return this->self();
 }

@@ -25,12 +25,9 @@
 			void appendText(string, map< string, string> = map< string, string>());
 			void cleanUnusedFlags();
 			Output self();
-			virtual void program(map< string, string> = map< string, string>(), vector< map< string, string > > = vector< map< string, string > >());
 		public:
 			//View(arguments);
 			//~View();	
-			Output run(map< string, string> = map< string, string>(), vector< map< string, string > > = vector< map< string, string > >());
-			Output prepare(map< string, string> = map< string, string>(), vector< map< string, string > > = vector< map< string, string > >());
 			static Output getHTML(string, map< string, string> = map< string, string>());
 			void replaceFlags(map< string, string>);
 			void replaceFlag(string, string);

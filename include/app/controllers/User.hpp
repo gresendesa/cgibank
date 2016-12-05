@@ -14,6 +14,7 @@
 			static Output dump();
 			static Output create();
 			static Output edit();
+			static Output profile();
 		};
 	}
 

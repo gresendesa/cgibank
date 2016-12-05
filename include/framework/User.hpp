@@ -33,9 +33,11 @@
 			void setName(string);
 			void setEmail(string);
 			void setPassword(string);
+			void setLevel(string);
 			string getName();
 			string getEmail();
 			string getPassword();
+			string getLevel();
 			//~Login();
 		};
 	}

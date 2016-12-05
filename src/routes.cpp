@@ -46,6 +46,9 @@ Output Route::route(){
 				return Controller::Transaction::index();
 			}
 		} else
+		if(Route::match("/profile")){
+			return Controller::User::profile();
+		} else
 		if(Route::match("/about")){
 			View::About view;
 			return view.index();

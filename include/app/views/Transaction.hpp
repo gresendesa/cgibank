@@ -15,8 +15,9 @@
 		{
 		public:
 			Transaction();
-			void program(map< string, string> = map< string, string>(), vector< map< string, string > > = vector< map< string, string > >());
 			Output index(map< string, string> = map< string, string>());
+			Output generalStatement();
+			Output privateStatement();
 		};
 	};
 		

@@ -9,6 +9,9 @@ void Model::User::setEmail(string email){
 void Model::User::setPassword(string password){
 	this->password = password;
 };
+void Model::User::setLevel(string level){
+	this->level = level;
+};
 string Model::User::getName(){
 	return this->name;
 };
@@ -17,4 +20,7 @@ string Model::User::getEmail(){
 };
 string Model::User::getPassword(){
 	return this->password;
+};
+string Model::User::getLevel(){
+	return this->level;
 };

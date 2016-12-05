@@ -14,7 +14,6 @@
 		class Login: public Framework::View
 		{
 		public:
-			void program(map< string, string> = map< string, string>(), vector< map< string, string > > = vector< map< string, string > >()); 
 			Output index(map< string, string> = map< string, string>());
 		};
 	};

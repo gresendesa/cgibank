@@ -5,10 +5,6 @@ View::Transaction::Transaction(){
 	this->appendText(main.index());
 }
 
-void View::Transaction::program(map< string, string> parameters, vector< map< string, string > > data){
-	
-}
-
 Output View::Transaction::index(map< string, string> parameters){
 	this->replaceFlag("page-content", Framework::View::getHTML("form.transactions", parameters));
 	this->replaceFlags({
@@ -19,3 +15,12 @@ Output View::Transaction::index(map< string, string> parameters){
 	this->cleanUnusedFlags();
 	return this->self();
 }
+
+Output View::Transaction::generalStatement(){
+
+}
+
+Output View::Transaction::privateStatement(){
+
+}
+

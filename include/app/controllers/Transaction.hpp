@@ -13,6 +13,7 @@
 			static Output index();
 			static Output transfer();
 			static Output deposit();
+			static Output statement();
 		};
 	}
 
