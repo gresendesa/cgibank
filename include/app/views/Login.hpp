@@ -14,7 +14,11 @@
 		class Login: public Framework::View
 		{
 		public:
+			Login();
 			Output index(map< string, string> = map< string, string>());
+			Output signin(map< string, string> = map< string, string>());
+			Output signup(map< string, string> = map< string, string>());
+			Output success();
 		};
 	};
 		

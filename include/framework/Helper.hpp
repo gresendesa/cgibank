@@ -39,6 +39,7 @@
 		static bool strVectorContains(vector< string >, string);
 		static string normalize(string, vector< string >, string);
 		static map< string, string > removeEmpty(map< string, string >);
+		static void joinTo(map< string, string >&, map< string, string >);
 	};
 
 #endif

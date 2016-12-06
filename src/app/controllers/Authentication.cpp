@@ -3,26 +3,23 @@
 Output Controller::Authentication::signin(){
 	View::Login view;
 	map< string, string > parameters = Core::getPOST();
-	map< string, string > page_parameters = {
-		{"signin-active-class", "active"},
-		{"signin-display", "block"},
-		{"signup-display", "none"}
-	};
-	Model::User user;
-	vector< map< string, string > > result = user.find({
-		{"email", Helper::getKey(parameters, "email", "")},
-		{"password", Helper::getKey(parameters, "password", "")}
-	});
-	if (result.size()){
-		Auth::auth(result[0].at(Storage::RID));
-		Route::redirect("/about");
-	} else {
-		if(parameters.size()){
-			page_parameters.insert(pair< string, string >("signin-failed-msg", Helper::getMessage("app.view.sigin.wrongcredentials")));
-			page_parameters.insert(pair< string, string >("signin-email", Helper::getKey(parameters, "email", "")));
+	if(parameters.size()){
+		Model::User user;
+		vector< map< string, string > > result = user.find({
+			{"email", Helper::getKey(parameters, "email", "")},
+			{"password", Helper::getKey(parameters, "password", "")}
+		});
+		if (result.size()){
+			Auth::auth(result.front().at(Storage::RID));
+			Route::redirect("/about");
+		} else {
+			Helper::joinTo(parameters, {
+				{"signin-failed-msg", Helper::getMessage("app.view.sigin.wrongcredentials")},
+				{"signin-email", Helper::getKey(parameters, "email", "")}
+			});
 		}
 	}
-	return view.index(page_parameters);
+	return view.signin(parameters);
 }
 
 Output Controller::Authentication::signout(){
@@ -37,32 +34,25 @@ Output Controller::Authentication::signout(){
 }
 
 Output Controller::Authentication::signup(){
-	View::Login view;
-	map< string, string > page_parameters = {{"signup-active-class", "active"},{"signup-display", "block"},{"signin-display", "none"}};
 	Output output;
-	map< string, string > variables = Core::getPOST();
-	if(variables.size()){
+	View::Login view;
+	map< string, string > parameters = Core::getPOST();
+	if(parameters.size()){
 		Model::User user;
-		map< string, string > data = {
-			{"name", Helper::getKey(variables, "name", "")},
-			{"email", Helper::getKey(variables, "email", "")},
-			{"password", Helper::getKey(variables, "password", "")},
+		user.put({
+			{"name", Helper::getKey(parameters, "name", "")},
+			{"email", Helper::getKey(parameters, "email", "")},
+			{"password", Helper::getKey(parameters, "password", "")},
 			{"level", "Client"}
-		};
-		user.put(data);
+		});
 		map< string, string > errors;
 		user.save(errors);
 		if(errors.size()){
-			page_parameters.insert(errors.begin(), errors.end());
-			page_parameters.insert(pair< string, string >("name", Helper::getKey(variables, "name", "")));
-			page_parameters.insert(pair< string, string >("email", Helper::getKey(variables, "email", "")));
-			output = view.index(page_parameters);
+			Helper::joinTo(parameters, errors);
+			output = view.signup(parameters);
 		} else {
-			map< string, string > sucess_page_parameters = {{"signin-active-class", "active"},{"signin-display", "block"},{"signup-display", "none"}, {"signup-success", Helper::getMessage("app.view.signup.success")}};
-			output = view.index(sucess_page_parameters);
+			output = view.success();
 		}
-	} else {
-		output = view.index(page_parameters);
 	}
 	return output;
 }
