@@ -3,17 +3,16 @@
 Output Controller::Authentication::signin(){
 	View::Login view;
 	map< string, string > parameters = Core::getPOST();
-	map< string, string > credentials = {
-		{"email", Helper::getKey(parameters, "email", "")},
-		{"password", Helper::getKey(parameters, "password", "")}
-	};
 	map< string, string > page_parameters = {
 		{"signin-active-class", "active"},
 		{"signin-display", "block"},
 		{"signup-display", "none"}
 	};
 	Model::User user;
-	vector< map< string, string > > result = user.find(credentials);
+	vector< map< string, string > > result = user.find({
+		{"email", Helper::getKey(parameters, "email", "")},
+		{"password", Helper::getKey(parameters, "password", "")}
+	});
 	if (result.size()){
 		Auth::auth(result[0].at(Storage::RID));
 		Route::redirect("/about");

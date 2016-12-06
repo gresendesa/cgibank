@@ -10,7 +10,6 @@ void Model::Transaction::makeRegister(string value, string details, string to_ac
 	});
 	map< string, string > errors;
 	transaction.save(errors);
-	//Helper::log(Helper::serializeStrMap(errors, ":", "#"));
 }
 
 bool Model::Transaction::incrementAccount(string account_number, string value, string label, map< string, string > &errors){

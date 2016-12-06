@@ -10,7 +10,7 @@ Output Controller::User::index(){
 	};
 	if(Auth::get("level") != "Manager")
 		parameters.insert(pair< string, string >("disabled-class", "disabled"));
-	Model::User user;
+	Model::Customer user;
 	vector< map< string, string > > users = user.getAll();
 	View::User view;
 	return view.index(parameters, users);
@@ -20,8 +20,10 @@ Output Controller::User::index(){
 Output Controller::User::dump(){
 	if(Core::getURIElements().size() == 3){
 		string user_id = Core::getURIElements().at(2);
-		Model::User user;
-		user.dump(user_id);
+		Model::Customer user;
+		user.setId(user_id);
+		if(user.loadFirst())
+			user.remove();
 	}
 	return Route::redirect("/users");
 }
@@ -40,7 +42,7 @@ Output Controller::User::create(){
 			{"password", Helper::getKey(variables, "password", "")},
 			{"level", Helper::normalize(Helper::getKey(variables, "level", ""), valid_level, "Client")}
 		};
-		Model::User user;
+		Model::Customer user;
 		user.put(user_data);
 		map< string, string > errors;
 		if(user.save(errors)){
@@ -60,7 +62,7 @@ Output Controller::User::edit(){
 		{"page-subtitle", "Edit"},
 		{"form-action", "/users/edit"}
 	};
-	::Model::User user;
+	::Model::Customer user;
 	map< string, string > variables = Core::getPOST();
 	if(variables.size()){
 		user.put(variables);
@@ -93,7 +95,7 @@ Output Controller::User::edit(){
 Output Controller::User::profile(){
 	View::User view;
 	map< string, string > parameters;
-	::Model::User user;
+	::Model::Customer user;
 	map< string, string > variables = Core::getPOST();
 	if(variables.size()){
 		user.put(variables);

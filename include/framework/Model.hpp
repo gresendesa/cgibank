@@ -32,6 +32,7 @@
 			void setStorageName(string);
 			void dump(string);
 			void setId(string);
+			bool loadFirst();
 			void setFieldsMap(map< string, string *>);
 			void appendFields(map< string, string *>);
 			map< string, string > getFields();

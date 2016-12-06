@@ -166,6 +166,15 @@ string Helper::serializeStrMap(map< string, string > mapList, string valueSepara
 	return output;
 }
 
+map< string, string > Helper::removeEmpty(map< string, string > mapList){
+	map< string, string > cleanMap;
+	for (map<string,string>::iterator i=mapList.begin(); i!=mapList.end(); i++){
+		if(i->second.size())
+			cleanMap.insert(pair< string, string >(i->first, i->second));
+	}
+	return cleanMap;
+}
+
 void Helper::log(string input, string directory){
 	string filename = directory + "Logs.System"; 
 	ofstream file;

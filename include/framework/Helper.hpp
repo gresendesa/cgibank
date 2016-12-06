@@ -38,6 +38,7 @@
 		static float toFloat(string);
 		static bool strVectorContains(vector< string >, string);
 		static string normalize(string, vector< string >, string);
+		static map< string, string > removeEmpty(map< string, string >);
 	};
 
 #endif

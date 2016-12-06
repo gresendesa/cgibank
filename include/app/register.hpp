@@ -7,6 +7,7 @@
 	//Models
 	#include "Account.hpp"
 	#include "Transaction.hpp"
+	#include "Customer.hpp"
 
 	//Views
 	#include "../app/views/Main.hpp"

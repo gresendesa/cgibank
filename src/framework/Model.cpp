@@ -4,8 +4,7 @@ map< string, int > Framework::Model::STD_STORAGE_ERRORS = map< string, int >();
 
 Framework::Model::Model(string storageName){
 	this->storageName = storageName;
-	map< string, string *> id_field = {{Storage::RID, &this->id}};
-	this->appendFields(id_field);
+	this->appendFields({{Storage::RID, &this->id}});
 }
 
 bool Framework::Model::save(map< string, string > &errors){
@@ -23,6 +22,16 @@ bool Framework::Model::update(map< string, string > &errors){
 	bool result = storage.update(this->getFields(), errors_raw);
 	map< string, string > nerrors = Storage::translateErrors(errors_raw);
 	errors.insert(nerrors.begin(), nerrors.end());
+	return result;
+}
+
+bool Framework::Model::loadFirst(){
+	bool result = false;
+	vector< map< string, string > > results = this->find(Helper::removeEmpty(this->getFields()));
+	if(results.size()){
+		this->put(results.front());
+		result = true;
+	}
 	return result;
 }
 
