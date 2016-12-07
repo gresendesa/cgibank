@@ -69,7 +69,12 @@ vector< map< string, string > > Framework::Model::getAll(){
 	return storage.getAll();
 }
 
-void Framework::Model::dump(string rid){
+void Framework::Model::dump(map< string, string > fields){
+	Storage storage(this->storageName);
+	storage.dump(fields);
+}
+
+void Framework::Model::dumpByRID(string rid){
 	Storage storage(this->storageName);
 	map< string, string > rid_field = {
 		{Storage::RID, rid}

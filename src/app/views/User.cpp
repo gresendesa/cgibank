@@ -6,6 +6,11 @@ View::User::User(){
 }
 
 Output View::User::index(map< string, string> parameters, vector< map< string, string > > data){
+	Helper::joinTo(parameters, {
+		{"page-title", "Users"},
+		{"page-subtitle", "Control muggles"},
+		{"ative-tab-users", "active"}
+	});
 	Output table_content;
 	for (int i = 0; i < data.size(); i++){
 		map< string, string > record = data.at(i);
@@ -20,29 +25,49 @@ Output View::User::index(map< string, string> parameters, vector< map< string, s
 		};
 		table_content += Framework::View::makeTableLine(line_content);
 	}
-	parameters.insert(pair< string, string >("table-content", table_content));
+	this->replaceFlag("page-content", Framework::View::getHTML("users.table"));
+	this->replaceFlag("table-content", table_content);
 	this->replaceFlags(parameters);
-	if(Auth::get("level") != "Manager")
-		this->replaceFlag("disabled-class", "disabled");
 	return this->self();
 }
 
 Output View::User::form(map< string, string> parameters){
 	map< string, string > radio_value;
 	if(Helper::getKey(parameters, "level", "") == "Client")
-		radio_value.insert(pair< string, string >("checked-client", "checked"));
+		Helper::joinTo(parameters, {{"checked-client", "checked"}});
 	else
 	if(Helper::getKey(parameters, "level", "") == "Teller")
-		radio_value.insert(pair< string, string >("checked-teller", "checked"));
+		Helper::joinTo(parameters, {{"checked-teller", "checked"}});
 	else
 	if(Helper::getKey(parameters, "level", "") == "Manager")
-		radio_value.insert(pair< string, string >("checked-manager", "checked"));
-	this->replaceFlag("page-content", Framework::View::getHTML("user.form", radio_value));
+		Helper::joinTo(parameters, {{"checked-manager", "checked"}});
 
-	parameters.insert(pair< string, string >("page-title", "User"));
-	parameters.insert(pair< string, string >("ative-tab-users", "active"));
+	this->replaceFlag("page-content", Framework::View::getHTML("user.form", radio_value));
+	Helper::joinTo(parameters, {
+		{"page-title", "User"},
+		{"ative-tab-users", "active"}
+	});
 	this->replaceFlags(parameters);
 	this->cleanUnusedFlags();
+	return this->self();
+}
+
+
+Output View::User::create(map< string, string> parameters){
+	Helper::joinTo(parameters, {
+		{"page-subtitle", "Create"},
+		{"form-action", "/users/create"}
+	});
+	this->replaceFlag("page-content", ::View::User::form(parameters));
+	return this->self();
+}
+
+Output View::User::edit(map< string, string> parameters){
+	Helper::joinTo(parameters, {
+		{"page-subtitle", "Edit"},
+		{"form-action", "/users/edit"}
+	});
+	this->replaceFlag("page-content", ::View::User::form(parameters));
 	return this->self();
 }
 

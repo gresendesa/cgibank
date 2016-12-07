@@ -14,6 +14,7 @@
 			static Output transfer();
 			static Output deposit();
 			static Output statement();
+			static Output alltransactions();
 		};
 	}
 

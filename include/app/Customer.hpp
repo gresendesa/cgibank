@@ -2,6 +2,7 @@
 #define CUSTOMER_HPP
 
 	#include "../framework/User.hpp"
+	#include "Account.hpp"
 
 	#include <iostream>
 	#include <string>
@@ -18,9 +19,8 @@
 			Customer() : User(){
 				
 			};
-			void remove(){
-				this->dump(this->getId());
-			}
+			void remove();
+			static vector< map< string, string > > getWithoutAccount();
 		};
 	}		
 

@@ -13,11 +13,14 @@
 	namespace View{
 		class User: public Framework::View
 		{
+		private:
+			Output form(map< string, string>);
 		public:
 			User();
 			Output index(map< string, string>, vector< map< string, string > >);
-			Output form(map< string, string>);
 			Output profile(map< string, string>);
+			Output create(map< string, string>);
+			Output edit(map< string, string>);
 		};
 	};
 		

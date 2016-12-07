@@ -7,6 +7,8 @@
 	namespace Controller{
 		class Account: public Framework::Controller
 		{
+		private:
+			static void save(map< string, string >&);
 		public:
 			//Account(arguments);
 			//~Account();

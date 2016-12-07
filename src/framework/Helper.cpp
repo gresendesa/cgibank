@@ -276,6 +276,7 @@ bool Helper::strVectorContains(vector< string > vect, string value){
 
 
 void Helper::joinTo(map< string, string > &subject, map< string, string > object){
-	subject.insert(object.begin(), object.end());
+	if(object.size())
+		subject.insert(object.begin(), object.end());
 }
 

@@ -8,6 +8,7 @@ Apache server - CGI module actived is required
   * Execute the following commands to active CGI module
   	- sudo a2enmod cgi
   	- sudo service apache2 restart
+  * Enter the root directory then call make
 
 ## Apache config
   * Create a virtual host or use default config file with the following options

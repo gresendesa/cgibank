@@ -70,12 +70,7 @@ bool Storage::File::isActive(){
 }
 
 map< string, bool > Storage::File::getFieldInfo(string field){
-	bool exist = false;
-	bool required = false;
-	bool unique = false;
-	bool integer = false;
-	bool floaty = false;
-	bool email = false;
+	bool exist = false, required = false, unique = false, integer = false, floaty = false, email = false;
 	for (int i = 0; i < this->fields.size(); i++)
 	{
 		if(Storage::removeFieldFlags(this->fields[i]) == Storage::removeFieldFlags(field)){
@@ -265,38 +260,31 @@ map< string, string > Storage::getByRID(string rid){
 	return record;
 }
 
-map< string, int > Storage::findInputErrors(map< string, string > keys_values, string rid_ignore){
+map< string, int > Storage::checkErrors(map< string, string > keys_values, string rid_ignore){
 	map< string, int > errors;
 	Storage::File * file = Storage::files_table.at(this->name);
 	for (map< string, string >::iterator i=keys_values.begin(); i!=keys_values.end(); i++){
-		map< string, bool > info = file->getFieldInfo(i->first);
-		if(info.at("exist")){
-			if(!info.at("required") && i->second.size() == 0){
-
+		map< string, bool > field = file->getFieldInfo(i->first);
+		if(field.at("exist")){
+			if(!field.at("required") && i->second.size() == 0){
+				//Not required and empty - nothing to check
 			} else {
-				if(info.at("required") && (i->second.size() == 0))
+				if(field.at("required") && (i->second.size() == 0))
 					errors.insert(pair< string, int >(i->first, Storage::EMPTY));
-				if(info.at("unique")){
-					map< string, string > arrange = {
-						{i->first, i->second}
-					};
-					if(file->recordMatch(arrange, rid_ignore)){
+				if(field.at("unique"))
+					if(file->recordMatch({{i->first, i->second}}, rid_ignore))
 						errors.insert(pair< string, int >(i->first, Storage::DUPLICATE));
-					}
-				}
-				if(info.at("integer") && !Helper::isInteger(i->second))
+				if(field.at("integer") && !Helper::isInteger(i->second))
 					errors.insert(pair< string, int >(i->first, Storage::INVALID));
-				if(info.at("float") && !Helper::isFloat(i->second))
+				if(field.at("float") && !Helper::isFloat(i->second))
 					errors.insert(pair< string, int >(i->first, Storage::INVALID));
-				if(info.at("email") && !Helper::isEmail(i->second))
+				if(field.at("email") && !Helper::isEmail(i->second))
 					errors.insert(pair< string, int >(i->first, Storage::INVALID));
 				if(i->second.find(Storage::SEPARATOR) != string::npos)
 					errors.insert(pair< string, int >(i->first, Storage::INVALID));
 			}
-		} else {
-			pair< string, int > record(i->first, Storage::UNDEFINED);
-			errors.insert(record);
-		}
+		} else 
+			errors.insert({{i->first, Storage::UNDEFINED}});
 	}
 	return errors;
 }
@@ -306,7 +294,7 @@ bool Storage::set(map< string, string > keys_values, map< string, int > &errors)
 	if(this->is_loaded){
 		if(keys_values.count(Storage::RID))
 			keys_values.erase(Storage::RID);
-		errors = Storage::findInputErrors(keys_values);
+		errors = Storage::checkErrors(keys_values);
 		if(errors.size() == 0){
 			result = true;
 			Storage::File * file = Storage::files_table.at(this->name);
@@ -338,7 +326,7 @@ bool Storage::update(map< string, string > keys_values, map< string, int > &erro
 			};
 			Storage::File * file = Storage::files_table.at(this->name);
 			if(file->recordMatch(arrange)){
-				errors = Storage::findInputErrors(keys_values, keys_values.at(Storage::RID));
+				errors = Storage::checkErrors(keys_values, keys_values.at(Storage::RID));
 				if(errors.size() == 0){
 					for (int i = 0; i < file->getRecords().size(); ++i)
 					{

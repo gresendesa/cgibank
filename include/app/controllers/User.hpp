@@ -15,6 +15,7 @@
 			static Output create();
 			static Output edit();
 			static Output profile();
+			static Output load(map< string, string >);
 		};
 	}
 

@@ -98,7 +98,7 @@
 		static string removeFieldFlags(string);
 		static map< string, vector< string > > processConfig(vector< string >, bool&);
 		static map< string, Storage::File* > init();
-		map< string, int > findInputErrors(map< string, string >, string = "0");
+		map< string, int > checkErrors(map< string, string >, string = "0");
 		bool is_loaded;
 		string name;
 		//static fstream * openFile(fstream *, string filename, bool&);
