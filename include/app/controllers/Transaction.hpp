@@ -13,8 +13,10 @@
 			static Output index();
 			static Output transfer();
 			static Output deposit();
-			static Output statement();
+			static Output statement(string);
 			static Output alltransactions();
+			static Output generateUserStatementURL();
+			static Output showUserStatement();
 		};
 	}
 

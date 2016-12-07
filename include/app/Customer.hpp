@@ -2,7 +2,7 @@
 #define CUSTOMER_HPP
 
 	#include "../framework/User.hpp"
-	#include "Account.hpp"
+	#include "register.hpp"
 
 	#include <iostream>
 	#include <string>

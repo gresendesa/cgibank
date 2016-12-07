@@ -39,6 +39,16 @@ Output Route::route(){
 				return Controller::Transaction::index();
 			}
 		} else
+		if(Route::match("/statement", "Employee")){
+			if(Route::match("/statement/fetch/")){
+				return Controller::Transaction::generateUserStatementURL();
+			} else
+			if(Route::match("/statement/user/")){
+				return Controller::Transaction::showUserStatement();
+			} else {
+				return Controller::Transaction::alltransactions();
+			}
+		} else
 		if(Route::match("/profile")){
 			return Controller::User::profile();
 		} else

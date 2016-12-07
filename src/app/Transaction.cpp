@@ -73,3 +73,18 @@ map< string, string > Model::Transaction::deposit(string value, string account_n
 		errors.insert(pair< string, string >("error.deposit_value", Helper::getMessage("app.transaction.value.invalid.error")));	
 	return errors;
 }
+
+vector< map< string, string > > Model::Transaction::getByUser(string user_rid){
+	::Model::Transaction transaction;
+	::Model::Account account;
+	::Model::Customer user;
+	vector< map< string, string > > user_transactions;
+	vector< map< string, string > > transactions = transaction.getAll();
+	for (int i = 0; i < transactions.size(); ++i){
+		string user_account_to = Helper::getKey(account.getOne(Helper::getKey(transactions.at(i), "to_account_id", "")), "user_id", "");
+	 	string user_account_from = Helper::getKey(account.getOne(Helper::getKey(transactions.at(i), "from_account_id", "")), "user_id", "");
+		if(user_account_to == user_rid || user_account_from == user_rid)
+			user_transactions.push_back(transactions.at(i));
+	}
+	return user_transactions;
+};

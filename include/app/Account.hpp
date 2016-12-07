@@ -2,6 +2,7 @@
 #define ACCOUNT_HPP
 
 	#include "../framework/Model.hpp"
+	#include "register.hpp"
 
 	#include <iostream>
 	#include <string>

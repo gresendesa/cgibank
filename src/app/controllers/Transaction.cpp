@@ -40,3 +40,46 @@ Output Controller::Transaction::deposit(){
 	}
 	return view.index(page_parameters);
 }
+
+Output Controller::Transaction::alltransactions(){
+	Model::Transaction transaction;
+	Model::Customer user;
+	View::Transaction view;
+	vector< map< string, string > > transactions = transaction.getAll();
+	vector< map< string, string > > reverse_vector;
+	for (int i = transactions.size() - 1; i >= 0 ; i--)
+		reverse_vector.push_back(transactions[i]);
+	return view.generalStatement(reverse_vector, user.getAll());
+}
+
+Output Controller::Transaction::statement(string user_rid){
+	Model::Customer user;
+	Output output = "";
+	if(user.getOne(user_rid).size()){
+		Model::Transaction transaction;
+		View::Transaction view;
+		output = view.privateStatement({{"page-message", "Transactions related to " + user.getOne(user_rid).at("name")}}, transaction.getByUser(user_rid));
+	} else 
+		Route::redirect("/statement");
+	return output;
+}
+
+Output Controller::Transaction::showUserStatement(){
+	Output output = "";
+	if(Core::getURIElements().size() == 3){
+		string user_id = Core::getURIElements().at(2);
+		output = ::Controller::Transaction::statement(user_id);
+	} else 
+		Route::redirect("/statement");
+	return output;
+}
+
+Output Controller::Transaction::generateUserStatementURL(){
+	map< string, string > parameters = Core::getPOST();
+	string user_id = Helper::getKey(parameters, "user_id", "");
+	if(user_id.size())
+		Route::redirect("/statement/user/" + user_id);
+	else
+		Route::redirect("/statement");
+	return "";
+}

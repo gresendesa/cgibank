@@ -2,7 +2,7 @@
 #define TRANSACTION_HPP
 
 	#include "../framework/Model.hpp"
-	#include "Account.hpp"
+	#include "register.hpp"
 
 	#include <iostream>
 	#include <string>
@@ -36,6 +36,7 @@
 			map< string, string > transfer(string, string, string);
 			map< string, string > deposit(string, string);
 			vector< map< string, string > > find(map< string, string >);
+			static vector< map< string, string > > getByUser(string);
 		};
 	}		
 

@@ -13,11 +13,13 @@
 	namespace View{
 		class Transaction: public Framework::View
 		{
+		private:
+			static Output makeTable(vector< map< string, string > >);
 		public:
 			Transaction();
 			Output index(map< string, string> = map< string, string>());
-			Output generalStatement();
-			Output privateStatement();
+			Output generalStatement(vector< map< string, string > >, vector< map< string, string > >);
+			Output privateStatement(map< string, string >, vector< map< string, string > >);
 		};
 	};
 		
