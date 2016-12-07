@@ -6,13 +6,6 @@ Output Route::route(){
 		if(Route::match("/signout")){
 			return Controller::Authentication::signout();
 		} else
-		if(Route::match("/goo", "Employee")){
-			map< string, int > errors;
-			Model::Account::create("23445", "1", errors);
-			Model::Account::create("23446", "2", errors);
-			Model::Account::create("23447", "3", errors);
-			return "fsgfd";
-		} else
 		if(Route::match("/accounts", "Employee")){
 			if(Route::match("/accounts/dump/", "Boss")){
 				return Controller::Account::dump();
